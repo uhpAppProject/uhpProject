@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  StatusBar
 } from 'react-native';
 
 export default class LoginForm extends Component {
@@ -17,10 +18,10 @@ export default class LoginForm extends Component {
     };
   }
 
-  login () => {
-    let username = this.state.username;
-    let password = this.state.password;
-    alert(username + ' ' + password)
+  login () {
+    const username = this.state.username;
+    const password = this.state.password;
+    alert(username + ' ' + password);
   }
 
   render() {
