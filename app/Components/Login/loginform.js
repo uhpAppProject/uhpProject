@@ -5,10 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  StatusBar,
-  ActivityIndicator,
-  ListView,
-  Alert
 } from 'react-native';
 
 export default class LoginForm extends Component {
