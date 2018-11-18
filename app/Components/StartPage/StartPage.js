@@ -19,34 +19,37 @@ export default class StartPage extends Component {
 
 async extractEvents() {
   try {
-      await AsyncStorage.getItem('Events').then((response) => JSON.parse(response))
-      .then((parsed) => {this.state.events = parsed})
-      if(this.state.events[0] != undefined){
-        alert(this.state.events[1].value);
+      const events = await AsyncStorage.getItem('Events')
+      if(events == null || events != JSON.stringify(this.state.events)){
+        AsyncStorage.setItem('Events', JSON.stringify(this.state.events))
+        }
       }
-  }
   catch(error) {
     alert(error);
   }
 }
 
 onPress = () => {
+
   this.extractEvents();
   const{navigate} = this.props.navigation;
     navigate('Participation');
   }
 
-  render() {
-
-    fetch('http://172.20.73.143:8888/testing.php')
+fetchInfo = () => {
+    fetch('http://192.168.1.109.:8888/select_all_from_events.php')
       .then((response) => response.json())
       .then((responseJson) => {
-//        this.state.events = responseJson;
-        AsyncStorage.setItem("Events", JSON.stringify(responseJson))
+        this.state.events = responseJson;
       })
-      .catch((error) => {
-        console.error(error);
+    .catch((error) => {
+      console.error(error);
     });
+  }
+
+  render() {
+
+    this.fetchInfo()
 
     return (
       <View style={styles.container}>
