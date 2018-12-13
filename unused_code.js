@@ -12,5 +12,15 @@ async checkKeys() {
 }
 
 
-this.state.user_info[0].academic_status
-this.state.user_info[0].social_justice_status
+async testIfStored(asyncTitle) {
+  //tests to see if info is already stored in async storage, if it is, returns true
+  try {
+      const item = await AsyncStorage.getItem(asyncTitle)
+      if(item != null){
+        return(true)
+      }
+    }
+  catch(error) {
+    alert(error);
+  }
+}

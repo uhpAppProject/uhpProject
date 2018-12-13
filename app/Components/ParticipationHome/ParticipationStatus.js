@@ -4,10 +4,9 @@ import {
         View,
         Text,
         ActivityIndicator,
+        AsyncStorage,
       }
 from 'react-native';
-
-import FormData from 'FormData';
 
 import StickyLogic from './EventStickyLogic.js'
 
@@ -15,35 +14,30 @@ export default class ParticiptionStatus extends Component {
   constructor(props) {
   super(props);
   this.state = {
-    user_email: 'tlannister@scu.edu',
     user_info: new Object(),
     isLoading: true,
     status: ''
   };
 }
 
-  componentDidMount(){
-    var formData = new FormData();
-    formData.append('email', this.state.user_email);
 
-    fetch('http://192.168.1.109.:8888/participation_status_query.php', {
-      method: 'POST',
-      body: formData,
-      headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'multipart/form-data',
+  async extractUserInfo(asyncTitle) {
+    /*Function for extracting input "asyncTitle" key from async storage and parsing it into
+    A JS Object, then the funtion changes the isloading value with setState*/
+    try {
+      await AsyncStorage.getItem(asyncTitle)
+      .then((response) => JSON.parse(response))
+      .then((parsed) => {
+          this.state.user_info = parsed
+        })
+      if(this.state.user_info[0] != undefined){
+        this.setState({isLoading: false});
+        }
       }
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-              user_info: responseJson,
-              isLoading: false})
-      })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
+    catch(error) {
+        alert(error);
+        }
+      }
 
   checkStatus = () => {
     if(this.state.user_info[0].academic_status == 'COMPLETE' && this.state.user_info[0].social_justice_status == 'COMPLETE'){
@@ -54,11 +48,16 @@ export default class ParticiptionStatus extends Component {
     }
   }
 
+  componentDidMount() {
+    this.extractUserInfo('userInfo');
+    }
+
   render() {
+
 
     if(this.state.isLoading){
       return(
-        <View>
+        <View style={styles.activityIndicatorContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )
@@ -75,8 +74,20 @@ export default class ParticiptionStatus extends Component {
           </View>
 
           <View style={styles.stickyContainer}>
-            <StickyLogic type={'UHP Academic Event'} status={this.state.user_info[0].academic_status} />
-            <StickyLogic type={'Social Justice Event'} status={this.state.user_info[0].social_justice_status} />
+            <StickyLogic
+                type={'UHP Academic Event'}
+                status={this.state.user_info[0].academic_status}
+                date={this.state.user_info[0].academic_date}
+                event={this.state.user_info[0].academic_event_attended}
+                email={this.state.user_info[0].email}
+                />
+            <StickyLogic
+                type={'Social Justice Event'}
+                status={this.state.user_info[0].social_justice_status}
+                date={this.state.user_info[0].social_justice_date}
+                event={this.state.user_info[0].social_justice_event_attended}
+                email={this.state.user_info[0].email}
+                />
           </View>
         </View>
       )
@@ -88,6 +99,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
+  },
+  activityIndicatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
   headerContainer: {
     flex: 1,

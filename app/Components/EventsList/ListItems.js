@@ -24,7 +24,8 @@ class MyListItem extends Component {
             location: this.props.location,
             date: this.props.date,
             time: this.props.time,
-            description: this.props.description
+            description: this.props.description,
+            email: this.props.email
         });
   }
 
@@ -32,25 +33,25 @@ class MyListItem extends Component {
     return (
       <TouchableOpacity style={styles.opacityContainer} onPress={() => this._onPress()}>
         <View style={styles.elementContainer}>
-          <Text style={{fontSize: 20}}>
+          <Text style={[styles.leftText, styles.titleText]}>
             {this.props.title}
           </Text>
-          <Text style={{}}>
+          <Text style={styles.rightText}>
             {this.props.location}
           </Text>
         </View>
 
         <View style={styles.elementContainer}>
-          <Text>
+          <Text style={styles.leftText}>
             {this.props.requirement}
           </Text>
-          <Text style={{paddingLeft: 0}}>
+          <Text style={styles.rightText}>
             {this.props.date}
           </Text>
         </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-          <Text>
+        <View style={styles.timeContainer}>
+          <Text style={styles.rightText}>
             {this.props.time}
           </Text>
         </View>
@@ -70,6 +71,19 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center'
       },
+    titleText: {
+      fontSize: 20
+    },
+    leftText: {
+      marginLeft: 1,
+    },
+    rightText: {
+      marginRight: 1,
+    },
+    timeContainer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+    },
     }
   );
 

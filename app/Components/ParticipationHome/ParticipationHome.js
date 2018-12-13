@@ -17,9 +17,11 @@ export default class ParticipationHome extends Component {
   };
 }
 
-onPressEvents = () => {
+onPressEvents = (email) => {
   const{navigate} = this.props.navigation;
-    navigate('EventsHome');
+    navigate('EventsHome', {
+      email: email
+    });
 }
 
 onPressParticipation = () => {
@@ -27,6 +29,10 @@ onPressParticipation = () => {
     navigate('ParticipationStatus');
 }
   render() {
+
+    const { navigation } = this.props;
+    const email = navigation.getParam('email', 'No Email');
+
     return (
       <View style={styles.container}>
       //Background Image
@@ -39,7 +45,7 @@ onPressParticipation = () => {
               </View>
               //First line of opacities
               <View style={styles.opacityContainer}>
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onPressEvents()}>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onPressEvents(email)}>
                   <Text style={styles.title_w}>Honors Events</Text>
                 </TouchableOpacity>
 
@@ -69,7 +75,6 @@ const styles = StyleSheet.create({
   opacity: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255,0.8)',
-//    opacity: .5,
   },
   headerContainer: {
     flex: 1,

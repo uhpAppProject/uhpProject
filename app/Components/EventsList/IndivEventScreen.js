@@ -8,9 +8,14 @@ import {
 from 'react-native';
 
 export default class IndivEvent extends Component {
-  _onPressOpacity = () => {
+  _onPressOpacity = (email, title, requirement, date) => {
     const{navigate} = this.props.navigation;
-    navigate('LocationCheck')
+    navigate('LocationCheck', {
+      email: email,
+      title: title,
+      requirement: requirement,
+      date: date,
+    })
   }
   render(){
 
@@ -23,6 +28,7 @@ export default class IndivEvent extends Component {
     const date = navigation.getParam('date', 'No Date');
     const time = navigation.getParam('time', 'No Time');
     const description = navigation.getParam('description', 'No Description');
+    const email = navigation.getParam('email', 'No Email');
 
     return(
       <View style={styles.container}>
@@ -43,7 +49,8 @@ export default class IndivEvent extends Component {
           <Text>{description}</Text>
         </View>
 
-        <TouchableOpacity style={styles.opacityContainer} onPress={() => this._onPressOpacity()}>
+        <TouchableOpacity style={styles.opacityContainer} onPress={() =>
+          this._onPressOpacity(email, title, requirement, date)}>
           <Text style={styles.opacityText}>Sign In</Text>
         </TouchableOpacity>
 
@@ -60,7 +67,6 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
     },
     generalInfoContainer:{
-      flex: .5,
       justifyContent: 'space-between',
       alignItems: 'center',
       marginTop: 5,
