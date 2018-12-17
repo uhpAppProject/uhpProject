@@ -7,21 +7,31 @@ import {
         TouchableOpacity,
         AsyncStorage,
         ActivityIndicator,
+        Dimensions
       }
 from 'react-native';
 
 import FormData from 'FormData';
+
+import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class StartPage extends Component {
 //works for valid users, throws a parse error for invalid users
   constructor(props) {
   super(props);
   this.state = {
-    user_email: 'bjust@scu.edu',
+    user_email: 'jsnow@scu.edu',
     isLoading: true,
     alreadyStored: false,
   }
-}
+};
+  static navigationOptions = {
+    headerStyle: {
+      height: (.01 * Dimensions.get('window').height),
+      borderBottomWidth: 0,
+      backgroundColor: '#B30738',
+    },
+  };
 
 postEmailAsync = (url, email, asyncTitle) => {
 
@@ -57,14 +67,25 @@ fetchEventsAsync = (url, asyncTitle) => {
   }
 
   onPress = () => {
-    const{navigate} = this.props.navigation;
-      navigate('Participation', {
-        email: this.state.user_email
-      });
+    const resetAction = StackActions.reset({
+    index: 0, // <-- currect active route from actions array
+    actions: [
+      NavigationActions.navigate({ routeName: 'Participation', params: {email: this.state.user_email}})
+    ],
+    });
+
+    this.props.navigation.dispatch(resetAction);
+
+//    const{navigate} = this.props.navigation;
+//      navigate('Participation', {
+//        email: this.state.user_email
+//      });
     }
 
   componentDidMount(){
-    const ip = 'www.scuhonors.com';
+//    const ip = 'www.scuhonors.com'; //web host
+//    const ip = '127.0.0.1:8888';  //local host
+    const ip = '192.168.1.109:8888'
     this.fetchEventsAsync('http://'+ ip + '/select_all_from_events.php', 'Events');
     this.postEmailAsync('http://' + ip + '/participation_status_query.php', this.state.user_email, 'userInfo');
     this.setState({isLoading: false});
@@ -83,12 +104,14 @@ fetchEventsAsync = (url, asyncTitle) => {
       return (
         <View style={styles.container}>
           <View style={styles.headerContainer}>
-            <Text style={styles.title}>SCU Honors Program Participation Tracker</Text>
+            <Text style={styles.title}>Santa Clara University</Text>
+            <Text style={styles.title}>Honors Program</Text>
           </View>
           <Image source={require("../../Images/SCU-Seal_Outlined_201-2-2.jpg")}
                         style={styles.logoContainer}></Image>
 
           <TouchableOpacity
+            elevation={5}
             style={styles.buttonContainer}
             onPress={ () => this.onPress()}>
 
@@ -103,38 +126,45 @@ fetchEventsAsync = (url, asyncTitle) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: '100%',
     backgroundColor: 'white'
   },
   activityIndicatorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#B30738',
   },
   headerContainer: {
     backgroundColor: '#B30738',
     alignSelf: 'stretch',
-    paddingVertical: 40,
+    justifyContent: 'center',
+    height: '19%',
   },
   logoContainer: {
-    width: 300,
-    height: 300
+    height: '50%',
+    width: '85%',
   },
   buttonContainer: {
+    justifyContent: 'center',
     backgroundColor: '#B30738',
-    paddingHorizontal: 110,
-    paddingVertical: 25,
-    marginBottom: 50
+    height: '15%',
+    width: '96%',
+    marginBottom: '5%',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
   },
   title: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 25,
-    paddingHorizontal: 10
+    fontSize: (.04 * Dimensions.get('window').height),
   },
 
   }

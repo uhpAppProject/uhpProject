@@ -7,8 +7,10 @@ import {
         TouchableOpacity,
         AsyncStorage,
         ImageBackground,
+        Dimensions,
       }
 from 'react-native';
+
 
 export default class ParticipationHome extends Component {
   constructor(props) {
@@ -17,10 +19,24 @@ export default class ParticipationHome extends Component {
   };
 }
 
+static navigationOptions = {
+  title: 'Home',
+  headerStyle: {
+    height: (.07 * Dimensions.get('window').height),
+    backgroundColor: '#B30738',
+    borderBottomWidth: 0,
+  },
+  headerTitleStyle: {
+    color: 'white',
+    fontSize: (.03 * Dimensions.get('window').height)
+  },
+};
+
 onPressEvents = (email) => {
   const{navigate} = this.props.navigation;
     navigate('EventsHome', {
-      email: email
+      email: email,
+      title: 'Home'
     });
 }
 
@@ -28,6 +44,17 @@ onPressParticipation = () => {
   const{navigate} = this.props.navigation;
     navigate('ParticipationStatus');
 }
+
+onPressEventReqs = () => {
+  const{navigate} = this.props.navigation;
+    navigate('EventRequirements');
+}
+
+onPressParticipationFAQ = () => {
+  const{navigate} = this.props.navigation;
+    navigate('ParticipationFAQ');
+}
+
   render() {
 
     const { navigation } = this.props;
@@ -40,22 +67,28 @@ onPressParticipation = () => {
           //Opacity over background Image
             <View style={styles.opacity}>
             //Header
-              <View style={styles.headerContainer}>
-                <Text style={styles.title_b}>UHP Participation Tracker</Text>
-              </View>
               //First line of opacities
-              <View style={styles.opacityContainer}>
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onPressEvents(email)}>
-                  <Text style={styles.title_w}>Honors Events</Text>
-                </TouchableOpacity>
+              <View style={styles.buttons}>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.onPressEvents(email)}>
+                      <Text style={styles.title_w}>Upcoming Honors Events</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onPressParticipation()}>
-                  <Text style={styles.title_w}>Participation Status</Text>
-                </TouchableOpacity>
-              </View>
-              //A second line of opacities for future development
-              <View style={styles.opacityContainer}>
-              </View>
+                    <TouchableOpacity style={styles.button} onPress={() => this.onPressParticipation()}>
+                      <Text style={styles.title_w}>Participation Status</Text>
+                    </TouchableOpacity>
+                  </View>
+                  //A second line of opacities for future development
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.onPressEventReqs()}>
+                      <Text style={styles.title_w}>Event Requirements</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button} onPress={() => this.onPressParticipationFAQ()}>
+                      <Text style={styles.title_w}>Honors Participation FAQs</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
             </View>
 
@@ -72,47 +105,46 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
   },
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+  },
   opacity: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255,0.8)',
   },
-  headerContainer: {
+  buttons: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    marginTop: 20,
-    },
-  opacityContainer: {
-    flex: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'flex-start',
-    },
+    marginTop: '15%'
+
+  },
   buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+    marginTop: '2%',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
+    },
+  button: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#B30738',
     //borderRadius is ios only
     borderRadius: 5,
-    height: 160,
-    width: 160,
-    marginTop: 25
+    height: '72%',
+    width: '47%',
     },
-  backgroundImage: {
-    width: '100%',
-    height: '100%',
-  },
   title_w: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 25,
-    paddingHorizontal: 10
-    },
-  title_b: {
-    color: 'black',
-    textAlign: 'center',
-    fontSize: 25,
-    paddingHorizontal: 10
+    fontSize: (.04 * Dimensions.get('window').height),
+    padding: 5
     },
   }
 );

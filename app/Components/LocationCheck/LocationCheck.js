@@ -4,6 +4,7 @@ import {
         View,
         Text,
         ImageBackground,
+        Dimensions,
       }
 from 'react-native';
 
@@ -12,20 +13,33 @@ export default class LocationCheck extends Component {
   constructor(props) {
   super(props);
   this.state = {
-    checkedIn: true
+    checkedIn: false
   }
 }
 
-//Add location check functionality here
+static navigationOptions = {
+  headerLeftContainerStyle: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginRight: '2%',
+  },
+  headerStyle: {
+    height: (.07 * Dimensions.get('window').height),
+    backgroundColor: '#B30738',
+    borderBottomWidth: 0,
+  },
+};
 
-updateDatabase = (php_url, email, title, requirement, date) => {
+//Add location check functionality here
+//app is currently submitting GPS coordinates of the event for testing. Coordinates submitted should actually be those of the location check
+createReport = (php_url, email, title, requirement, date, geolocation) => {
 
     var formData = new FormData();
     formData.append('email', email);
     formData.append('requirement', requirement);
     formData.append('date', date);
     formData.append('title', title);
-  //  alert(JSON.stringify(formData))
+    formData.append('geolocation', geolocation);
 
     fetch( php_url , {
       method: 'POST',
@@ -37,7 +51,9 @@ updateDatabase = (php_url, email, title, requirement, date) => {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      alert(responseJson)
+      if(responseJson == 'TRUE') {
+        alert("You've already signed in!")
+      }
     })
     .catch((error) => {
       console.error(error);
@@ -51,16 +67,16 @@ updateDatabase = (php_url, email, title, requirement, date) => {
     const requirement = navigation.getParam('requirement', 'No Req');
     const date = navigation.getParam('date', 'No Date');
     const email = navigation.getParam('email', 'No Email');
+    const geolocation = navigation.getParam('geolocation', 'No Geolocation');
 
     if(this.state.checkedIn){
 
-      //doesn't seem to be updating academic events
-      const ip = 'www.scuhonors.com'
+//      const ip = 'www.scuhonors.com'; //web host
+//      const ip = '127.0.0.1:8888'; //local host
+      const ip = '192.168.1.109:8888';
 
-      //this.updateDatabase('http://' + ip + ':8888/update_participation.php', email, title, requirement, date)
-
-      //this function is actually creating a report of users who attend the event, not directly updating the database
-      this.updateDatabase('http://' + ip + '/create_report.php', email, title, requirement, date)
+      //this function is  creating a report of users who attend the event to be updated later
+      this.createReport('http://' + ip + '/create_report.php', email, title, requirement, date, geolocation)
 
       return (
         <View style={styles.container}>
@@ -111,25 +127,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   infoBannerContainer: {
-    flexDirection: 'column',
-    height: 200,
+    height: '35%',
     backgroundColor: '#B30738',
     justifyContent: 'space-evenly'
   },
   textTitle: {
-    fontSize: 30,
+    fontSize: (.045 * Dimensions.get('window').height),
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
-    marginLeft: 5,
-    marginRight: 5
+    marginLeft: '2%',
+    marginRight: '2%'
   },
   text: {
-    fontSize: 25,
+    fontSize: (.04 * Dimensions.get('window').height),
     color: 'white',
     textAlign: 'center',
-    marginLeft: 5,
-    marginRight: 5
+    marginLeft: '2%',
+    marginRight: '2%'
   },
   }
 );

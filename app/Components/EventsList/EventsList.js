@@ -6,13 +6,14 @@ import {
         AsyncStorage,
         FlatList,
         ActivityIndicator,
-        ScrollView
+        ImageBackground,
+        Dimensions,
       }
 from 'react-native';
 
-import {List} from 'react-native-elements'
-
 import MyListItem from './ListItems.js'
+
+import AngleLeft from '../Icons/angle-left.js'
 
 
 class EventsList extends Component {
@@ -53,6 +54,7 @@ renderItem = ({ item }) => (
       date={item.date}
       description={item.description}
       email={this.props.email}
+      geolocation={'(' + item.latitude + ', ' + item.longitude + ')'}
     />
 )
 
@@ -86,6 +88,21 @@ componentDidMount() {
 export default class EventsShow extends Component {
   //renders the page with all of the events in scrolling formatt
   //click events for more information
+  static navigationOptions = {
+    headerLeftContainerStyle: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginRight: '2%'
+    },
+    headerStyle: {
+      height: (.07 * Dimensions.get('window').height),
+      borderBottomWidth: 0,
+      backgroundColor: '#B30738',
+    },
+    headerTitleStyle: {
+      color: 'white'
+    },
+  };
   render(){
 
     const { navigation } = this.props;
@@ -96,7 +113,12 @@ export default class EventsShow extends Component {
         <View style={styles.headerContainer}>
           <Text style={styles.title}>Upcoming Events</Text>
         </View>
-        <EventsList email={email}/>
+
+        <ImageBackground source={require("../../Images/upcoming_events_background.png")} style={styles.backgroundImage}>
+          <View style={styles.opacity}>
+            <EventsList email={email}/>
+          </View>
+        </ImageBackground>
       </View>
     )
   }
@@ -112,21 +134,31 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'white',
-    },
-    flatlistContainer: {
-      flex: 1
+      backgroundColor: 'grey',
     },
     headerContainer: {
       alignItems: 'stretch',
+      justifyContent: 'flex-start',
+      height: '13%',
       backgroundColor: '#B30738',
-      paddingVertical: 60,
+      borderBottomWidth: 1
+    },
+    backgroundImage: {
+      height: '100%',
+      width: '100%',
+    },
+    opacity: {
+      flex: 1,
+      backgroundColor: 'rgba(255,255,255,0.3)',
+    },
+    flatlistContainer: {
+      height: '87%',
     },
     title: {
-      color: 'white',
       textAlign: 'center',
-      fontSize: 25,
-      paddingHorizontal: 10
+      fontWeight: 'bold',
+      fontSize: (.05 * Dimensions.get('window').height),
+      color: 'white',
     },
   }
 );

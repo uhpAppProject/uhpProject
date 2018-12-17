@@ -5,6 +5,9 @@ import {
         Text,
         ActivityIndicator,
         AsyncStorage,
+        ImageBackground,
+        ScrollView,
+        Dimensions,
       }
 from 'react-native';
 
@@ -20,6 +23,21 @@ export default class ParticiptionStatus extends Component {
   };
 }
 
+static navigationOptions = {
+  headerLeftContainerStyle: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginRight: '2%'
+  },
+  headerStyle: {
+    height: (.07 * Dimensions.get('window').height),
+    backgroundColor: '#B30738',
+    borderBottomWidth: 0,
+  },
+  headerTitleStyle: {
+    color: 'white',
+  }
+};
 
   async extractUserInfo(asyncTitle) {
     /*Function for extracting input "asyncTitle" key from async storage and parsing it into
@@ -69,26 +87,30 @@ export default class ParticiptionStatus extends Component {
       return(
         <View style={styles.container}>
           <View style={styles.headerContainer}>
-            <Text style={styles.headerTitle}>Your Participation</Text>
-            <Text style={styles.headerText}>Status: {this.state.status}</Text>
+            <Text style={styles.headerTitle}>Participation</Text>
+            <Text style={styles.headerText}>{this.state.status}</Text>
           </View>
 
-          <View style={styles.stickyContainer}>
-            <StickyLogic
-                type={'UHP Academic Event'}
-                status={this.state.user_info[0].academic_status}
-                date={this.state.user_info[0].academic_date}
-                event={this.state.user_info[0].academic_event_attended}
-                email={this.state.user_info[0].email}
-                />
-            <StickyLogic
-                type={'Social Justice Event'}
-                status={this.state.user_info[0].social_justice_status}
-                date={this.state.user_info[0].social_justice_date}
-                event={this.state.user_info[0].social_justice_event_attended}
-                email={this.state.user_info[0].email}
-                />
-          </View>
+          <ImageBackground source={require("../../Images/paticipation_status_background.png")} style={styles.backgroundImage}>
+            <View style={styles.opacity}>
+              <ScrollView style={styles.stickyContainer}>
+                <StickyLogic
+                    type={'UHP Academic Event'}
+                    status={this.state.user_info[0].academic_status}
+                    date={this.state.user_info[0].academic_date}
+                    event={this.state.user_info[0].academic_event_attended}
+                    email={this.state.user_info[0].email}
+                    />
+                <StickyLogic
+                    type={'Social Justice Event'}
+                    status={this.state.user_info[0].social_justice_status}
+                    date={this.state.user_info[0].social_justice_date}
+                    event={this.state.user_info[0].social_justice_event_attended}
+                    email={this.state.user_info[0].email}
+                    />
+              </ScrollView>
+            </View>
+          </ImageBackground>
         </View>
       )
     }
@@ -97,33 +119,38 @@ export default class ParticiptionStatus extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'stretch',
   },
   activityIndicatorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#B30738',
   },
   headerContainer: {
-    flex: 1,
+    height: '13%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     backgroundColor: '#B30738',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   headerTitle: {
     color: 'white',
-    fontSize: 35,
+    fontSize: (.045 * Dimensions.get('window').height),
     fontWeight: 'bold'
   },
   headerText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: (.035 * Dimensions.get('window').height),
+  },
+  backgroundImage: {
+    height: '100%',
+    width: '100%'
+  },
+  opacity: {
+    backgroundColor: 'rgba(255,255,255,0.3)',
   },
   stickyContainer: {
-    flex: 4,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
+    height: (.74 * Dimensions.get('window').height),
+    marginBottom: (.5 * Dimensions.get('window').height),
   },
 })

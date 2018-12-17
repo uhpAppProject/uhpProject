@@ -5,34 +5,33 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  Dimensions
 } from 'react-native';
 
 import { withNavigation } from 'react-navigation';
 
 class MyListItem extends Component {
-  constructor(props) {
-  super(props);
-  this.state = {
-  };
-}
+
 
   _onPress = () => {
     const{navigate} = this.props.navigation;
       navigate('IndividualEvent', {
+            event_id: this.props.id,
             title: this.props.title,
             requirement: this.props.requirement,
             location: this.props.location,
             date: this.props.date,
             time: this.props.time,
             description: this.props.description,
-            email: this.props.email
+            email: this.props.email,
+            geolocation: this.props.geolocation
         });
   }
 
   render() {
     return (
-      <TouchableOpacity style={styles.opacityContainer} onPress={() => this._onPress()}>
-        <View style={styles.elementContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={() => this._onPress()}>
+        <View style={styles.eventContainer}>
           <Text style={[styles.leftText, styles.titleText]}>
             {this.props.title}
           </Text>
@@ -41,7 +40,7 @@ class MyListItem extends Component {
           </Text>
         </View>
 
-        <View style={styles.elementContainer}>
+        <View style={styles.eventContainer}>
           <Text style={styles.leftText}>
             {this.props.requirement}
           </Text>
@@ -61,24 +60,38 @@ class MyListItem extends Component {
 }
 
 const styles = StyleSheet.create({
-    opacityContainer: {
-      flex: 1,
-      paddingVertical: 40,
+    buttonContainer: {
+      height: (.15 * Dimensions.get('window').height),
+      width: (.96 * Dimensions.get('window').width),
+      alignSelf: 'center',
+      justifyContent: 'center',
+      marginTop: (.02 * Dimensions.get('window').height),
+      marginBottom: (.02 * Dimensions.get('window').height),
       backgroundColor: 'white',
+      shadowColor: 'black',
+      shadowOffset: {
+        width: 0,
+        height: 3
       },
-    elementContainer: {
+      shadowRadius: 5,
+      shadowOpacity: 1.0,
+      borderRadius: 2,
+      },
+    eventContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center'
       },
     titleText: {
-      fontSize: 20
+      fontSize: (.035 * Dimensions.get('window').height)
     },
     leftText: {
-      marginLeft: 1,
+      fontSize: (.03 * Dimensions.get('window').height),
+      marginLeft: '1%',
     },
     rightText: {
-      marginRight: 1,
+      fontSize: (.03 * Dimensions.get('window').height),
+      marginRight: '1%',
     },
     timeContainer: {
       flexDirection: 'row',
