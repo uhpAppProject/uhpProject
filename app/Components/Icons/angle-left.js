@@ -45,7 +45,7 @@ export default class AngleLeft extends Component {
           <Icon
             color={'white'}
             name={'angle-left'}
-            size={.07 * Dimensions.get('window').height}
+            size={.12 * Dimensions.get('window').width}
             onPress={() => this.onPress()}
             />
 
@@ -62,9 +62,9 @@ export default class AngleLeft extends Component {
         alignItems: 'center',
       },
       title: {
-        fontSize: (.03 * Dimensions.get('window').height),
+        fontSize: (.06 * Dimensions.get('window').width),
         color: 'white',
-        marginLeft: (.01 * Dimensions.get('window').height),
+        marginLeft: (.02 * Dimensions.get('window').width),
       },
     }
   );

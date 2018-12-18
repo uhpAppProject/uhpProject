@@ -8,7 +8,9 @@ import {
   StatusBar
 } from 'react-native';
 
-export default class LoginForm extends Component {
+import { withNavigation, StackActions, NavigationActions } from 'react-navigation';
+
+class LoginForm extends Component {
   constructor(props){
     super(props);
     this.state={
@@ -19,10 +21,15 @@ export default class LoginForm extends Component {
   }
 
   login () {
-    const username = this.state.username;
-    const password = this.state.password;
-    alert(username + ' ' + password);
-  }
+    const resetAction = StackActions.reset({
+    index: 0, // <-- currect active route from actions array
+    actions: [
+      NavigationActions.navigate({ routeName: 'Participation', params: {email: this.state.username}})
+    ],
+    });
+
+    this.props.navigation.dispatch(resetAction);
+    }
 
   render() {
     return (
@@ -52,7 +59,7 @@ export default class LoginForm extends Component {
             style={styles.buttonContainer}
             onPress={() => this.login()}>
 
-            <Text style={styles.buttonText}>LOGIN</Text>
+            <Text style={styles.buttonText}>SUBMIT</Text>
 
           </TouchableOpacity>
       </View>
@@ -66,19 +73,20 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: '#B7B0B0',
     marginBottom: 10,
-    color: '#FFF',
     paddingHorizontal: 10
   },
   buttonContainer: {
-    backgroundColor: '#2902b9',
+    backgroundColor: '#B30738',
     paddingVertical: 35
   },
   buttonText: {
     textAlign: 'center',
-    color: '#FFFFFF',
+    color: 'white',
     fontWeight: '700'
   }
 
 })
+
+export default withNavigation(LoginForm);

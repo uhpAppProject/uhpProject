@@ -22,6 +22,7 @@ export default class ParticipationFAQ extends Component {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
       backgroundColor: '#B30738',
+      elevation: 0,
     },
   };
 
@@ -39,17 +40,20 @@ export default class ParticipationFAQ extends Component {
 
                 <PostIt title={'Why should I fulfill my Honors participation requirement?'}
                         contents={"Attending Honors-designated events will not only encourage learning beyond the classroom, but it is also an opportunity to meet new students or catch up with the ones you may not have seen since the days of CTW and C&I. Failure to fulfil this two-event requirement will result in loss of Honors status, which includes priority registration and, for seniors, loss of Honors designation in transcript. There will be many chances to attend events throughout the year, but please be aware that there will not be a plethora of UHP-sponsored events at the end of Spring quarter."}
+                        button={false}
                         />
 
                 <PostIt title={'What does this mean for other events on campus hosted by other departments or organizations that previously counted for credit?'}
                         contents={'Unless explicitly designated as an Honors event in the weekly UHP newsletter, these events will not count for participation credit. However, students are encouraged to take advantage of the programming on campus, and event organizers are still welcome to advertise their event in the newsletter.'}
+                        button={false}
                         />
 
                 <PostIt title={'How do I track my participation status?'}
                         contents={'The Participation Tracker will give you a detailed record of your participation status with regard to these event requirements. On the “Participation Status” page, you will see the events you attended and whether they counted for a UHP Academic Event or Social Justice Event. If your status is incomplete for either one of these events, you may be prompted to return to the “Upcoming Honors Events” page to find an event that you would like to attend to fulfill your requirement.'}
+                        button={true}
+                        buttonTitle={'View Participation Status'}
                         />
 
-                //custom postit
                 <View style={styles.postItContainer}>
 
                   <View style={styles.postItHeader}>
@@ -69,6 +73,7 @@ export default class ParticipationFAQ extends Component {
 
                 <PostIt title={'Where can I learn more information about events and participation?'}
                         contents={'Please refer to the weekly UHP newsletter to find out more information. We will be advertising which events count for participation credit. If you have any questions, feel free to reply to the newsletter to reach the Honors Advisory Council. You can also view our Google Calendar, also found in the newsletter, to help you plan for these events.'}
+                        button={false}
                         />
 
               </ScrollView>
@@ -130,7 +135,8 @@ const styles = StyleSheet.create({
       height: 3
     },
     shadowRadius: 5,
-    shadowOpacity: 0.5
+    shadowOpacity: 0.5,
+    elevation: 5,
   },
   postItHeader: {
     alignItems: 'center',
@@ -140,6 +146,7 @@ const styles = StyleSheet.create({
     fontSize: (.03 * Dimensions.get('window').height),
     fontWeight: 'bold',
     textAlign: 'center',
+    margin: (.02 * Dimensions.get('window').width),
   },
   postItBody: {
     justifyContent: 'space-evenly',

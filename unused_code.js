@@ -24,3 +24,15 @@ async testIfStored(asyncTitle) {
     alert(error);
   }
 }
+
+//code for switching from sign-in page to participation home while clearing the stack
+_onPress = () => {
+  const resetAction = StackActions.reset({
+  index: 0, // <-- currect active route from actions array
+  actions: [
+    NavigationActions.navigate({ routeName: 'Participation', params: {email: this.state.user_email}})
+  ],
+  });
+
+  this.props.navigation.dispatch(resetAction);
+  }

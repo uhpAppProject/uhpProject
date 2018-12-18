@@ -8,6 +8,7 @@ import {
         AsyncStorage,
         ImageBackground,
         Dimensions,
+        ActivityIndicator,
       }
 from 'react-native';
 
@@ -25,10 +26,14 @@ static navigationOptions = {
     height: (.07 * Dimensions.get('window').height),
     backgroundColor: '#B30738',
     borderBottomWidth: 0,
+    elevation: 0,
   },
   headerTitleStyle: {
     color: 'white',
-    fontSize: (.03 * Dimensions.get('window').height)
+    fontSize: (.03 * Dimensions.get('window').height),
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 };
 
@@ -42,50 +47,63 @@ onPressEvents = (email) => {
 
 onPressParticipation = () => {
   const{navigate} = this.props.navigation;
-    navigate('ParticipationStatus');
-}
+    navigate('ParticipationStatus', {
+      title: 'Home',
+    }
+  )
+};
+
 
 onPressEventReqs = () => {
   const{navigate} = this.props.navigation;
     navigate('EventRequirements');
 }
 
-onPressParticipationFAQ = () => {
+onPressParticipationFAQ = (email) => {
   const{navigate} = this.props.navigation;
-    navigate('ParticipationFAQ');
+    navigate('ParticipationFAQ')
 }
+
 
   render() {
 
     const { navigation } = this.props;
     const email = navigation.getParam('email', 'No Email');
 
+    if(this.state.isLoading){
+      return(
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size="large" color='#B30738' />
+        </View>
+      )
+    }
+    else{
     return (
       <View style={styles.container}>
-      //Background Image
+
           <ImageBackground source={require("../../Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
-          //Opacity over background Image
+
             <View style={styles.opacity}>
-            //Header
-              //First line of opacities
+
+
               <View style={styles.buttons}>
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={() => this.onPressEvents(email)}>
-                      <Text style={styles.title_w}>Upcoming Honors Events</Text>
+                      <Text style={styles.title}>Upcoming Honors Events</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} onPress={() => this.onPressParticipation()}>
-                      <Text style={styles.title_w}>Participation Status</Text>
+                      <Text style={styles.title}>Participation Status</Text>
                     </TouchableOpacity>
                   </View>
-                  //A second line of opacities for future development
+
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={() => this.onPressEventReqs()}>
-                      <Text style={styles.title_w}>Event Requirements</Text>
+                      <Text style={styles.title}>Event Requirements</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} onPress={() => this.onPressParticipationFAQ()}>
-                      <Text style={styles.title_w}>Honors Participation FAQs</Text>
+                      <Text style={styles.title}>Honors Participation FAQs</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -98,12 +116,19 @@ onPressParticipationFAQ = () => {
 
     );
   }
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
+  },
+  activityIndicatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
   backgroundImage: {
     width: '100%',
@@ -129,22 +154,22 @@ const styles = StyleSheet.create({
       height: 3
     },
     shadowRadius: 5,
-    shadowOpacity: 1.0
+    shadowOpacity: 1.0,
+    elevation: 5,
     },
   button: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#B30738',
-    //borderRadius is ios only
     borderRadius: 5,
     height: '72%',
     width: '47%',
     },
-  title_w: {
+  title: {
     color: 'white',
     textAlign: 'center',
-    fontSize: (.04 * Dimensions.get('window').height),
-    padding: 5
+    fontSize: (.07 * Dimensions.get('window').width),
+    margin: (.01 * Dimensions.get('window').width),
     },
   }
 );

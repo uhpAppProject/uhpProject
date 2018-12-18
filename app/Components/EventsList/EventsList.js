@@ -13,9 +13,6 @@ from 'react-native';
 
 import MyListItem from './ListItems.js'
 
-import AngleLeft from '../Icons/angle-left.js'
-
-
 class EventsList extends Component {
   constructor(props) {
   super(props);
@@ -58,7 +55,7 @@ renderItem = ({ item }) => (
     />
 )
 
-componentDidMount() {
+componentWillMount() {
   this.extractAsyncData('Events');
 }
 
@@ -67,7 +64,13 @@ componentDidMount() {
     if (this.state.isloading){
       return (
         <View style={styles.activityIndicatorContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color='#B30738' />
+
+          <AppLoading
+            startAsync={this._loadResourcesAsync}
+            onError={this._handleLoadingError}
+            onFinish={this._handleFinishLoading}
+          />
         </View>
       )
     }
@@ -88,6 +91,11 @@ componentDidMount() {
 export default class EventsShow extends Component {
   //renders the page with all of the events in scrolling formatt
   //click events for more information
+  constructor(props) {
+  super(props);
+  this.state = {
+  };
+}
   static navigationOptions = {
     headerLeftContainerStyle: {
       flexDirection: 'column',
@@ -98,29 +106,41 @@ export default class EventsShow extends Component {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
       backgroundColor: '#B30738',
+      elevation: 0,
     },
     headerTitleStyle: {
       color: 'white'
     },
   };
+
   render(){
 
     const { navigation } = this.props;
     const email = navigation.getParam('email', 'No Email');
 
-    return(
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.title}>Upcoming Events</Text>
+    if(this.state.isLoading){
+      return(
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size="large" color='#B30738' />
         </View>
+      )
+    }
+    else{
 
-        <ImageBackground source={require("../../Images/upcoming_events_background.png")} style={styles.backgroundImage}>
-          <View style={styles.opacity}>
-            <EventsList email={email}/>
+      return(
+        <View style={styles.container}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.title}>Upcoming Events</Text>
           </View>
-        </ImageBackground>
-      </View>
-    )
+
+          <ImageBackground source={require("../../Images/upcoming_events_background.png")} style={styles.backgroundImage}>
+            <View style={styles.opacity}>
+              <EventsList email={email}/>
+            </View>
+          </ImageBackground>
+        </View>
+      )
+    }
   }
 }
 
@@ -134,7 +154,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'grey',
+      backgroundColor: 'white',
     },
     headerContainer: {
       alignItems: 'stretch',

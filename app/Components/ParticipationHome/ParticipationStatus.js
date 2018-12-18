@@ -33,6 +33,7 @@ static navigationOptions = {
     height: (.07 * Dimensions.get('window').height),
     backgroundColor: '#B30738',
     borderBottomWidth: 0,
+    elevation: 0,
   },
   headerTitleStyle: {
     color: 'white',

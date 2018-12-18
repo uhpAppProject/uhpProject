@@ -42,7 +42,7 @@ class StickyLogic extends Component {
               elevation={5}
               style={styles.buttonContainer}
               onPress={ () => this._onPress() }>
-            <Text style={styles.buttonText}>Tap To See Upcoming Events</Text>
+            <Text style={styles.buttonText}>View Upcoming Events</Text>
           </TouchableOpacity>
         </View>
       );
@@ -109,9 +109,11 @@ const styles = StyleSheet.create({
       shadowRadius: 5,
       shadowOpacity: 1.0,
       borderRadius: 1,
+      elevation: 5,
     },
     buttonText: {
       fontSize: (.035 * Dimensions.get('window').height),
+      textAlign: 'center',
     },
     textRegular: {
       fontSize: (.03 * Dimensions.get('window').height),

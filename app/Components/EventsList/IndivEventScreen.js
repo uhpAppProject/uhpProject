@@ -17,14 +17,19 @@ export default class IndivEvent extends Component {
       justifyContent: 'center',
       marginRight: '2%',
     },
+    headerTitleContainerStyle: {
+      alignItems: 'center',
+    },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
       backgroundColor: '#B30738',
       borderBottomWidth: 0,
+      elevation: 0,
     },
     headerTitleStyle: {
       color: 'white',
-      fontSize: (.03 * Dimensions.get('window').height)
+      fontSize: (.03 * Dimensions.get('window').height),
+      alignSelf: 'center',
     }
   };
   _onPressOpacity = (email, title, requirement, date, geolocation) => {
@@ -94,7 +99,15 @@ const styles = StyleSheet.create({
       marginRight: '2%',
       backgroundColor: '#F7FFCB',
       //borderRadius is ios only
-      borderRadius: 5
+      borderRadius: 3,
+      shadowColor: 'black',
+      shadowOffset: {
+        width: 0,
+        height: 3
+      },
+      shadowRadius: 5,
+      shadowOpacity: 0.5,
+      elevation: 5,
     },
     eventDiscription: {
       height: '50%',
@@ -117,7 +130,8 @@ const styles = StyleSheet.create({
         height: 3
       },
       shadowRadius: 5,
-      shadowOpacity: 1.0
+      shadowOpacity: 1.0,
+      elevation: 5,
     },
     opacityText: {
       color: 'white',

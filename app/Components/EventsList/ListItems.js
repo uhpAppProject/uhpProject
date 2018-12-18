@@ -29,6 +29,21 @@ class MyListItem extends Component {
   }
 
   render() {
+
+    if(this.props.requirement == 'Social Justice Event'){
+      var requirement = 'SJ Event'
+    }
+    else{
+      var requirement = 'UHP Event'
+    }
+
+    if(this.props.location == 'California Mission Room'){
+      var location = 'CMR'
+    }
+    else{
+      var location = this.props.location
+    }
+
     return (
       <TouchableOpacity style={styles.buttonContainer} onPress={() => this._onPress()}>
         <View style={styles.eventContainer}>
@@ -36,13 +51,13 @@ class MyListItem extends Component {
             {this.props.title}
           </Text>
           <Text style={styles.rightText}>
-            {this.props.location}
+            {location}
           </Text>
         </View>
 
         <View style={styles.eventContainer}>
           <Text style={styles.leftText}>
-            {this.props.requirement}
+            {requirement}
           </Text>
           <Text style={styles.rightText}>
             {this.props.date}
@@ -76,6 +91,7 @@ const styles = StyleSheet.create({
       shadowRadius: 5,
       shadowOpacity: 1.0,
       borderRadius: 2,
+      elevation: 5,
       },
     eventContainer: {
       flexDirection: 'row',

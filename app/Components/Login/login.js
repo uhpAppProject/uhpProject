@@ -1,19 +1,42 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, KeyboardAvoidingView } from 'react-native';
+
+import {
+        StyleSheet,
+        View,
+        Image,
+        Text,
+        KeyboardAvoidingView,
+        Dimensions}
+from 'react-native';
+
 import LoginForm from './loginform';
 
 export default class Login extends Component {
+  static navigationOptions = {
+    headerStyle: {
+      height: (.07 * Dimensions.get('window').height),
+      borderBottomWidth: 0,
+      backgroundColor: '#B30738',
+      elevation: 0,
+    },
+    headerLeftContainerStyle: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginRight: '2%'
+    },
+  };
+
+
   render() {
     return (
       <KeyboardAvoidingView behavior = "padding" style={styles.container}>
         <View style={styles.container}>
           <View style={styles.logoContainer}>
             <Image
-            style={styles.logo}
-            source={require('../../Images/images.jpg')}
+              style={styles.logo}
+              source={require('../../Images/images.jpg')}
             />
 
-            <Text style={styles.title}>UHP App</Text>
           </View>
           <View style={styles.formContainer}>
             <LoginForm />
@@ -27,12 +50,12 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#3498db'
+    backgroundColor: 'white'
   },
   logoContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
     flexGrow: 1,
-    justifyContent: 'center'
   },
   logo: {
     width: 100,

@@ -19,6 +19,7 @@ export default class EventRequirements extends Component {
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
+      elevation: 0,
       backgroundColor: '#B30738',
     },
   };
@@ -106,6 +107,8 @@ const styles = StyleSheet.create({
     fontSize: (.025 * Dimensions.get('window').height),
     textAlign: 'center',
     color: 'white',
+    marginRight: '2%',
+    marginLeft: '2%',
     marginBottom: '2%'
   },
   backgroundImage: {
@@ -136,7 +139,8 @@ const styles = StyleSheet.create({
       height: 3
     },
     shadowRadius: 5,
-    shadowOpacity: 0.5
+    shadowOpacity: 0.5,
+    elevation: 5,
   },
   postItHeader: {
     alignItems: 'center',
