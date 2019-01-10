@@ -12,11 +12,14 @@ import {
       }
 from 'react-native';
 
+import { AppLoading, Asset, Font, Icon} from 'expo';
 
 export default class ParticipationHome extends Component {
   constructor(props) {
   super(props);
   this.state = {
+    user_email: '',
+    isLoading: true,
   };
 }
 
@@ -27,6 +30,11 @@ static navigationOptions = {
     backgroundColor: '#B30738',
     borderBottomWidth: 0,
     elevation: 0,
+  },
+  headerRightContainerStyle: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginRight: '2%',
   },
   headerTitleStyle: {
     color: 'white',
@@ -59,21 +67,78 @@ onPressEventReqs = () => {
     navigate('EventRequirements');
 }
 
-onPressParticipationFAQ = (email) => {
+onPressParticipationFAQ = () => {
   const{navigate} = this.props.navigation;
     navigate('ParticipationFAQ')
 }
+
+postEmailAsync = (url, email, asyncTitle) => {
+
+    var formData = new FormData();
+    formData.append('email', email);
+
+    fetch( url , {
+      method: 'POST',
+      body: formData,
+      headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'multipart/form-data',
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        AsyncStorage.setItem(asyncTitle, JSON.stringify(responseJson));
+      })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+fetchEventsAsync = (url, asyncTitle) => {
+    fetch(url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        AsyncStorage.setItem(asyncTitle, JSON.stringify(responseJson));
+      })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+_loadResourcesAsync = async => {
+  //  const ip = 'www.scuhonors.com'; //web host
+  //    const ip = '127.0.0.1';  //local host
+  const ip = '172.20.111.24'
+  this.fetchEventsAsync('http://'+ ip + '/select_all_from_events.php', 'Events');
+  this.postEmailAsync('http://' + ip + '/participation_status_query.php', this.state.user_email, 'userInfo');
+};
+
+_handleLoadingError = error => {
+// In this case, you might want to report the error to your error
+// reporting service, for example Sentry
+console.warn(error);
+};
+
+_handleFinishLoading = () => {
+  this.setState({ isLoading: false });
+};
 
 
   render() {
 
     const { navigation } = this.props;
-    const email = navigation.getParam('email', 'No Email');
+    this.state.user_email = navigation.getParam('email', 'No Email');
 
     if(this.state.isLoading){
       return(
         <View style={styles.activityIndicatorContainer}>
           <ActivityIndicator size="large" color='#B30738' />
+
+          <AppLoading
+            startAsync={this._loadResourcesAsync}
+            onError={this._handleLoadingError}
+            onFinish={this._handleFinishLoading}
+          />
         </View>
       )
     }
@@ -88,7 +153,7 @@ onPressParticipationFAQ = (email) => {
 
               <View style={styles.buttons}>
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => this.onPressEvents(email)}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.onPressEvents(this.state.user_email)}>
                       <Text style={styles.title}>Upcoming Honors Events</Text>
                     </TouchableOpacity>
 
@@ -103,7 +168,7 @@ onPressParticipationFAQ = (email) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} onPress={() => this.onPressParticipationFAQ()}>
-                      <Text style={styles.title}>Honors Participation FAQs</Text>
+                      <Text style={styles.title}>Honors Participation FAQ</Text>
                     </TouchableOpacity>
                   </View>
                 </View>

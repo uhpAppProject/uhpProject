@@ -5,19 +5,30 @@ import {
         Text,
         ScrollView,
         ImageBackground,
-        Dimensions
+        Dimensions,
+        Animated,
       }
 from 'react-native';
 
 import PostIt from './PostIt.js';
 
+const HEADER_EXPANDED_HEIGHT = .13 * Dimensions.get('window').height
+const HEADER_COLLAPSED_HEIGHT = 0
+
 export default class ParticipationFAQ extends Component {
   constructor(props) {
   super(props);
   this.state = {
+    scrollY: new Animated.Value(0)
   }
 };
   static navigationOptions = {
+    headerLeftContainerStyle: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginRight: '2%',
+      marginLeft: '.05%',
+    },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
@@ -28,15 +39,30 @@ export default class ParticipationFAQ extends Component {
 
   render() {
 
+    const headerHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
+      outputRange: [HEADER_EXPANDED_HEIGHT, HEADER_COLLAPSED_HEIGHT],
+      extrapolate: 'clamp'
+    });
+
       return (
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerTitleText}>Participation FAQs</Text>
-          </View>
-
           <ImageBackground source={require("../../Images/participation_faq.jpg")} style={styles.backgroundImage}>
+
+            <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
+              <Text style={styles.headerTitleText}>Participation FAQ</Text>
+            </Animated.View>
+
             <View style={styles.opacity}>
-              <ScrollView style={styles.bodyContainer}>
+              <ScrollView style={styles.bodyContainer}
+                          onScroll={Animated.event(
+                            [{ nativeEvent: {
+                                contentOffset: {
+                                   y: this.state.scrollY
+                                 }
+                               }
+                            }])}
+                        scrollEventThrottle={16}>
 
                 <PostIt title={'Why should I fulfill my Honors participation requirement?'}
                         contents={"Attending Honors-designated events will not only encourage learning beyond the classroom, but it is also an opportunity to meet new students or catch up with the ones you may not have seen since the days of CTW and C&I. Failure to fulfil this two-event requirement will result in loss of Honors status, which includes priority registration and, for seniors, loss of Honors designation in transcript. There will be many chances to attend events throughout the year, but please be aware that there will not be a plethora of UHP-sponsored events at the end of Spring quarter."}
@@ -92,7 +118,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   headerContainer: {
-    flex: 1,
     backgroundColor: '#B30738',
   },
   headerTitleText: {
@@ -120,7 +145,6 @@ const styles = StyleSheet.create({
   bodyContainer: {
     width: '100%',
     marginTop: '5%',
-    marginBottom: '2%',
   },
   postItContainer: {
     justifyContent: 'space-evenly',

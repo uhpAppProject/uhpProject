@@ -5,17 +5,28 @@ import {
         Text,
         ScrollView,
         ImageBackground,
-        Dimensions
+        Dimensions,
+        Animated,
       }
 from 'react-native';
+
+const HEADER_EXPANDED_HEIGHT = .17 * Dimensions.get('window').height
+const HEADER_COLLAPSED_HEIGHT = 0
 
 export default class EventRequirements extends Component {
   constructor(props) {
   super(props);
   this.state = {
+    scrollY: new Animated.Value(0)
   }
 };
   static navigationOptions = {
+    headerLeftContainerStyle: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginRight: '2%',
+      marginLeft: '.05%',
+    },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
@@ -26,19 +37,36 @@ export default class EventRequirements extends Component {
 
   render() {
 
+    const headerHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
+      outputRange: [HEADER_EXPANDED_HEIGHT, HEADER_COLLAPSED_HEIGHT],
+      extrapolate: 'clamp'
+    });
+
+
       return (
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerTitleText}>Event Requirements</Text>
-            <Text style={styles.headerText}>To fulfill your event requirements,
-                  you must complete 1 UHP Academic Event
-                  and 1 Social Justice Event.
-            </Text>
-          </View>
 
           <ImageBackground source={require("../../Images/event_reqs.png")} style={styles.backgroundImage}>
+
+            <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
+              <Text style={styles.headerTitleText}>Event Requirements</Text>
+              <Text style={styles.headerText}>To fulfill your event requirements,
+                    you must complete 1 UHP Academic Event
+                    and 1 Social Justice Event.
+              </Text>
+            </Animated.View>
+
             <View style={styles.opacity}>
-              <ScrollView style={styles.bodyContainer}>
+              <ScrollView style={styles.bodyContainer}
+                          onScroll={Animated.event(
+                            [{ nativeEvent: {
+                                contentOffset: {
+                                   y: this.state.scrollY
+                                 }
+                               }
+                            }])}
+                        scrollEventThrottle={16}>
                 <View style={styles.postItContainer}>
 
                   <View style={styles.postItHeader}>
@@ -80,7 +108,6 @@ export default class EventRequirements extends Component {
               </ScrollView>
             </View>
           </ImageBackground>
-
         </View>
       );
     };
@@ -93,7 +120,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   headerContainer: {
-    flex: 1,
     backgroundColor: '#B30738',
   },
   headerTitleText: {
@@ -123,7 +149,6 @@ const styles = StyleSheet.create({
   bodyContainer: {
     width: '100%',
     marginTop: '5%',
-    marginBottom: '2%',
   },
   postItContainer: {
     justifyContent: 'space-evenly',

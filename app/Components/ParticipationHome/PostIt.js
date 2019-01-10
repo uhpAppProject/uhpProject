@@ -20,7 +20,7 @@ class PostIt extends Component {
 _onPress = () => {
   const{navigate} = this.props.navigation;
   navigate('ParticipationStatus', {
-    title: 'Participation FAQs',
+    title: 'FAQ',
   })
 }
   render() {

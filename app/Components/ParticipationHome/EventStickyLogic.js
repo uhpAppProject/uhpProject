@@ -53,14 +53,12 @@ class StickyLogic extends Component {
 
 const styles = StyleSheet.create({
     container: {
-      marginBottom: (.02 * Dimensions.get('window').height),
     },
     stickyContainerComplete: {
       justifyContent: 'space-around',
       alignItems: 'center',
       alignSelf: 'center',
       marginTop: (.05 * Dimensions.get('window').height),
-      marginBottom: (.02 * Dimensions.get('window').height),
       height: (.3 * Dimensions.get('window').height),
       width: (.9 * Dimensions.get('window').width),
       backgroundColor: 'white',
@@ -70,14 +68,13 @@ const styles = StyleSheet.create({
         height: 3
       },
       shadowRadius: 5,
-      shadowOpacity: 0.5
+      shadowOpacity: 0.5,
     },
     stickyContainerIncomplete: {
       justifyContent: 'space-evenly',
       alignItems: 'center',
       alignSelf: 'center',
       marginTop: (.05 * Dimensions.get('window').height),
-      marginBottom: (.02 * Dimensions.get('window').height),
       height: (.3 * Dimensions.get('window').height),
       width: '90%',
       backgroundColor: 'white',
@@ -87,7 +84,7 @@ const styles = StyleSheet.create({
         height: 3
       },
       shadowRadius: 5,
-      shadowOpacity: 0.5
+      shadowOpacity: 0.5,
     },
     textContainer: {
       height: '50%',
@@ -100,7 +97,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       height: (.1 * Dimensions.get('window').height),
       width: (.9 * Dimensions.get('window').width),
-      marginBottom: '2%',
+      marginTop: '2%',
       shadowColor: 'black',
       shadowOffset: {
         width: 0,

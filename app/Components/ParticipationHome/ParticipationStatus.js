@@ -8,10 +8,15 @@ import {
         ImageBackground,
         ScrollView,
         Dimensions,
+        Animated,
       }
 from 'react-native';
 
 import StickyLogic from './EventStickyLogic.js'
+
+
+const HEADER_EXPANDED_HEIGHT = .13 * Dimensions.get('window').height
+const HEADER_COLLAPSED_HEIGHT = 0
 
 export default class ParticiptionStatus extends Component {
   constructor(props) {
@@ -19,7 +24,9 @@ export default class ParticiptionStatus extends Component {
   this.state = {
     user_info: new Object(),
     isLoading: true,
-    status: ''
+    status: '',
+    scrollY: new Animated.Value(0),
+    scrollX: new Animated.Value(0),
   };
 }
 
@@ -27,7 +34,8 @@ static navigationOptions = {
   headerLeftContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%'
+    marginRight: '2%',
+    marginLeft: '.05%',
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
@@ -73,6 +81,11 @@ static navigationOptions = {
 
   render() {
 
+    const headerHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
+      outputRange: [HEADER_EXPANDED_HEIGHT, HEADER_COLLAPSED_HEIGHT],
+      extrapolate: 'clamp'
+    });
 
     if(this.state.isLoading){
       return(
@@ -87,31 +100,47 @@ static navigationOptions = {
 
       return(
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerTitle}>Participation</Text>
-            <Text style={styles.headerText}>{this.state.status}</Text>
-          </View>
+            <ImageBackground source={require("../../Images/paticipation_status_background.png")}
+                                      style={styles.backgroundImage}
+                                      resizeMode={'cover'}
+                                      >
+              <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
+                <Text style={styles.headerTitle}>Participation</Text>
+                <Text style={styles.headerText}>{this.state.status}</Text>
+              </Animated.View>
 
-          <ImageBackground source={require("../../Images/paticipation_status_background.png")} style={styles.backgroundImage}>
-            <View style={styles.opacity}>
-              <ScrollView style={styles.stickyContainer}>
-                <StickyLogic
-                    type={'UHP Academic Event'}
-                    status={this.state.user_info[0].academic_status}
-                    date={this.state.user_info[0].academic_date}
-                    event={this.state.user_info[0].academic_event_attended}
-                    email={this.state.user_info[0].email}
-                    />
-                <StickyLogic
-                    type={'Social Justice Event'}
-                    status={this.state.user_info[0].social_justice_status}
-                    date={this.state.user_info[0].social_justice_date}
-                    event={this.state.user_info[0].social_justice_event_attended}
-                    email={this.state.user_info[0].email}
-                    />
-              </ScrollView>
-            </View>
-          </ImageBackground>
+              <View style={styles.opacity}>
+
+                <ScrollView style={styles.stickyContainer}
+                            onScroll={Animated.event(
+                              [{ nativeEvent: {
+                                  contentOffset: {
+                                     y: this.state.scrollY,
+                                   }
+                                 }
+                              }])}
+                          scrollEventThrottle={16}>
+                  <StickyLogic
+                      type={'UHP Academic Event'}
+                      status={this.state.user_info[0].academic_status}
+                      date={this.state.user_info[0].academic_date}
+                      event={this.state.user_info[0].academic_event_attended}
+                      email={this.state.user_info[0].email}
+                      />
+                  <StickyLogic
+                      type={'Social Justice Event'}
+                      status={this.state.user_info[0].social_justice_status}
+                      date={this.state.user_info[0].social_justice_date}
+                      event={this.state.user_info[0].social_justice_event_attended}
+                      email={this.state.user_info[0].email}
+                      />
+
+                  <View style={styles.placeholder}>What the fuck</View>
+
+                </ScrollView>
+
+              </View>
+            </ImageBackground>
         </View>
       )
     }
@@ -129,7 +158,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#B30738',
   },
   headerContainer: {
-    height: '13%',
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#B30738',
@@ -145,13 +173,15 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
   opacity: {
+    flex: 1,
     backgroundColor: 'rgba(255,255,255,0.3)',
   },
+  placeholder: {
+    height: 80
+  },
   stickyContainer: {
-    height: (.74 * Dimensions.get('window').height),
-    marginBottom: (.5 * Dimensions.get('window').height),
   },
 })

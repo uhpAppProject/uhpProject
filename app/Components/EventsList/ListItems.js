@@ -24,7 +24,8 @@ class MyListItem extends Component {
             time: this.props.time,
             description: this.props.description,
             email: this.props.email,
-            geolocation: this.props.geolocation
+            latitude: this.props.latitude,
+            longitude: this.props.longitude,
         });
   }
 
@@ -80,8 +81,8 @@ const styles = StyleSheet.create({
       width: (.96 * Dimensions.get('window').width),
       alignSelf: 'center',
       justifyContent: 'center',
-      marginTop: (.02 * Dimensions.get('window').height),
-      marginBottom: (.02 * Dimensions.get('window').height),
+      marginTop: (.01 * Dimensions.get('window').height),
+      marginBottom: (.01 * Dimensions.get('window').height),
       backgroundColor: 'white',
       shadowColor: 'black',
       shadowOffset: {

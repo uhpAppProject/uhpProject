@@ -22,7 +22,8 @@ export default class Login extends Component {
     headerLeftContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%'
+      marginRight: '2%',
+      marginLeft: '.05%',
     },
   };
 

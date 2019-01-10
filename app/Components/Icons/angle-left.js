@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Platform } from 'react-native';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import { AppLoading, Font } from 'expo';
 
 import FontAwesome
 from '../../../node_modules/@expo/vector-icons/fonts/FontAwesome.ttf';
-import MaterialIcons
-from '../../../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf';
+//import MaterialIcons
+//from '../../../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf';
 
-export default class AngleLeft extends Component {
+export default class BackButton extends Component {
   constructor(props) {
   super(props);
   this.state = {
@@ -40,18 +40,34 @@ export default class AngleLeft extends Component {
         return (<AppLoading />);
 
       }
-      return (
-        <View style={styles.container}>
-          <Icon
-            color={'white'}
-            name={'angle-left'}
-            size={.12 * Dimensions.get('window').width}
-            onPress={() => this.onPress()}
-            />
+      else {
+        if(Platform.OS === 'ios') {
+          return(
+            <View style={styles.container}>
+              <Ionicons
+                color={'white'}
+                name={'ios-arrow-back'}
+                size={(.1 * Dimensions.get('window').width)}
+                onPress={() => this.onPress()}
+                />
 
-          <Text style={styles.title} onPress={() => this.onPress()}>{this.props.title}</Text>
-        </View>
-      );
+              <Text style={styles.title} onPress={() => this.onPress()}>{this.props.title}</Text>
+            </View>
+          )
+        }
+        else {
+          return(
+            <View style={styles.container}>
+              <MaterialIcons
+                color={'white'}
+                name={'arrow-back'}
+                size={(.1 * Dimensions.get('window').width)}
+                onPress={() => this.onPress()}
+                />
+            </View>
+          )
+        }
+      }
     }
   };
 

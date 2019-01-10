@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "uhpapp",
     "name": "uhpAppExp2",
     "description": "This project is really great.",
     "slug": "uhpAppExp2",

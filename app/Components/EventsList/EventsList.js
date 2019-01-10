@@ -8,10 +8,13 @@ import {
         ActivityIndicator,
         ImageBackground,
         Dimensions,
+        Animated,
       }
 from 'react-native';
 
 import MyListItem from './ListItems.js'
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 class EventsList extends Component {
   constructor(props) {
@@ -51,7 +54,8 @@ renderItem = ({ item }) => (
       date={item.date}
       description={item.description}
       email={this.props.email}
-      geolocation={'(' + item.latitude + ', ' + item.longitude + ')'}
+      latitude={item.latitude}
+      longitude={item.longitude}
     />
 )
 
@@ -77,10 +81,12 @@ componentWillMount() {
     else{
     return (
       <View style={styles.flatlistContainer}>
-        <FlatList
+        <AnimatedFlatList
           keyExtractor={(item) => item.event_id}
           data={this.state.events}
           renderItem={this.renderItem}
+          scrollEventThrottle={16}
+          onScroll={this.props.onScroll}
         />
       </View>
     )
@@ -88,19 +94,23 @@ componentWillMount() {
   }
 }
 
+const HEADER_EXPANDED_HEIGHT = .1 * Dimensions.get('window').height
+
 export default class EventsShow extends Component {
   //renders the page with all of the events in scrolling formatt
   //click events for more information
   constructor(props) {
   super(props);
   this.state = {
+    scrollY: new Animated.Value(0),
   };
 }
   static navigationOptions = {
     headerLeftContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%'
+      marginRight: '2%',
+      marginLeft: '.05%',
     },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
@@ -118,6 +128,12 @@ export default class EventsShow extends Component {
     const { navigation } = this.props;
     const email = navigation.getParam('email', 'No Email');
 
+    const headerHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT],
+      outputRange: [HEADER_EXPANDED_HEIGHT, 0],
+      extrapolate: 'clamp',
+    });
+
     if(this.state.isLoading){
       return(
         <View style={styles.activityIndicatorContainer}>
@@ -129,14 +145,26 @@ export default class EventsShow extends Component {
 
       return(
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.title}>Upcoming Events</Text>
-          </View>
-
           <ImageBackground source={require("../../Images/upcoming_events_background.png")} style={styles.backgroundImage}>
+
+            <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
+              <Text style={styles.title}>Upcoming Events</Text>
+            </Animated.View>
+
             <View style={styles.opacity}>
-              <EventsList email={email}/>
-            </View>
+
+                <EventsList
+                    email={email}
+                    onScroll={Animated.event(
+                      [{ nativeEvent: {
+                          contentOffset: {
+                             y: this.state.scrollY
+                           }
+                         }
+                      }],
+                    )}/>
+
+              </View>
           </ImageBackground>
         </View>
       )
@@ -159,9 +187,11 @@ const styles = StyleSheet.create({
     headerContainer: {
       alignItems: 'stretch',
       justifyContent: 'flex-start',
-      height: '13%',
       backgroundColor: '#B30738',
       borderBottomWidth: 1
+    },
+    animationContainer: {
+
     },
     backgroundImage: {
       height: '100%',
@@ -172,7 +202,8 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(255,255,255,0.3)',
     },
     flatlistContainer: {
-      height: '87%',
+      height: '100%',
+
     },
     title: {
       textAlign: 'center',

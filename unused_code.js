@@ -25,6 +25,8 @@ async testIfStored(asyncTitle) {
   }
 }
 
+
+import StartPage from '../StartPage/StartPage.js'
 //code for switching from sign-in page to participation home while clearing the stack
 _onPress = () => {
   const resetAction = StackActions.reset({

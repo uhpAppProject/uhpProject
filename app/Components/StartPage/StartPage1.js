@@ -19,17 +19,13 @@ import { Linking } from 'expo';
 
 import { StackActions, NavigationActions } from 'react-navigation';
 
-import FontAwesome
-from '../../../node_modules/@expo/vector-icons/fonts/FontAwesome.ttf';
-import MaterialIcons
-from '../../../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf';
-
 export default class StartPage extends Component {
 //works for valid users, throws a parse error for invalid users
   constructor(props) {
   super(props);
   this.state = {
     isLoading: true,
+    passwordReset: '',
   }
 };
   static navigationOptions = {
@@ -56,12 +52,8 @@ export default class StartPage extends Component {
       require("../../Images/MissionChurch2.jpg"),
       require("../../Images/event_reqs.png"),
       require("../../Images/participation_faq.jpg"),
-      require('../../Images/images.jpg'),
+      require('../../Images/images.jpg')
     ]),
-    Font.loadAsync({
-      FontAwesome,
-      MaterialIcons
-    })
   ]);
 };
 
@@ -76,15 +68,18 @@ _handleFinishLoading = () => {
 };
 
 //goes to forgot password too many times
-/*componentWillMount(){
-  Linking.getInitialURL().then(url => {
-    if(Linking.parse(url).path == 'ForgotPassword' && this.state.passwordReset == 'false'){
-        this.props.navigation.navigate('ForgotPasswordNavigator');
-      }
-    })
-  }*/
+componentWillMount(){
+  const { navigation } = this.props;
+  this.state.passwordReset = navigation.getParam('Reset', 'false');
+  alert(this.state.passwordReset)
+  }
 
   componentDidMount(){
+    Linking.getInitialURL().then(url => {
+      if(Linking.parse(url).path == 'ForgotPassword' && this.state.passwordReset == 'false'){
+          this.props.navigation.navigate('ForgotPassword');
+        }
+      })
   }
 
   render() {
