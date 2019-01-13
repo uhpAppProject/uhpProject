@@ -11,6 +11,8 @@ import {
 
 import ConfirmPassword from './confirm-password.js'
 
+import IP from '../../../assets/ip.js';
+
 export default class PasswordReset extends Component {
   constructor(props){
     super(props);
@@ -28,6 +30,7 @@ export default class PasswordReset extends Component {
       textAlign: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
+      fontFamily: 'Helvetica Neue',
     },
     headerLeftContainerStyle: {
       flexDirection: 'column',
@@ -37,7 +40,7 @@ export default class PasswordReset extends Component {
     },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       borderBottomWidth: 0,
       elevation: 0,
     },
@@ -77,9 +80,6 @@ export default class PasswordReset extends Component {
 
   render() {
 
-    //  const ip = 'www.scuhonors.com'; //web host
-    //    const ip = '127.0.0.1';  //local host
-        const ip = '172.20.111.24'
     if(!this.state.credentialsEntered) {
       return (
         <KeyboardAvoidingView behavior = "padding" style={styles.container}>
@@ -105,11 +105,11 @@ export default class PasswordReset extends Component {
               secureTextEntry
               ref={(input) => this.passwordInput = input}
               onChangeText={(input) => this.state.password = input}
-              onSubmitEditing={() => this._onPress('http://'+ ip + '/login.php')}
+              onSubmitEditing={() => this._onPress(IP + '/login.php')}
               />
               <TouchableOpacity
                 style={styles.buttonContainer}
-                onPress={() => this._onPress('http://'+ ip + '/login.php')}>
+                onPress={() => this._onPress(IP + '/login.php')}>
 
                 <Text style={styles.buttonText}>SUBMIT</Text>
 
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     fontSize: (.05 * Dimensions.get('window').width),
     textAlign: 'center',
     marginBottom: '5%',
+    fontFamily: 'Helvetica Neue',
   },
   input: {
     height: (.05 * Dimensions.get('window').height),
@@ -150,12 +151,13 @@ const styles = StyleSheet.create({
     height: (.15 * Dimensions.get('window').height),
     width: (.94 * Dimensions.get('window').width),
     justifyContent: 'center',
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
   },
   buttonText: {
     textAlign: 'center',
     color: 'white',
     fontSize: (.05 * Dimensions.get('window').width),
+    fontFamily: 'Helvetica Neue',
   }
 
 })

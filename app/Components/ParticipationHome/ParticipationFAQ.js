@@ -32,7 +32,7 @@ export default class ParticipationFAQ extends Component {
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       elevation: 0,
     },
   };
@@ -47,7 +47,7 @@ export default class ParticipationFAQ extends Component {
 
       return (
         <View style={styles.container}>
-          <ImageBackground source={require("../../Images/participation_faq.jpg")} style={styles.backgroundImage}>
+          <ImageBackground source={require("../../../assets/Images/participation_faq.jpg")} style={styles.backgroundImage}>
 
             <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
               <Text style={styles.headerTitleText}>Participation FAQ</Text>
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   headerContainer: {
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
   },
   headerTitleText: {
     flex: 1,
@@ -126,12 +126,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: (.04 * Dimensions.get('window').height),
     marginBottom: '2%',
+    fontFamily: 'Helvetica Neue',
   },
   headerText: {
     fontSize: (.03 * Dimensions.get('window').height),
     textAlign: 'center',
     color: 'white',
-    marginBottom: '2%'
+    marginBottom: '2%',
+    fontFamily: 'Helvetica Neue',
   },
   backgroundImage: {
     flex: 7,
@@ -144,7 +146,6 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     width: '100%',
-    marginTop: '5%',
   },
   postItContainer: {
     justifyContent: 'space-evenly',
@@ -183,6 +184,7 @@ const styles = StyleSheet.create({
   postItBodyText: {
     fontSize: (.025 * Dimensions.get('window').height),
     marginBottom: (.03 * Dimensions.get('window').height),
+    fontFamily: 'Helvetica Neue',
   },
   boldText: {
     fontWeight: 'bold',

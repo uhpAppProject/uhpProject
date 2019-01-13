@@ -26,6 +26,7 @@ static navigationOptions = {
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
+    fontFamily: 'Helvetica Neue',
   },
   headerLeftContainerStyle: {
     flexDirection: 'column',
@@ -35,7 +36,7 @@ static navigationOptions = {
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     borderBottomWidth: 0,
     elevation: 0,
   },
@@ -99,5 +100,6 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     textAlignVertical: 'center',
+    fontFamily: 'Helvetica Neue',
   },
 });

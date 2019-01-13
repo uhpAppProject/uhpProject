@@ -16,7 +16,7 @@ export default class Login extends Component {
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       elevation: 0,
     },
     headerLeftContainerStyle: {
@@ -35,7 +35,7 @@ export default class Login extends Component {
           <View style={styles.logoContainer}>
             <Image
               style={styles.logo}
-              source={require('../../Images/images.jpg')}
+              source={require('../../../assets/Images/SCU_honors_logo_black.jpg')}
             />
 
           </View>
@@ -59,8 +59,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   logo: {
-    width: 100,
-    height: 100
+    height: '25%',
+    width: '60%',
+    resizeMode: 'contain'
   },
   title: {
     color: '#FFF',

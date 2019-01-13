@@ -10,6 +10,8 @@ import {
 
 import { withNavigation, StackActions, NavigationActions } from 'react-navigation';
 
+import IP from '../../../assets/ip.js';
+
 class LoginForm extends Component {
   constructor(props){
     super(props);
@@ -70,10 +72,6 @@ class LoginForm extends Component {
 
   render() {
 
-    //  const ip = 'www.scuhonors.com'; //web host
-    //    const ip = '127.0.0.1';  //local host
-        const ip = '172.20.111.24'
-
     return (
       <View style={styles.container}>
         <TextInput
@@ -93,12 +91,12 @@ class LoginForm extends Component {
           secureTextEntry
           ref={(input) => this.passwordInput = input}
           onChangeText={(input) => this.state.password = input}
-          onSubmitEditing={() => this._loginCheck('http://'+ ip + '/login.php')}
+          onSubmitEditing={() => this._loginCheck(IP + '/login.php')}
           />
 
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this._loginCheck('http://'+ ip + '/login.php')}>
+            onPress={() => this._loginCheck(IP + '/login.php')}>
 
             <Text style={styles.buttonText}>SUBMIT</Text>
 
@@ -127,7 +125,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   buttonContainer: {
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     paddingVertical: 35
   },
   buttonText: {

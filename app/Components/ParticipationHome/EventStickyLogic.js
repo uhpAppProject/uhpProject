@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     textContainer: {
       height: '50%',
       justifyContent: 'space-between',
+      fontFamily: 'Helvetica Neue',
     },
     buttonContainer: {
       justifyContent: 'center',
@@ -111,12 +112,14 @@ const styles = StyleSheet.create({
     buttonText: {
       fontSize: (.035 * Dimensions.get('window').height),
       textAlign: 'center',
+      fontFamily: 'Helvetica Neue',
     },
     textRegular: {
       fontSize: (.03 * Dimensions.get('window').height),
       marginLeft: '2%',
       marginRight: '2%',
       textAlign: 'center',
+      fontFamily: 'Helvetica Neue',
     },
     textBold: {
       fontWeight: 'bold',

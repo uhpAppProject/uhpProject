@@ -25,7 +25,7 @@ static navigationOptions = {
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     borderBottomWidth: 0,
     elevation: 0,
   },
@@ -43,7 +43,7 @@ static navigationOptions = {
 
       return (
           <View style={styles.container}>
-            <ImageBackground source={require("../../Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
+            <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
               <View style={styles.opacity}>
 
                 <View style={styles.infoBannerContainer}>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   infoBannerContainer: {
     height: '35%',
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     justifyContent: 'space-evenly'
   },
   textTitle: {

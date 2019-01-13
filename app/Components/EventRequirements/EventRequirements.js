@@ -31,7 +31,7 @@ export default class EventRequirements extends Component {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
       elevation: 0,
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
     },
   };
 
@@ -47,7 +47,7 @@ export default class EventRequirements extends Component {
       return (
         <View style={styles.container}>
 
-          <ImageBackground source={require("../../Images/event_reqs.png")} style={styles.backgroundImage}>
+          <ImageBackground source={require("../../../assets/Images/event_reqs.png")} style={styles.backgroundImage}>
 
             <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
               <Text style={styles.headerTitleText}>Event Requirements</Text>
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   headerContainer: {
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
   },
   headerTitleText: {
     flex: 1,
@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     width: '100%',
-    marginTop: '5%',
   },
   postItContainer: {
     justifyContent: 'space-evenly',

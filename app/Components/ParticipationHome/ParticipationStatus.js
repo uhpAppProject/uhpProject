@@ -39,7 +39,7 @@ static navigationOptions = {
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     borderBottomWidth: 0,
     elevation: 0,
   },
@@ -98,51 +98,92 @@ static navigationOptions = {
 
     this.checkStatus()
 
-      return(
-        <View style={styles.container}>
-            <ImageBackground source={require("../../Images/paticipation_status_background.png")}
-                                      style={styles.backgroundImage}
-                                      resizeMode={'cover'}
-                                      >
-              <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
-                <Text style={styles.headerTitle}>Participation</Text>
-                <Text style={styles.headerText}>{this.state.status}</Text>
-              </Animated.View>
+      if (this.state.user_info[0].academic_status == "INCOMPLETE" && this.state.user_info[0].social_justice_status == "INCOMPLETE") {
+          return(
+            <View style={styles.container}>
+                <ImageBackground source={require("../../../assets/Images/paticipation_status_background.png")}
+                                          style={styles.backgroundImage}
+                                          resizeMode={'cover'}
+                                          >
+                  <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
+                    <Text style={styles.headerTitle}>Participation</Text>
+                    <Text style={styles.headerText}>{this.state.status}</Text>
+                  </Animated.View>
 
-              <View style={styles.opacity}>
+                  <View style={styles.opacity}>
 
-                <ScrollView style={styles.stickyContainer}
-                            onScroll={Animated.event(
-                              [{ nativeEvent: {
-                                  contentOffset: {
-                                     y: this.state.scrollY,
-                                   }
-                                 }
-                              }])}
-                          scrollEventThrottle={16}>
-                  <StickyLogic
-                      type={'UHP Academic Event'}
-                      status={this.state.user_info[0].academic_status}
-                      date={this.state.user_info[0].academic_date}
-                      event={this.state.user_info[0].academic_event_attended}
-                      email={this.state.user_info[0].email}
-                      />
-                  <StickyLogic
-                      type={'Social Justice Event'}
-                      status={this.state.user_info[0].social_justice_status}
-                      date={this.state.user_info[0].social_justice_date}
-                      event={this.state.user_info[0].social_justice_event_attended}
-                      email={this.state.user_info[0].email}
-                      />
+                    <ScrollView style={styles.stickyContainer}
+                                onScroll={Animated.event(
+                                  [{ nativeEvent: {
+                                      contentOffset: {
+                                         y: this.state.scrollY,
+                                       }
+                                     }
+                                  }])}
+                              scrollEventThrottle={16}>
+                      <StickyLogic
+                          type={'UHP Academic Event'}
+                          status={this.state.user_info[0].academic_status}
+                          date={this.state.user_info[0].academic_date}
+                          event={this.state.user_info[0].academic_event_attended}
+                          email={this.state.user_info[0].email}
+                          />
+                      <StickyLogic
+                          type={'Social Justice Event'}
+                          status={this.state.user_info[0].social_justice_status}
+                          date={this.state.user_info[0].social_justice_date}
+                          event={this.state.user_info[0].social_justice_event_attended}
+                          email={this.state.user_info[0].email}
+                          />
 
-                  <View style={styles.placeholder}>What the fuck</View>
+                      <View style={styles.placeholder}>What the fuck</View>
 
-                </ScrollView>
+                    </ScrollView>
 
-              </View>
-            </ImageBackground>
-        </View>
-      )
+                  </View>
+                </ImageBackground>
+            </View>
+          )
+        }
+      else {
+        return(
+          <View style={styles.container}>
+              <ImageBackground source={require("../../../assets/Images/paticipation_status_background.png")}
+                                        style={styles.backgroundImage}
+                                        resizeMode={'cover'}
+                                        >
+                <View style={[styles.headerContainer, {height: '13%'}]}>
+                  <Text style={styles.headerTitle}>Participation</Text>
+                  <Text style={styles.headerText}>{this.state.status}</Text>
+                </View>
+
+                <View style={styles.opacity}>
+
+                  <ScrollView style={styles.stickyContainer}>
+                    <StickyLogic
+                        type={'UHP Academic Event'}
+                        status={this.state.user_info[0].academic_status}
+                        date={this.state.user_info[0].academic_date}
+                        event={this.state.user_info[0].academic_event_attended}
+                        email={this.state.user_info[0].email}
+                        />
+                    <StickyLogic
+                        type={'Social Justice Event'}
+                        status={this.state.user_info[0].social_justice_status}
+                        date={this.state.user_info[0].social_justice_date}
+                        event={this.state.user_info[0].social_justice_event_attended}
+                        email={this.state.user_info[0].email}
+                        />
+
+                    <View style={styles.placeholder}>What the fuck</View>
+
+                  </ScrollView>
+
+                </View>
+              </ImageBackground>
+          </View>
+        )
+      }
     }
   }
 }
@@ -160,7 +201,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
   },
   headerTitle: {
     color: 'white',

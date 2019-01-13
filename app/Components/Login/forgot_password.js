@@ -12,6 +12,8 @@ import { Linking } from 'expo';
 
 import { StackActions, NavigationActions } from 'react-navigation';
 
+import IP from '../../../assets/ip.js';
+
 export default class ForgotPassword extends Component {
   constructor(props){
     super(props);
@@ -27,7 +29,7 @@ export default class ForgotPassword extends Component {
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       elevation: 0,
     },
     headerLeftContainerStyle: {
@@ -103,10 +105,6 @@ export default class ForgotPassword extends Component {
   }
   render() {
 
-    //  const ip = 'www.scuhonors.com'; //web host
-    //    const ip = '127.0.0.1';  //local host
-      const ip = '172.20.111.24'
-
     if(!this.state.email_sent){
     return (
       <View style={styles.container}>
@@ -116,7 +114,7 @@ export default class ForgotPassword extends Component {
         <TextInput
           placeholder='SCU Email'
           returnKeyType='go'
-          onSubmitEditing={() => this._sendEmailLink('http://'+ ip + '/forgot_password_email.php')}
+          onSubmitEditing={() => this._sendEmailLink(IP + '/forgot_password_email.php')}
           onChangeText={(input) => this.state.email = input}
           keyboardType='email-address'
           autoCapitalize='none'
@@ -126,7 +124,7 @@ export default class ForgotPassword extends Component {
 
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this._sendEmailLink('http://'+ ip + '/forgot_password_email.php')}>
+            onPress={() => this._sendEmailLink(IP + '/forgot_password_email.php')}>
 
             <Text style={styles.buttonText}>SUBMIT</Text>
 
@@ -186,7 +184,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   buttonContainer: {
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     paddingVertical: 35
   },
   buttonText: {

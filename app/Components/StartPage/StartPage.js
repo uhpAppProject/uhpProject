@@ -34,9 +34,9 @@ export default class StartPage extends Component {
 };
   static navigationOptions = {
     headerStyle: {
-      height: (.01 * Dimensions.get('window').height),
+      height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       elevation: 0,
     },
   };
@@ -50,13 +50,13 @@ export default class StartPage extends Component {
   _loadResourcesAsync = async => {
   return Promise.all([
     Asset.loadAsync([
-      require("../../Images/SCU-Seal_Outlined_201-2-2.jpg"),
-      require("../../Images/paticipation_status_background.png"),
-      require("../../Images/upcoming_events_background.png"),
-      require("../../Images/MissionChurch2.jpg"),
-      require("../../Images/event_reqs.png"),
-      require("../../Images/participation_faq.jpg"),
-      require('../../Images/images.jpg'),
+      require("../../../assets/Images/SCU_honors_logo_red.jpg"),
+      require("../../../assets/Images/paticipation_status_background.png"),
+      require("../../../assets/Images/upcoming_events_background.png"),
+      require("../../../assets/Images/MissionChurch2.jpg"),
+      require("../../../assets/Images/event_reqs.png"),
+      require("../../../assets/Images/participation_faq.jpg"),
+      require('../../../assets/Images/SCU_honors_logo_black.jpg'),
     ]),
     Font.loadAsync({
       FontAwesome,
@@ -106,18 +106,14 @@ _handleFinishLoading = () => {
     else {
       return (
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.title}>Santa Clara University</Text>
-            <Text style={styles.title}>Honors Program</Text>
-          </View>
-          <Image source={require("../../Images/SCU-Seal_Outlined_201-2-2.jpg")}
-                        style={styles.logoContainer}></Image>
+          <Image source={require("../../../assets/Images/SCU_honors_logo_red.jpg")}
+                 style={styles.logoContainer}></Image>
 
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={ () => this._onPress()}>
 
-            <Text style={styles.title}>Sign In</Text>
+            <Text style={styles.title}>SIGN IN</Text>
           </TouchableOpacity>
 
         </View>
@@ -139,20 +135,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
-  headerContainer: {
-    backgroundColor: '#B30738',
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    height: '19%',
-  },
   logoContainer: {
+    marginTop: '20%',
     height: '50%',
     width: '85%',
     resizeMode: 'contain'
   },
   buttonContainer: {
     justifyContent: 'center',
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     height: '15%',
     width: '94%',
     marginBottom: '5%',
@@ -169,6 +160,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: (.04 * Dimensions.get('window').height),
+    fontFamily: 'Helvetica Neue',
   },
 
   }

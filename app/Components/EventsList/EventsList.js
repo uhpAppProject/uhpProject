@@ -115,7 +115,7 @@ export default class EventsShow extends Component {
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
       borderBottomWidth: 0,
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       elevation: 0,
     },
     headerTitleStyle: {
@@ -145,7 +145,7 @@ export default class EventsShow extends Component {
 
       return(
         <View style={styles.container}>
-          <ImageBackground source={require("../../Images/upcoming_events_background.png")} style={styles.backgroundImage}>
+          <ImageBackground source={require("../../../assets/Images/upcoming_events_background.png")} style={styles.backgroundImage}>
 
             <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
               <Text style={styles.title}>Upcoming Events</Text>
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     headerContainer: {
       alignItems: 'stretch',
       justifyContent: 'flex-start',
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       borderBottomWidth: 1
     },
     animationContainer: {

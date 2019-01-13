@@ -14,6 +14,8 @@ from 'react-native';
 
 import { AppLoading, Asset, Font, Icon} from 'expo';
 
+import IP from '../../../assets/ip.js';
+
 export default class ParticipationHome extends Component {
   constructor(props) {
   super(props);
@@ -27,7 +29,7 @@ static navigationOptions = {
   title: 'Home',
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     borderBottomWidth: 0,
     elevation: 0,
   },
@@ -42,6 +44,7 @@ static navigationOptions = {
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
+    fontFamily: 'Helvetica Neue',
   },
 };
 
@@ -106,11 +109,9 @@ fetchEventsAsync = (url, asyncTitle) => {
   }
 
 _loadResourcesAsync = async => {
-  //  const ip = 'www.scuhonors.com'; //web host
-  //    const ip = '127.0.0.1';  //local host
-  const ip = '172.20.111.24'
-  this.fetchEventsAsync('http://'+ ip + '/select_all_from_events.php', 'Events');
-  this.postEmailAsync('http://' + ip + '/participation_status_query.php', this.state.user_email, 'userInfo');
+
+  this.fetchEventsAsync(IP + '/select_all_from_events.php', 'Events');
+  this.postEmailAsync(IP + '/participation_status_query.php', this.state.user_email, 'userInfo');
 };
 
 _handleLoadingError = error => {
@@ -146,7 +147,7 @@ _handleFinishLoading = () => {
     return (
       <View style={styles.container}>
 
-          <ImageBackground source={require("../../Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
+          <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
 
             <View style={styles.opacity}>
 
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     borderRadius: 5,
     height: '72%',
     width: '47%',
@@ -235,6 +236,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: (.07 * Dimensions.get('window').width),
     margin: (.01 * Dimensions.get('window').width),
+    fontFamily: 'Helvetica Neue',
     },
   }
 );

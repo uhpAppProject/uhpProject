@@ -12,6 +12,8 @@ from 'react-native';
 
 import { Constants, Location, Permissions } from 'expo';
 
+import IP from '../../../assets/ip.js';
+
 export default class LocationCheck extends Component {
   constructor(props) {
   super(props);
@@ -31,7 +33,7 @@ static navigationOptions = {
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     borderBottomWidth: 0,
     elevation: 0,
   },
@@ -139,16 +141,13 @@ componentWillMount(){
         )
     }
     else if (this.state.checkedIn) {
-      //      const ip = 'www.scuhonors.com'; //web host
-      //      const ip = '127.0.0.1'; //local host
-        const ip = '172.20.111.24';
 
         //this function is  creating a report of users who attend the event to be updated later
-        this.createReport('http://' + ip + '/create_report.php', email, title, requirement, date, geolocation)
+        this.createReport(IP + '/create_report.php', email, title, requirement, date, geolocation)
 
       return (
           <View style={styles.container}>
-            <ImageBackground source={require("../../Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
+            <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
               <View style={styles.opacity}>
 
                 <View style={styles.infoBannerContainer}>
@@ -164,7 +163,7 @@ componentWillMount(){
     else {
       return (
         <View style={styles.container}>
-          <ImageBackground source={require("../../Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
+          <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
             <View style={styles.opacity}>
 
               <View style={styles.infoBannerContainer}>
@@ -202,7 +201,7 @@ const styles = StyleSheet.create({
   },
   infoBannerContainer: {
     height: '35%',
-    backgroundColor: '#B30738',
+    backgroundColor: 'rgb(165,36,59)',
     justifyContent: 'space-evenly'
   },
   textTitle: {

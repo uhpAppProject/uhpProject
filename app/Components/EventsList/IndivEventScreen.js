@@ -10,6 +10,8 @@ import {
       }
 from 'react-native';
 
+import IP from '../../../assets/ip.js';
+
 const HEADER_EXPANDED_HEIGHT = .25 * Dimensions.get('window').height
 const HEADER_COLLAPSED_HEIGHT = .1 * Dimensions.get('window').height
 
@@ -35,7 +37,7 @@ export default class IndivEvent extends Component {
     },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       borderBottomWidth: 0,
       elevation: 0,
     },
@@ -80,7 +82,8 @@ export default class IndivEvent extends Component {
       })
     }
     else{
-      this.createReport('http://172.21.102.68/create_report_RSVP.php', email, title, date);
+
+      this.createReport(IP + '/create_report_RSVP.php', email, title, date);
       navigate('Rsvp', {
         email: email,
         title: title,
@@ -145,11 +148,11 @@ export default class IndivEvent extends Component {
       //check if year is past
       this.setState({ isPast: true });
     }
-    else if(date_today.getMonth() > months.indexOf(eventDate.slice(0, eventDate.indexOf(' ')))){
+    else if((date_today.getFullYear() == Number(eventDate.slice(-4))) && (date_today.getMonth() > months.indexOf(eventDate.slice(0, eventDate.indexOf(' '))))){
         //check is month is past
       this.setState({ isPast: true });
     }
-    else if(date_today.getDate() > Number(eventDate.slice(eventDate.indexOf(' '), eventDate.indexOf(',')))){
+    else if((date_today.getFullYear() == Number(eventDate.slice(-4))) && (date_today.getMonth() == months.indexOf(eventDate.slice(0, eventDate.indexOf(' ')))) && (date_today.getDate() > Number(eventDate.slice(eventDate.indexOf(' '), eventDate.indexOf(','))))){
           //check is day is past
       this.setState({ isPast: true });
     }
@@ -356,7 +359,7 @@ const styles = StyleSheet.create({
       height: '15%',
       width: '96%',
       marginBottom: '5%',
-      backgroundColor: '#B30738',
+      backgroundColor: 'rgb(165,36,59)',
       shadowColor: 'black',
       shadowOffset: {
         width: 0,
