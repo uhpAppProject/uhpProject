@@ -1,3 +1,10 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: User inputs their current login information for a password reset.
+ * Notable Features: Funtion for checking if a user exists in an external database.
+ * Text input. Contains the confirm password component also.
+ */
+
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -7,6 +14,8 @@ import {
   Text,
   Dimensions,
   KeyboardAvoidingView,
+  Platform,
+  Image,
 } from 'react-native';
 
 import ConfirmPassword from './confirm-password.js'
@@ -30,7 +39,7 @@ export default class PasswordReset extends Component {
       textAlign: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
-      fontFamily: 'Helvetica Neue',
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
     headerLeftContainerStyle: {
       flexDirection: 'column',
@@ -46,36 +55,47 @@ export default class PasswordReset extends Component {
     },
   };
 
+  _error_Nav(email, error){
+    const{navigate} = this.props.navigation;
+      navigate('Error', {
+        email: email,
+        error: error
+      });
+  }
 
-  _onPress(url) {
-        if(this.state.email != '' && this.state.password != '') {
+  _checkUser(url) {
+    /*
+     * Determines if the users login credentials are valid
+     */
 
-          var formData = new FormData();
-          formData.append('email', this.state.email);
-          formData.append('password', this.state.password);
+    if(this.state.email != '' && this.state.password != '') {
 
-          fetch( url , {
-            method: 'POST',
-            body: formData,
-            headers: {
-             'Accept': 'application/json',
-             'Content-Type': 'multipart/form-data',
-            }
-          })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if(responseJson){
-                  this.setState( {credentialsEntered: true} )
-                }
-                else{
-                  alert('Your email or password is incorrect')
-                }
-            })
-          .catch((error) => {
-            console.error(error);
-          });
+      var formData = new FormData();
+      formData.append('email', this.state.email);
+      formData.append('password', this.state.password);
+
+      fetch( url , {
+        method: 'POST',
+        body: formData,
+        headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'multipart/form-data',
         }
-      }
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            if(responseJson){
+              this.setState( {credentialsEntered: true} )
+            }
+            else{
+              alert('Your email or password is incorrect')
+            }
+        })
+      .catch((error) => {
+        this._error_Nav(this.state.email, error);
+      });
+    }
+  }
 
 
   render() {
@@ -84,6 +104,14 @@ export default class PasswordReset extends Component {
       return (
         <KeyboardAvoidingView behavior = "padding" style={styles.container}>
           <View style={styles.container}>
+
+            <View style={styles.logoContainer}>
+              <Image
+                style={styles.logo}
+                source={require('../../../assets/Images/SCU_honors_logo_black.jpg')}
+              />
+
+            </View>
 
             <Text style={styles.text}>Enter Login Credentials</Text>
 
@@ -105,11 +133,11 @@ export default class PasswordReset extends Component {
               secureTextEntry
               ref={(input) => this.passwordInput = input}
               onChangeText={(input) => this.state.password = input}
-              onSubmitEditing={() => this._onPress(IP + '/login.php')}
+              onSubmitEditing={() => this._checkUser(IP + '/login.php')}
               />
               <TouchableOpacity
                 style={styles.buttonContainer}
-                onPress={() => this._onPress(IP + '/login.php')}>
+                onPress={() => this._checkUser(IP + '/login.php')}>
 
                 <Text style={styles.buttonText}>SUBMIT</Text>
 
@@ -129,8 +157,7 @@ export default class PasswordReset extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: (.02 * Dimensions.get('window').width),
     backgroundColor: 'white'
   },
   text: {
@@ -138,26 +165,43 @@ const styles = StyleSheet.create({
     fontSize: (.05 * Dimensions.get('window').width),
     textAlign: 'center',
     marginBottom: '5%',
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexGrow: 1,
+  },
+  logo: {
+    height: '25%',
+    width: '60%',
+    resizeMode: 'contain'
   },
   input: {
-    height: (.05 * Dimensions.get('window').height),
-    width: (.94 * Dimensions.get('window').width),
+    height: 40,
     backgroundColor: '#B7B0B0',
-    marginBottom: '3%',
-    paddingHorizontal: (.02 * Dimensions.get('window').width),
+    marginBottom: 10,
+    paddingHorizontal: 10
   },
   buttonContainer: {
-    height: (.15 * Dimensions.get('window').height),
-    width: (.94 * Dimensions.get('window').width),
-    justifyContent: 'center',
     backgroundColor: 'rgb(165,36,59)',
+    paddingVertical: .052 * Dimensions.get('window').height,
+    marginBottom: .02 * Dimensions.get('window').height,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
+    elevation: 5,
   },
   buttonText: {
     textAlign: 'center',
     color: 'white',
     fontSize: (.05 * Dimensions.get('window').width),
-    fontFamily: 'Helvetica Neue',
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   }
 
 })

@@ -1,3 +1,9 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Provides assistance to "ParticipationFAQ" screen in presenting data.
+ * Notable Features: receives props: title, content, button (true or false)
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -5,6 +11,7 @@ import {
         Text,
         TouchableOpacity,
         Dimensions,
+        Platform,
       }
 from 'react-native';
 
@@ -13,16 +20,20 @@ import { withNavigation } from 'react-navigation';
 class PostIt extends Component {
   constructor(props) {
   super(props);
-  this.state = {
-  }
+  this.state = {}
 };
 
-_onPress = () => {
+_navigateTo = (page, navObj) => {
+  /*
+   * Function uses react navigation to move to the next page in the application.
+   * It takes in a page to navigate to and an object with parameters to be passed
+   * to the next page
+   */
+
   const{navigate} = this.props.navigation;
-  navigate('ParticipationStatus', {
-    title: 'FAQ',
-  })
-}
+    navigate(page, navObj);
+  }
+
   render() {
     if(this.props.button){
       return(
@@ -36,7 +47,7 @@ _onPress = () => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.buttonContainer} onPress={ () => this._onPress()}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={ () => this._navigateTo('ParticipationStatus', { title: 'FAQ' })}>
             <Text style={styles.buttonText}>{this.props.buttonTitle}</Text>
           </TouchableOpacity>
         </View>
@@ -83,10 +94,11 @@ const styles = StyleSheet.create({
     marginTop: (.02 * Dimensions.get('window').height),
   },
   postItHeaderText: {
-    fontSize: (.03 * Dimensions.get('window').height),
+    fontSize: (.06 * Dimensions.get('window').width),
     fontWeight: 'bold',
     textAlign: 'center',
     margin: (.02 * Dimensions.get('window').width),
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   postItBody: {
     alignItems: 'flex-start',
@@ -96,7 +108,8 @@ const styles = StyleSheet.create({
     marginBottom: (.02 * Dimensions.get('window').height),
   },
   postItBodyText: {
-    fontSize: (.025 * Dimensions.get('window').height),
+    fontSize: (.05 * Dimensions.get('window').width),
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   buttonContainer: {
     justifyContent: 'center',
@@ -117,7 +130,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonText: {
-    fontSize: (.035 * Dimensions.get('window').height),
+    fontSize: (.05 * Dimensions.get('window').width),
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   }
 });
 

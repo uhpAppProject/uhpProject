@@ -1,3 +1,11 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Contains functions that will log user into the app.
+ * Notable Features: 2 text inputs for username and password.
+ *                   A button to login. And pressable text for
+ *                   a forgotten password.
+ */
+
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -5,7 +13,8 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  Async,
+  Platform,
+  Dimensions,
 } from 'react-native';
 
 import { withNavigation, StackActions, NavigationActions } from 'react-navigation';
@@ -18,24 +27,35 @@ class LoginForm extends Component {
     this.state={
       email:'',
       password:'',
-      isValid: false,
-      isLoading: true
     };
   }
 
-  login () {
+  _error_Nav(email, error){
+    const{navigate} = this.props.navigation;
+      navigate('Error', {
+        email: email,
+        error: error
+      });
+  }
+
+  _navigateToAndReset (page, navObj) {
       const resetAction = StackActions.reset({
       index: 0, // <-- currect active route from actions array
       actions: [
-        NavigationActions.navigate({ routeName: 'Participation', params: {email: this.state.email}})
+        NavigationActions.navigate({ routeName: page, params: navObj})
       ],
       });
 
       this.props.navigation.dispatch(resetAction);
     }
 
+  _login = (url) => {
+    /*
+     * First checks the database located at url to see if the user
+     * trying to login exists. If the user exists then the function
+     * "_navigateToAndReset" is called.
+     */
 
-  _loginCheck = (url) => {
       if(this.state.email != '' && this.state.password != '') {
 
         var formData = new FormData();
@@ -53,22 +73,28 @@ class LoginForm extends Component {
           .then((response) => response.json())
           .then((responseJson) => {
               if(responseJson){
-                this.login()
+                this._navigateToAndReset('Participation', {email: this.state.email});
               }
               else{
                 alert('Your email or password is incorrect')
               }
           })
         .catch((error) => {
-          console.error(error);
+          _this._error_Nav(this.state.email, error)
         });
       }
     }
 
-  forgotPassword() {
+  _navigateTo = (page, navObj) => {
+    /*
+     * Function uses react navigation to move to the next page in the application.
+     * It takes in a page to navigate to and an object with parameters to be passed
+     * to the next page
+     */
+
     const{navigate} = this.props.navigation;
-    navigate('ForgotPassword')
-  }
+      navigate(page, navObj);
+    }
 
   render() {
 
@@ -91,18 +117,18 @@ class LoginForm extends Component {
           secureTextEntry
           ref={(input) => this.passwordInput = input}
           onChangeText={(input) => this.state.password = input}
-          onSubmitEditing={() => this._loginCheck(IP + '/login.php')}
+          onSubmitEditing={() => this._login(IP + '/login.php')}
           />
 
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this._loginCheck(IP + '/login.php')}>
+            onPress={() => this._login(IP + '/login.php')}>
 
             <Text style={styles.buttonText}>SUBMIT</Text>
 
           </TouchableOpacity>
 
-          <Text style={styles.text} onPress={ () => this.forgotPassword()}>Forgot your password?</Text>
+          <Text style={styles.text} onPress={ () => this._navigateTo('ForgotPassword', {})}>Forgot your password?</Text>
 
       </View>
     );
@@ -111,12 +137,14 @@ class LoginForm extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20
+    padding: (.02 * Dimensions.get('window').width)
   },
   text: {
     textAlign: 'center',
     marginBottom: '5%',
     marginTop: '5%',
+    size: .05 * Dimensions.get('window').width,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   input: {
     height: 40,
@@ -126,12 +154,22 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     backgroundColor: 'rgb(165,36,59)',
-    paddingVertical: 35
+    paddingVertical: .052 * Dimensions.get('window').height,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
+    elevation: 5,
   },
   buttonText: {
     textAlign: 'center',
     color: 'white',
-    fontWeight: '700'
+    fontSize: (.05 * Dimensions.get('window').width),
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   }
 
 })

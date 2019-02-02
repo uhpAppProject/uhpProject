@@ -1,6 +1,17 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Settings Cog icon to be displayed
+ * Notable Features: Navigates to another screen on press.
+ */
+
 import React, { Component } from 'react';
 
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import {View,
+        Text,
+        StyleSheet,
+        Dimensions,
+        Platform,
+      } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -19,7 +30,13 @@ export default class SettingsCog extends Component {
   };
 }
 
-  onPress = () => this.props.navigation.navigate('Settings');
+  _error_Nav(email, error){
+    const{navigate} = this.props.navigation;
+      navigate('Error', {
+        email: email,
+        error: error
+    });
+  }
 
     async componentWillMount() {
       try {
@@ -29,7 +46,7 @@ export default class SettingsCog extends Component {
         });
         this.setState({ fontLoaded: true });
       } catch (error) {
-        console.log('error loading icon fonts', error);
+        this._error_Nav("Settings Cog", error);
       }
     }
 
@@ -46,7 +63,7 @@ export default class SettingsCog extends Component {
             color={'white'}
             name={'cog'}
             size={.08 * Dimensions.get('window').width}
-            onPress={() => this.onPress()}
+            onPress={() => this.props.navigation.navigate('Settings')}
             />
         </View>
       );
@@ -63,6 +80,7 @@ export default class SettingsCog extends Component {
         fontSize: (.06 * Dimensions.get('window').width),
         color: 'white',
         margin: (.02 * Dimensions.get('window').width),
+        fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
       },
     }
   );

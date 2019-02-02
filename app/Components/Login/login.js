@@ -1,3 +1,9 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Container for the app's login form
+ * Notable Features: Contains a login form
+ */
+
 import React, { Component } from 'react';
 
 import {
@@ -6,7 +12,9 @@ import {
         Image,
         Text,
         KeyboardAvoidingView,
-        Dimensions}
+        Dimensions,
+        Platform,
+      }
 from 'react-native';
 
 import LoginForm from './loginform';
@@ -63,10 +71,4 @@ const styles = StyleSheet.create({
     width: '60%',
     resizeMode: 'contain'
   },
-  title: {
-    color: '#FFF',
-    marginTop: 10,
-    width: 160,
-    textAlign: 'center'
-  }
 });

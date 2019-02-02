@@ -1,3 +1,12 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Start Page of the app.
+ * Notable Features: Preloads all the images the app will need later.
+ *                   Page also contains a button that will navigate to
+ *                   Another page. Pressable text for uninitialized users
+ *                   to login.
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -8,14 +17,13 @@ import {
         AsyncStorage,
         ActivityIndicator,
         Dimensions,
+        Platform,
       }
 from 'react-native';
 
 import { AppLoading, Asset, Font, Icon } from 'expo';
 
 import FormData from 'FormData';
-
-import { Linking } from 'expo';
 
 import { StackActions, NavigationActions } from 'react-navigation';
 
@@ -25,7 +33,6 @@ import MaterialIcons
 from '../../../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf';
 
 export default class StartPage extends Component {
-//works for valid users, throws a parse error for invalid users
   constructor(props) {
   super(props);
   this.state = {
@@ -41,11 +48,29 @@ export default class StartPage extends Component {
     },
   };
 
-  _onPress = () => {
+  _navigateTo = (page, navObj) => {
+    /*
+     * Function uses react navigation to move to the next page in the application.
+     * It takes in a page to navigate to and an object with parameters to be passed
+     * to the next page
+     */
+
     const{navigate} = this.props.navigation;
-      navigate('Login');
+      navigate(page, navObj);
     }
 
+  _errorNav(error){
+    /*
+     * A function designed only to navigate to the "error page" using React Navigation.
+     * It is special because it passes information about an app error to the error page
+     */
+
+    const{navigate} = this.props.navigation;
+      navigate('Error', {
+        email: "Start Page Error",
+        error: error
+      });
+  }
 
   _loadResourcesAsync = async => {
   return Promise.all([
@@ -60,32 +85,18 @@ export default class StartPage extends Component {
     ]),
     Font.loadAsync({
       FontAwesome,
-      MaterialIcons
+      MaterialIcons,
     })
   ]);
 };
 
-_handleLoadingError = error => {
-  // In this case, you might want to report the error to your error
-  // reporting service, for example Sentry
-  console.warn(error);
-};
+  _handleLoadingError = error => {
+    this._errorNav(error);
+  };
 
-_handleFinishLoading = () => {
-  this.setState({ isLoading: false });
-};
-
-//goes to forgot password too many times
-/*componentWillMount(){
-  Linking.getInitialURL().then(url => {
-    if(Linking.parse(url).path == 'ForgotPassword' && this.state.passwordReset == 'false'){
-        this.props.navigation.navigate('ForgotPasswordNavigator');
-      }
-    })
-  }*/
-
-  componentDidMount(){
-  }
+  _handleFinishLoading = () => {
+    this.setState({ isLoading: false });
+  };
 
   render() {
 
@@ -109,18 +120,25 @@ _handleFinishLoading = () => {
           <Image source={require("../../../assets/Images/SCU_honors_logo_red.jpg")}
                  style={styles.logoContainer}></Image>
 
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={ () => this._onPress()}>
+          <View style={styles.bottomContainer}>
 
-            <Text style={styles.title}>SIGN IN</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={ () => this._navigateTo('Login',{info: null})}>
+
+              <Text style={styles.title}>SIGN IN</Text>
+
+            </TouchableOpacity>
+
+            <Text style={styles.bottomText} onPress={() => this._navigateTo('Participation', {email: 'Non-Honors'})}>Not A Member?</Text>
+
+          </View>
 
         </View>
-      )
+        )
+      }
     }
   }
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -141,10 +159,17 @@ const styles = StyleSheet.create({
     width: '85%',
     resizeMode: 'contain'
   },
+  bottomContainer: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
   buttonContainer: {
     justifyContent: 'center',
     backgroundColor: 'rgb(165,36,59)',
-    height: '15%',
+    height: '40%',
     width: '94%',
     marginBottom: '5%',
     shadowColor: 'black',
@@ -157,10 +182,16 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
-    color: 'white',
     textAlign: 'center',
-    fontSize: (.04 * Dimensions.get('window').height),
-    fontFamily: 'Helvetica Neue',
+    color: 'white',
+    fontSize: (.05 * Dimensions.get('window').width),
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+  },
+  bottomText: {
+    size: .05 * Dimensions.get('window').width,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+    marginBottom: '7%',
   },
 
   }

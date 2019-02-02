@@ -1,3 +1,9 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Presents information
+ * Notable Features: Works with "PostIt" to present information. Has a scrollview and an animated header.
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -7,6 +13,7 @@ import {
         ImageBackground,
         Dimensions,
         Animated,
+        Platform,
       }
 from 'react-native';
 
@@ -35,6 +42,11 @@ export default class ParticipationFAQ extends Component {
       backgroundColor: 'rgb(165,36,59)',
       elevation: 0,
     },
+    headerRightContainerStyle: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginRight: '2%',
+    },
   };
 
   render() {
@@ -45,12 +57,18 @@ export default class ParticipationFAQ extends Component {
       extrapolate: 'clamp'
     });
 
+    const headerTitle = this.state.scrollY.interpolate({
+    inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
+    outputRange: [1, -1],
+    extrapolate: 'clamp'
+  });
+
       return (
         <View style={styles.container}>
           <ImageBackground source={require("../../../assets/Images/participation_faq.jpg")} style={styles.backgroundImage}>
 
             <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
-              <Text style={styles.headerTitleText}>Participation FAQ</Text>
+              <Animated.Text style={[styles.headerTitleText, {opacity: headerTitle}]}>Participation FAQ</Animated.Text>
             </Animated.View>
 
             <View style={styles.opacity}>
@@ -75,7 +93,7 @@ export default class ParticipationFAQ extends Component {
                         />
 
                 <PostIt title={'How do I track my participation status?'}
-                        contents={'The Participation Tracker will give you a detailed record of your participation status with regard to these event requirements. On the “Participation Status” page, you will see the events you attended and whether they counted for a UHP Academic Event or Social Justice Event. If your status is incomplete for either one of these events, you may be prompted to return to the “Upcoming Honors Events” page to find an event that you would like to attend to fulfill your requirement.'}
+                        contents={'The Participation Tracker will give you a detailed record of your participation status with regard to these event requirements. On the “Participation Status” page, you will see the events you attended and whether they counted for a UHP Event or Social Justice Event. If your status is incomplete for either one of these events, you may be prompted to return to the “Upcoming Honors Events” page to find an event that you would like to attend to fulfill your requirement.'}
                         button={true}
                         buttonTitle={'View Participation Status'}
                         />
@@ -89,9 +107,9 @@ export default class ParticipationFAQ extends Component {
                   <View style={styles.postItBody}>
                     <Text style={styles.postItBodyText}>Please see the “Upcoming Honors Events” page from the home screen to sign into an Honors Event. From there, you will be presented with a list of events that will occur in the next couple weeks. Click on the event you would like to attend.
                     </Text>
-                    <Text style={styles.postItBodyText}><Text style={styles.boldText}>If the event is today: </Text>You will be able to read a short description of the event, followed by a sign-in button. Please click on the sign-in button to sign in to the event. In addition, make sure your location services are on and that you are in the location of the event. You will not be able to sign in unless you are in the location of the event.
+                    <Text style={styles.postItBodyText}><Text style={styles.boldText}>If the event is currently happening: </Text>You will be able to read a short description of the event, followed by a sign-in button. Please click on the sign-in button to sign in to the event. In addition, make sure your location services are on and that you are in the location of the event. You will not be able to sign in unless you are in the location of the event.
                     </Text>
-                    <Text style={styles.postItBodyText}><Text style={styles.boldText}>If the event is not today: </Text>You will be able to read a short description of the event, followed by an RSVP button. Please click on the RSVP button to let us know you are planning on attending. Please note: you will still need to sign in on the day of the event to receive credit.
+                    <Text style={styles.postItBodyText}><Text style={styles.boldText}>If the event is not currently happening: </Text>You will be able to read a short description of the event, followed by an RSVP button. Please click on the RSVP button to let us know you are planning on attending. Please note: you will still need to sign in on the day of the event to receive credit.
                     </Text>
                   </View>
 
@@ -126,14 +144,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: (.04 * Dimensions.get('window').height),
     marginBottom: '2%',
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   headerText: {
-    fontSize: (.03 * Dimensions.get('window').height),
+    fontSize: (.05 * Dimensions.get('window').width),
     textAlign: 'center',
     color: 'white',
     marginBottom: '2%',
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   backgroundImage: {
     flex: 7,
@@ -168,10 +186,11 @@ const styles = StyleSheet.create({
     marginTop: (.02 * Dimensions.get('window').height),
   },
   postItHeaderText: {
-    fontSize: (.03 * Dimensions.get('window').height),
+    fontSize: (.06 * Dimensions.get('window').width),
     fontWeight: 'bold',
     textAlign: 'center',
     margin: (.02 * Dimensions.get('window').width),
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   postItBody: {
     justifyContent: 'space-evenly',
@@ -182,9 +201,9 @@ const styles = StyleSheet.create({
     marginBottom: (.02 * Dimensions.get('window').height),
   },
   postItBodyText: {
-    fontSize: (.025 * Dimensions.get('window').height),
+    fontSize: (.05 * Dimensions.get('window').width),
     marginBottom: (.03 * Dimensions.get('window').height),
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   boldText: {
     fontWeight: 'bold',

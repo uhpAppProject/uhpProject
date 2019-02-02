@@ -1,3 +1,9 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Setting menu
+ * Notable Features: Buttons that navigate to other screens from the settings menu
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -5,6 +11,7 @@ import {
         Text,
         Dimensions,
         TouchableOpacity,
+        Platform,
       }
 from 'react-native';
 
@@ -14,19 +21,22 @@ import { withNavigation, StackActions, NavigationActions } from 'react-navigatio
 export default class LocationCheck extends Component {
   constructor(props) {
   super(props);
-  this.state = {
-  }
+  this.state = {}
 }
 
 static navigationOptions = {
   title: 'Settings',
   headerTitleStyle: {
     color: 'white',
-    fontSize: (.03 * Dimensions.get('window').height),
-    textAlign: 'center',
+    fontSize: (.06 * Dimensions.get('window').width),
     marginLeft: 'auto',
     marginRight: 'auto',
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+  },
+  headerRight: <View style={{padding: .08 * Dimensions.get('window').width}}></View>,
+  headerRightContainerStyle: {
+    marginLeft: '2%',
+    marginRight: '.05%',
   },
   headerLeftContainerStyle: {
     flexDirection: 'column',
@@ -42,27 +52,34 @@ static navigationOptions = {
   },
 };
 
-_onPressResetPassword() {
-  const{navigate} = this.props.navigation;
-    navigate('PasswordReset');
-}
+  _navigateTo = (page, navObj) => {
+    /*
+     * Function uses react navigation to move to the next page in the application.
+     * It takes in a page to navigate to and an object with parameters to be passed
+     * to the next page
+     */
 
-_onPressSignOut() {
-  const resetAction = StackActions.reset({
-  index: 0, // <-- currect active route from actions array
-  actions: [
-    NavigationActions.navigate({ routeName: 'Start' })
-  ],
-  });
+    const{navigate} = this.props.navigation;
+      navigate(page, navObj);
+    }
 
-  this.props.navigation.dispatch(resetAction);
-}
+  _navigateToAndReset (page, navObj) {
+      const resetAction = StackActions.reset({
+      index: 0, // <-- currect active route from actions array
+      actions: [
+        NavigationActions.navigate({ routeName: page, params: navObj})
+      ],
+      });
+
+      this.props.navigation.dispatch(resetAction);
+    }
+
   render() {
       return (
         <View style={styles.container}>
           <TouchableOpacity
               style={styles.buttonContainer}
-              onPress={() => this._onPressResetPassword()}>
+              onPress={() => this._navigateTo('PasswordReset', {})}>
 
             <Text>Password Reset</Text>
 
@@ -70,7 +87,7 @@ _onPressSignOut() {
 
           <TouchableOpacity
               style={styles.buttonContainer}
-              onPress={() => this._onPressSignOut()}>
+              onPress={() => this._navigateToAndReset('Start', {})}>
 
             <Text>Sign Out</Text>
 
@@ -100,6 +117,6 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     textAlignVertical: 'center',
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
 });

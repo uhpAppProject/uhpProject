@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
-import {
-        StyleSheet,
-        Text,
-        View,
-        Platform,
-} from 'react-native';
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Main stack of the app
+ * Notable Features: Defines the app's structure as a stack navigator and combines
+ *                   screens to create the app.
+ */
 
-import { Linking } from 'expo';
+import React, { Component } from 'react';
 
 import { createNavigationContainer, createSwitchNavigator, createStackNavigator, navigation} from 'react-navigation';
-
 
 import StartPage from './app/Components/StartPage/StartPage.js'
 import Login from './app/Components/Login/login.js'
@@ -28,6 +26,7 @@ import EventRequirements from './app/Components/EventRequirements/EventRequireme
 import ParticipationFAQ from './app/Components/ParticipationHome/ParticipationFAQ.js'
 import BackButton from './app/Components/Icons/angle-left.js'
 import SettingsCog from './app/Components/Icons/settingsCog.js'
+import Error from './app/Components/ErrorPage/error.js'
 
 const AppNavigator = createStackNavigator({
   Start: { screen: StartPage },
@@ -53,53 +52,45 @@ const AppNavigator = createStackNavigator({
                       headerLeft: <BackButton navigation={navigation} title={navigation.state.params.title}/> }),
                      },
   EventRequirements: {screen: EventRequirements, navigationOptions: ({ navigation }) => ({
-                      headerLeft: <BackButton navigation={navigation} title={'Home'}/> })
+                      headerLeft: <BackButton navigation={navigation} title={'Home'}/>,
+                      headerRight: <SettingsCog navigation={navigation}/>
+                    })
               },
   ParticipationFAQ: {screen: ParticipationFAQ, navigationOptions: ({ navigation }) => ({
-                    headerLeft: <BackButton navigation={navigation} title={'Home'}/> })
+                    headerLeft: <BackButton navigation={navigation} title={'Home'}/>,
+                    headerRight: <SettingsCog navigation={navigation}/>
+                  })
             },
   EventsHome: { screen: EventsShow, navigationOptions: ({ navigation }) => ({
-                headerLeft: <BackButton navigation={navigation} title={navigation.state.params.title}/>})
+                headerLeft: <BackButton navigation={navigation} title={navigation.state.params.title}/>,
+                headerRight: <SettingsCog navigation={navigation}/>
+              })
               },
   IndividualEvent: { screen: IndivEvent, navigationOptions: ({ navigation }) => ({
-                      headerLeft: <BackButton navigation={navigation} title={'Events'}/> })
+                      headerLeft: <BackButton navigation={navigation} title={'Events'}/>,
+                      headerRight: <SettingsCog navigation={navigation}/>
+                    })
               },
   ParticipationStatus: {screen: ParticipationStatus, navigationOptions: ({ navigation }) => ({
-                        headerLeft: <BackButton navigation={navigation} title={navigation.state.params.title}/> })
+                        headerLeft: <BackButton navigation={navigation} title={navigation.state.params.title}/>,
+                        headerRight: <SettingsCog navigation={navigation}/>
+                      })
               },
   LocationCheck: {screen: LocationCheck, navigationOptions: ({ navigation }) => ({
-                  headerLeft: <BackButton navigation={navigation} title={'Sign In'}/> })
+                  headerLeft: <BackButton navigation={navigation} title={'Sign In'}/>,
+                  headerRight: <SettingsCog navigation={navigation}/>
+                })
               },
   Rsvp: {screen: Rsvp, navigationOptions: ({ navigation }) => ({
-                  headerLeft: <BackButton navigation={navigation} title={'Back To Event'}/> })
+                  headerLeft: <BackButton navigation={navigation} title={'Back To Event'}/>,
+                  headerRight: <SettingsCog navigation={navigation}/>
+                })
+              },
+  Error: {screen: Error, navigationOptions: ({ navigation }) => ({
+                  headerLeft: <BackButton navigation={navigation} title={''}/>,
+                  headerRight: <SettingsCog navigation={navigation}/>
+                })
               },
 });
 
-const ResetPasswordNav = createStackNavigator({
-//  StartPage: {screen: StartPage1},
-  ForgotPasswordReset:  {screen: NewPassword}
-});
-const FullStack = createSwitchNavigator(
-  {
-  MainNavigator: AppNavigator,
-  ForgotPasswordNavigator:  ResetPasswordNav,
-  },
-);
-
-const AppContainer = createNavigationContainer( FullStack );
-
-export default class App extends Component {
-  constructor(props) {
-  super(props);
-  this.state = {
-    screen: '',
-  }
-};
-
-
-  render() {
-    return(
-        <AppContainer />
-      );
-  };
-};
+export default AppNavigator;

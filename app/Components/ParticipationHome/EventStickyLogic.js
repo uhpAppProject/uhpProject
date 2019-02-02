@@ -1,3 +1,9 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Provides assistance to the "ParticipationStatus" screen in processing and presenting user data.
+ * Notable Features: None
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -5,6 +11,7 @@ import {
         Text,
         Dimensions,
         TouchableOpacity,
+        Platform,
       }
 from 'react-native';
 
@@ -12,13 +19,16 @@ import { withNavigation } from 'react-navigation';
 
 class StickyLogic extends Component {
 
-  _onPress = () => {
+  _navigateTo = (page, navObj) => {
+    /*
+     * Function uses react navigation to move to the next page in the application.
+     * It takes in a page to navigate to and an object with parameters to be passed
+     * to the next page
+     */
+
     const{navigate} = this.props.navigation;
-    navigate('EventsHome', {
-      email: this.props.email,
-      title: 'Participation',
-    })
-  }
+      navigate(page, navObj);
+    }
 
   render(){
     if(this.props.status == "COMPLETE") {
@@ -41,7 +51,7 @@ class StickyLogic extends Component {
           <TouchableOpacity
               elevation={5}
               style={styles.buttonContainer}
-              onPress={ () => this._onPress() }>
+              onPress={ () => this._navigateTo('EventsHome', { email: this.props.email, title: 'Participation' }) }>
             <Text style={styles.buttonText}>View Upcoming Events</Text>
           </TouchableOpacity>
         </View>
@@ -89,7 +99,7 @@ const styles = StyleSheet.create({
     textContainer: {
       height: '50%',
       justifyContent: 'space-between',
-      fontFamily: 'Helvetica Neue',
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
     buttonContainer: {
       justifyContent: 'center',
@@ -110,16 +120,17 @@ const styles = StyleSheet.create({
       elevation: 5,
     },
     buttonText: {
-      fontSize: (.035 * Dimensions.get('window').height),
+      fontSize: (.05 * Dimensions.get('window').width),
+      fontWeight: '700',
       textAlign: 'center',
-      fontFamily: 'Helvetica Neue',
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
     textRegular: {
-      fontSize: (.03 * Dimensions.get('window').height),
+      fontSize: (.05 * Dimensions.get('window').width),
       marginLeft: '2%',
       marginRight: '2%',
       textAlign: 'center',
-      fontFamily: 'Helvetica Neue',
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
     textBold: {
       fontWeight: 'bold',

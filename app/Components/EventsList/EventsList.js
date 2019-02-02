@@ -1,3 +1,11 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Display list of events.
+ * Notable Features: Contains two classes: "EventsList" which defines a flatlist with event information
+ *                   and "EventsShow" which displays the flatlist. The ListItems are pressable.
+ *                   EventsShow has an animated header.
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -9,6 +17,7 @@ import {
         ImageBackground,
         Dimensions,
         Animated,
+        Platform,
       }
 from 'react-native';
 
@@ -25,6 +34,14 @@ class EventsList extends Component {
   };
 }
 
+_error_Nav(email, error){
+  const{navigate} = this.props.navigation;
+    navigate('Error', {
+      email: email,
+      error: error
+  });
+}
+
 async extractAsyncData(asyncTitle) {
   /*Function for extracting a key from async storage (input as "asyncTitle")and parsing it into
   A JS Object, then the funtion changes the isloading value with setState*/
@@ -39,7 +56,7 @@ async extractAsyncData(asyncTitle) {
     }
   }
   catch(error) {
-    alert(error);
+    this._error_Nav("Extracting Events", error);
   }
 }
 
@@ -56,6 +73,7 @@ renderItem = ({ item }) => (
       email={this.props.email}
       latitude={item.latitude}
       longitude={item.longitude}
+      radius={item.radius}
     />
 )
 
@@ -97,7 +115,7 @@ componentWillMount() {
 const HEADER_EXPANDED_HEIGHT = .1 * Dimensions.get('window').height
 
 export default class EventsShow extends Component {
-  //renders the page with all of the events in scrolling formatt
+  //renders the page with all of the events in scrolling format
   //click events for more information
   constructor(props) {
   super(props);
@@ -119,7 +137,13 @@ export default class EventsShow extends Component {
       elevation: 0,
     },
     headerTitleStyle: {
-      color: 'white'
+      color: 'white',
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+    },
+    headerRightContainerStyle: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginRight: '2%',
     },
   };
 
@@ -133,6 +157,12 @@ export default class EventsShow extends Component {
       outputRange: [HEADER_EXPANDED_HEIGHT, 0],
       extrapolate: 'clamp',
     });
+
+    const headerTitle = this.state.scrollY.interpolate({
+    inputRange: [0, HEADER_EXPANDED_HEIGHT],
+    outputRange: [1, -1],
+    extrapolate: 'clamp'
+  });
 
     if(this.state.isLoading){
       return(
@@ -148,7 +178,7 @@ export default class EventsShow extends Component {
           <ImageBackground source={require("../../../assets/Images/upcoming_events_background.png")} style={styles.backgroundImage}>
 
             <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
-              <Text style={styles.title}>Upcoming Events</Text>
+              <Animated.Text style={[styles.title, {opacity: headerTitle}]}>Upcoming Events</Animated.Text>
             </Animated.View>
 
             <View style={styles.opacity}>
@@ -190,9 +220,6 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgb(165,36,59)',
       borderBottomWidth: 1
     },
-    animationContainer: {
-
-    },
     backgroundImage: {
       height: '100%',
       width: '100%',
@@ -203,13 +230,13 @@ const styles = StyleSheet.create({
     },
     flatlistContainer: {
       height: '100%',
-
     },
     title: {
       textAlign: 'center',
       fontWeight: 'bold',
-      fontSize: (.05 * Dimensions.get('window').height),
+      fontSize: (.09 * Dimensions.get('window').width),
       color: 'white',
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
   }
 );

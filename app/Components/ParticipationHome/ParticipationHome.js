@@ -1,3 +1,10 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Home page of the app. Also loads data the app will need later.
+ * Notable Features: Functions to fetch data from an external database. A few
+ *                   buttons to navigate to other pages in the app.
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -9,6 +16,7 @@ import {
         ImageBackground,
         Dimensions,
         ActivityIndicator,
+        Platform,
       }
 from 'react-native';
 
@@ -38,44 +46,43 @@ static navigationOptions = {
     justifyContent: 'center',
     marginRight: '2%',
   },
+  headerLeft: <View style={{padding: .08 * Dimensions.get('window').width}}></View>,
+  headerLeftContainerStyle: {
+    marginLeft: '2%',
+  },
   headerTitleStyle: {
     color: 'white',
-    fontSize: (.03 * Dimensions.get('window').height),
-    textAlign: 'center',
+    fontSize: (.06 * Dimensions.get('window').width),
     marginLeft: 'auto',
     marginRight: 'auto',
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
 };
 
-onPressEvents = (email) => {
+_error_Nav(email, error){
   const{navigate} = this.props.navigation;
-    navigate('EventsHome', {
+    navigate('Error', {
       email: email,
-      title: 'Home'
+      error: error
     });
 }
 
-onPressParticipation = () => {
+_navigateTo = (page, navObj) => {
+  /*
+   * Function uses react navigation to move to the next page in the application.
+   * It takes in a page to navigate to and an object with parameters to be passed
+   * to the next page
+   */
+
   const{navigate} = this.props.navigation;
-    navigate('ParticipationStatus', {
-      title: 'Home',
-    }
-  )
-};
+    navigate(page, navObj);
+  }
 
-
-onPressEventReqs = () => {
-  const{navigate} = this.props.navigation;
-    navigate('EventRequirements');
-}
-
-onPressParticipationFAQ = () => {
-  const{navigate} = this.props.navigation;
-    navigate('ParticipationFAQ')
-}
-
-postEmailAsync = (url, email, asyncTitle) => {
+fetchAndStore = (url, email, asyncTitle) => {
+  /*
+   * Pulls user data stored at url using email as a key.
+   * Stores the data in async storage for later use in the app.
+   */
 
     var formData = new FormData();
     formData.append('email', email);
@@ -93,31 +100,34 @@ postEmailAsync = (url, email, asyncTitle) => {
         AsyncStorage.setItem(asyncTitle, JSON.stringify(responseJson));
       })
     .catch((error) => {
-      console.error(error);
+      this._error_Nav(email, error);
     });
   }
 
-fetchEventsAsync = (url, asyncTitle) => {
+fetchAndStoreEvents = (url, asyncTitle) => {
+  /*
+   * Pulls data from url and stores it with async storage for later use.
+   */
+
     fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
         AsyncStorage.setItem(asyncTitle, JSON.stringify(responseJson));
       })
     .catch((error) => {
-      console.error(error);
+      this._error_Nav(this.state.user_email, error);
     });
   }
 
 _loadResourcesAsync = async => {
-
-  this.fetchEventsAsync(IP + '/select_all_from_events.php', 'Events');
-  this.postEmailAsync(IP + '/participation_status_query.php', this.state.user_email, 'userInfo');
+  this.fetchAndStoreEvents(IP + '/select_all_from_events.php', 'Events');
+  if(this.state.user_email != "Non-Honors"){
+      this.fetchAndStore(IP + '/participation_status_query.php', this.state.user_email, 'userInfo');
+  }
 };
 
 _handleLoadingError = error => {
-// In this case, you might want to report the error to your error
-// reporting service, for example Sentry
-console.warn(error);
+  this._error_Nav(this.state.user_email, error);
 };
 
 _handleFinishLoading = () => {
@@ -154,21 +164,21 @@ _handleFinishLoading = () => {
 
               <View style={styles.buttons}>
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => this.onPressEvents(this.state.user_email)}>
+                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('EventsHome', { email: this.state.user_email, title: 'Home' })}>
                       <Text style={styles.title}>Upcoming Honors Events</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.onPressParticipation()}>
+                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('ParticipationStatus', { email: this.state.user_email, title: 'Home' })}>
                       <Text style={styles.title}>Participation Status</Text>
                     </TouchableOpacity>
                   </View>
 
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => this.onPressEventReqs()}>
+                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('EventRequirements', {})}>
                       <Text style={styles.title}>Event Requirements</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.onPressParticipationFAQ()}>
+                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('ParticipationFAQ', {})}>
                       <Text style={styles.title}>Honors Participation FAQ</Text>
                     </TouchableOpacity>
                   </View>
@@ -236,7 +246,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: (.07 * Dimensions.get('window').width),
     margin: (.01 * Dimensions.get('window').width),
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
   }
 );

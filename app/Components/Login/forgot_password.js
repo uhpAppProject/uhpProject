@@ -1,3 +1,11 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Provides a way for a user to change their password if they forgot it.
+ * Notable Features: A function that generates a code to be emailed to the user.
+ *                   A function that calls a script to email the user. A couple of
+ *                   text inputs and buttons.
+ */
+
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -6,9 +14,10 @@ import {
   TouchableOpacity,
   Text,
   Dimensions,
+  Platform,
+  Image,
+  KeyboardAvoidingView
 } from 'react-native';
-
-import { Linking } from 'expo';
 
 import { StackActions, NavigationActions } from 'react-navigation';
 
@@ -40,6 +49,14 @@ export default class ForgotPassword extends Component {
     },
   };
 
+  _error_Nav(email, error){
+    const{navigate} = this.props.navigation;
+      navigate('Error', {
+        email: email,
+        error: error
+      });
+  }
+
   _generateCode(){
     var digits = '0123456789';
     var code = '';
@@ -48,12 +65,17 @@ export default class ForgotPassword extends Component {
     }
     this.state.code = code;
   }
-  _sendEmailLink = (url) => {
+
+  _sendEmail = (url) => {
+    /*
+     * Calls a PHP script that sends an email to the user
+     * with a code generated in the app.
+    */
+
       if(this.state.email != '') {
 
         var formData = new FormData();
         formData.append('email', this.state.email);
-        formData.append('link', Linking.makeUrl('ForgotPassword', { email: this.state.email, code: this.state.code }));
         formData.append('code', this.state.code);
 
         fetch( url , {
@@ -70,18 +92,24 @@ export default class ForgotPassword extends Component {
               alert(responseText);
             }
             else{
-              alert('Check your email!')
+              alert("Don't close the app! And check your email!")
             }
-          this.setState( {email_sent: true} )
+          this.setState({email_sent: true})
           })
         .catch((error) => {
-          console.error(error);
+          this.error_Nav(this.state.email, error)
         });
       }
     }
 
-  _checkPin(pin){
-    if(pin==this.state.code){
+  _checkCode(code){
+    /*
+     * Checks to see if the correct code was entered.
+     * Navigates to a screen where the user can reset
+     * their password if correct code was entered.
+     */
+
+    if(code==this.state.code){
       this.props.navigation.navigate('NewPassword', {
         email: this.state.email,
         title: 'Password Reset'
@@ -89,61 +117,35 @@ export default class ForgotPassword extends Component {
       }
     }
 
-  componentWillMount(){
-    Linking.getInitialURL().then(url => {
-      if(Linking.parse(url).path == 'ForgotPassword'){
-        this.setState({
-          email: Linking.parse(url).queryParams.email,
-          code: Linking.parse(url).queryParams.code,
-          email_sent: true,
-        });
-      }
-      else{
-        this._generateCode();
-      }
-    })
+  componentWillMount() {
+    this._generateCode();
   }
+
   render() {
 
     if(!this.state.email_sent){
     return (
-      <View style={styles.container}>
-
-      <Text style={styles.text}>Enter SCU Email</Text>
-
-        <TextInput
-          placeholder='SCU Email'
-          returnKeyType='go'
-          onSubmitEditing={() => this._sendEmailLink(IP + '/forgot_password_email.php')}
-          onChangeText={(input) => this.state.email = input}
-          keyboardType='email-address'
-          autoCapitalize='none'
-          autoCorrect={false}
-          style={styles.input}
-          />
-
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => this._sendEmailLink(IP + '/forgot_password_email.php')}>
-
-            <Text style={styles.buttonText}>SUBMIT</Text>
-
-          </TouchableOpacity>
-
-      </View>
-    );
-  }
-  else{
-    return(
+      <KeyboardAvoidingView behavior = "padding" style={styles.container}>
         <View style={styles.container}>
 
-        <Text style={styles.text}>Enter The 6 Digit Pin From Your Email</Text>
+          <View style={styles.logoContainer}>
+            <Image
+              style={styles.logo}
+              source={require('../../../assets/Images/SCU_honors_logo_black.jpg')}
+            />
+
+          </View>
+
+          <Text style={styles.text}>Enter SCU Email</Text>
 
           <TextInput
-            placeholder='Enter Pin'
+            clearButtonMode="always"
+            placeholder='SCU Email'
             returnKeyType='go'
-            onSubmitEditing={(input) => this._checkPin(input)}
-            onChangeText={(input) => this.state.input = input}
+            value={this.state.inputValue}
+            onSubmitEditing={() => { this._sendEmail(IP + '/forgot_password_email.php') }}
+            onChangeText={(input) => this.state.email = input}
+            ref={input => { this.textInput = input }}
             keyboardType='email-address'
             autoCapitalize='none'
             autoCorrect={false}
@@ -152,13 +154,53 @@ export default class ForgotPassword extends Component {
 
             <TouchableOpacity
               style={styles.buttonContainer}
-              onPress={() => this._checkPin(this.state.input)}>
+              onPress={() => this._sendEmail(IP + '/forgot_password_email.php')}>
 
               <Text style={styles.buttonText}>SUBMIT</Text>
 
             </TouchableOpacity>
 
         </View>
+      </KeyboardAvoidingView>
+    );
+  }
+  else{
+    return(
+      <KeyboardAvoidingView behavior = "padding" style={styles.container}>
+          <View style={styles.container}>
+
+            <View style={styles.logoContainer}>
+              <Image
+                style={styles.logo}
+                source={require('../../../assets/Images/SCU_honors_logo_black.jpg')}
+              />
+
+            </View>
+
+            <Text style={styles.text}>Enter The 6 Digit Pin From Your Email</Text>
+
+            <TextInput
+              clearButtonMode="always"
+              placeholder='Enter Pin'
+              returnKeyType='go'
+              onSubmitEditing={(input) => this._checkCode(input)}
+              onChangeText={(input) => this.state.input = input}
+              autoCapitalize='none'
+              autoCorrect={false}
+              style={styles.input}
+              />
+
+              <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={() => this._checkCode(this.state.input)}>
+
+                <Text style={styles.buttonText}>SUBMIT</Text>
+
+              </TouchableOpacity>
+
+          </View>
+
+        </KeyboardAvoidingView>
         );
       }
     }
@@ -167,15 +209,25 @@ export default class ForgotPassword extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    padding: 20
+    padding: (.02 * Dimensions.get('window').width),
+    backgroundColor: 'white'
   },
   text: {
-    fontSize: (.03 * Dimensions.get('window').height),
+    color: 'black',
+    fontSize: (.05 * Dimensions.get('window').width),
     textAlign: 'center',
-    marginBottom: '10%',
-    marginTop: '5%',
+    marginBottom: '5%',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexGrow: 1,
+  },
+  logo: {
+    height: '25%',
+    width: '60%',
+    resizeMode: 'contain'
   },
   input: {
     height: 40,
@@ -185,12 +237,23 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     backgroundColor: 'rgb(165,36,59)',
-    paddingVertical: 35
+    paddingVertical: .052 * Dimensions.get('window').height,
+    marginBottom: .02 * Dimensions.get('window').height,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
+    elevation: 5,
   },
   buttonText: {
     textAlign: 'center',
     color: 'white',
-    fontWeight: '700'
+    fontSize: (.05 * Dimensions.get('window').width),
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   }
 
 })

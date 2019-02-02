@@ -1,3 +1,11 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Presents information about the user's participation status.
+ * Notable Features: A function to call the user's data from storage.
+ *                   A function to determine if the user has completed all
+ *                   requirements.
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -9,19 +17,21 @@ import {
         ScrollView,
         Dimensions,
         Animated,
+        Platform,
       }
 from 'react-native';
 
-import StickyLogic from './EventStickyLogic.js'
+import StickyLogic from './EventStickyLogic.js';
+import GenericBanner from '../General/genericBannerScreen.js';
 
-
-const HEADER_EXPANDED_HEIGHT = .13 * Dimensions.get('window').height
-const HEADER_COLLAPSED_HEIGHT = 0
+const HEADER_EXPANDED_HEIGHT = .13 * Dimensions.get('window').height;
+const HEADER_COLLAPSED_HEIGHT = 0;
 
 export default class ParticiptionStatus extends Component {
   constructor(props) {
   super(props);
   this.state = {
+    isMember: true,
     user_info: new Object(),
     isLoading: true,
     status: '',
@@ -45,12 +55,29 @@ static navigationOptions = {
   },
   headerTitleStyle: {
     color: 'white',
-  }
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+  },
+  headerRightContainerStyle: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginRight: '2%',
+  },
 };
 
+  _error_Nav(email, error){
+    const{navigate} = this.props.navigation;
+      navigate('Error', {
+        email: email,
+        error: error
+      });
+  }
+
   async extractUserInfo(asyncTitle) {
-    /*Function for extracting input "asyncTitle" key from async storage and parsing it into
-    A JS Object, then the funtion changes the isloading value with setState*/
+    /*
+     * Function for extracting data from async storage and parsing it into
+     * A JS Object. Then the funtion changes the isloading value with setState.
+     */
+
     try {
       await AsyncStorage.getItem(asyncTitle)
       .then((response) => JSON.parse(response))
@@ -62,7 +89,7 @@ static navigationOptions = {
         }
       }
     catch(error) {
-        alert(error);
+        this._error_Nav("Participation Parsing", error)
         }
       }
 
@@ -75,15 +102,29 @@ static navigationOptions = {
     }
   }
 
-  componentDidMount() {
-    this.extractUserInfo('userInfo');
+  componentWillMount() {
+    if(this.props.navigation.getParam('email', 'No Email') == "Non-Honors"){
+      this.setState({
+                      isMember: false,
+                      isLoading: false,
+                    });
     }
+    else {
+      this.extractUserInfo('userInfo');
+    }
+  }
 
   render() {
 
     const headerHeight = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
       outputRange: [HEADER_EXPANDED_HEIGHT, HEADER_COLLAPSED_HEIGHT],
+      extrapolate: 'clamp'
+    });
+
+    const headerTitle = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
+      outputRange: [1, -2],
       extrapolate: 'clamp'
     });
 
@@ -94,7 +135,7 @@ static navigationOptions = {
         </View>
       )
     }
-    else {
+    else if(this.state.isMember) {
 
     this.checkStatus()
 
@@ -106,8 +147,8 @@ static navigationOptions = {
                                           resizeMode={'cover'}
                                           >
                   <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
-                    <Text style={styles.headerTitle}>Participation</Text>
-                    <Text style={styles.headerText}>{this.state.status}</Text>
+                    <Animated.Text style={[styles.headerTitle, {opacity: headerTitle}]}>Participation</Animated.Text>
+                    <Animated.Text style={[styles.headerText, {opacity: headerTitle}]}>{this.state.status}</Animated.Text>
                   </Animated.View>
 
                   <View style={styles.opacity}>
@@ -122,7 +163,7 @@ static navigationOptions = {
                                   }])}
                               scrollEventThrottle={16}>
                       <StickyLogic
-                          type={'UHP Academic Event'}
+                          type={'UHP Event'}
                           status={this.state.user_info[0].academic_status}
                           date={this.state.user_info[0].academic_date}
                           event={this.state.user_info[0].academic_event_attended}
@@ -161,7 +202,7 @@ static navigationOptions = {
 
                   <ScrollView style={styles.stickyContainer}>
                     <StickyLogic
-                        type={'UHP Academic Event'}
+                        type={'UHP Event'}
                         status={this.state.user_info[0].academic_status}
                         date={this.state.user_info[0].academic_date}
                         event={this.state.user_info[0].academic_event_attended}
@@ -175,7 +216,7 @@ static navigationOptions = {
                         email={this.state.user_info[0].email}
                         />
 
-                    <View style={styles.placeholder}>What the fuck</View>
+                    <View style={styles.placeholder}></View>
 
                   </ScrollView>
 
@@ -185,6 +226,13 @@ static navigationOptions = {
         )
       }
     }
+  else {
+    return(
+      <GenericBanner title={"Honors students are required to attend 1 Social Justice Event\
+                            and 1 UHP Event a year to maintain their honors status."}
+                     text={''}/>
+    );
+  }
   }
 }
 
@@ -205,12 +253,14 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: 'white',
-    fontSize: (.045 * Dimensions.get('window').height),
-    fontWeight: 'bold'
+    fontSize: (.08 * Dimensions.get('window').width),
+    fontWeight: 'bold',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   headerText: {
     color: 'white',
-    fontSize: (.035 * Dimensions.get('window').height),
+    fontSize: (.06 * Dimensions.get('window').width),
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   backgroundImage: {
     height: '100%',

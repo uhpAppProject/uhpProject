@@ -1,3 +1,9 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Allows a user to change their password
+ * Notable Features: Text input. A function that calls a script that changes the users password.
+ */
+
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -7,9 +13,9 @@ import {
   Text,
   Dimensions,
   KeyboardAvoidingView,
+  Platform,
+  Image,
 } from 'react-native';
-
-import { Linking } from 'expo';
 
 import { StackActions } from 'react-navigation';
 
@@ -33,7 +39,7 @@ export default class NewPassword extends Component {
       textAlign: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
-      fontFamily: 'Helvetica Neue',
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
     headerLeftContainerStyle: {
       flexDirection: 'column',
@@ -49,12 +55,18 @@ export default class NewPassword extends Component {
     },
   };
 
-
-  _onPressHome() {
-    this.props.navigation.dispatch(StackActions.popToTop())
+  _error_Nav(email, error){
+    const{navigate} = this.props.navigation;
+      navigate('Error', {
+        email: email,
+        error: error
+      });
   }
 
-  _onPress(url) {
+  _newPassword(url) {
+    /*
+     * Lets user define a new password. Navigates back to the home screen when finished.
+     */
         if(this.state.password == this.state.password_re) {
 
           var formData = new FormData();
@@ -73,14 +85,14 @@ export default class NewPassword extends Component {
             .then((responseJson) => {
               if(responseJson){
                 alert("Password was successfully changed");
-                this._onPressHome();
+                this.props.navigation.dispatch(StackActions.popToTop());
               }
               else{
                 alert('There was a problem updating your password')
               }
             })
           .catch((error) => {
-            console.error(error);
+            _this._error_Nav(this.state.email, error);
           });
         }
         else{
@@ -89,16 +101,8 @@ export default class NewPassword extends Component {
       }
 
   componentWillMount(){
-    Linking.getInitialURL().then(url => {
-      if(Linking.parse(url).path == 'ForgotPassword'){
-        this.state.email = Linking.parse(url).queryParams.email;
-        this.state.fromDeeplink = true;
-      }
-      else{
-        const { navigation } = this.props;
-        this.state.email = navigation.getParam('email', 'No Title');
-      }
-    })
+      const { navigation } = this.props;
+      this.state.email = navigation.getParam('email', 'No Title');
   }
 
 
@@ -107,6 +111,14 @@ export default class NewPassword extends Component {
     return (
       <KeyboardAvoidingView behavior = "padding" style={styles.container}>
         <View style={styles.container}>
+
+          <View style={styles.logoContainer}>
+            <Image
+              style={styles.logo}
+              source={require('../../../assets/Images/SCU_honors_logo_black.jpg')}
+            />
+
+          </View>
 
           <Text style={styles.text}>Enter New Password</Text>
 
@@ -128,11 +140,11 @@ export default class NewPassword extends Component {
             secureTextEntry
             ref={(input) => this.passwordInput = input}
             onChangeText={(input) => this.state.password_re = input}
-            onSubmitEditing={() => this._onPress(IP + '/update_password.php')}
+            onSubmitEditing={() => this._newPassword(IP + '/update_password.php')}
             />
             <TouchableOpacity
               style={styles.buttonContainer}
-              onPress={() => this._onPress(IP + '/update_password.php')}>
+              onPress={() => this._newPassword(IP + '/update_password.php')}>
 
               <Text style={styles.buttonText}>SUBMIT</Text>
 
@@ -146,8 +158,7 @@ export default class NewPassword extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: (.02 * Dimensions.get('window').width),
     backgroundColor: 'white'
   },
   text: {
@@ -155,26 +166,43 @@ const styles = StyleSheet.create({
     fontSize: (.05 * Dimensions.get('window').width),
     textAlign: 'center',
     marginBottom: '5%',
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexGrow: 1,
+  },
+  logo: {
+    height: '25%',
+    width: '60%',
+    resizeMode: 'contain'
   },
   input: {
-    height: (.05 * Dimensions.get('window').height),
-    width: (.94 * Dimensions.get('window').width),
+    height: 40,
     backgroundColor: '#B7B0B0',
-    marginBottom: '3%',
-    paddingHorizontal: (.02 * Dimensions.get('window').width),
+    marginBottom: 10,
+    paddingHorizontal: 10
   },
   buttonContainer: {
-    height: (.15 * Dimensions.get('window').height),
-    width: (.94 * Dimensions.get('window').width),
-    justifyContent: 'center',
     backgroundColor: 'rgb(165,36,59)',
+    paddingVertical: .052 * Dimensions.get('window').height,
+    marginBottom: .02 * Dimensions.get('window').height,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
+    elevation: 5,
   },
   buttonText: {
     textAlign: 'center',
     color: 'white',
     fontSize: (.05 * Dimensions.get('window').width),
-    fontFamily: 'Helvetica Neue',
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   }
 
 })

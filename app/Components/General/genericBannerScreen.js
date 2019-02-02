@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
- * Purpose: Displays information to the user thanking them for RSVPing for an event.
- * Notable Features: None
+ * Purpose: Reusable page with an image background.
+ * Notable Features: Has props: title, text
  */
 
 import React, { Component } from 'react';
@@ -16,9 +16,7 @@ import {
       }
 from 'react-native';
 
-import GenericBanner from '../General/genericBannerScreen.js'
-
-export default class Rsvp extends Component {
+export default class GenericBanner extends Component {
   constructor(props) {
   super(props);
   this.state = {
@@ -26,6 +24,9 @@ export default class Rsvp extends Component {
 }
 
 static navigationOptions = {
+  headerTitleStyle: {
+    color: 'white',
+  },
   headerLeftContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
@@ -48,15 +49,37 @@ static navigationOptions = {
 
   render() {
 
-    const { navigation } = this.props;
-    const title = navigation.getParam('title', 'No Title');
-    const requirement = navigation.getParam('requirement', 'No Req');
-    const date = navigation.getParam('date', 'No Date');
-    const email = navigation.getParam('email', 'No Email');
-    const geolocation = navigation.getParam('geolocation', 'No Geolocation');
+    if(this.props.text != ''){
+      return (
+          <View style={styles.container}>
+            <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
+              <View style={styles.opacity}>
 
-    return ( <GenericBanner title={'See you at the event!'} text={'Thank you for letting us know you are coming'} /> );
+                <View style={styles.infoBannerContainer}>
+                  <Text style={styles.textTitle}>{this.props.title}</Text>
+                  <Text style={styles.text}>{this.props.text}</Text>
+                </View>
 
+              </View>
+            </ImageBackground>
+          </View>
+        );
+      }
+    else {
+      return(
+        <View style={styles.container}>
+          <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
+            <View style={styles.opacity}>
+
+              <View style={styles.infoBannerContainer}>
+                <Text style={styles.textTitle}>{this.props.title}</Text>
+              </View>
+
+            </View>
+          </ImageBackground>
+        </View>
+      );
+    }
   }
 }
 
@@ -81,25 +104,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   infoBannerContainer: {
-    height: '35%',
     backgroundColor: 'rgb(165,36,59)',
     justifyContent: 'space-evenly'
   },
   textTitle: {
-    fontSize: (.045 * Dimensions.get('window').height),
+    fontSize: (.07 * Dimensions.get('window').width),
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
+    marginTop: '5%',
+    marginBottom: '5%',
     marginLeft: '2%',
     marginRight: '2%',
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   text: {
-    fontSize: (.04 * Dimensions.get('window').height),
+    fontSize: (.06 * Dimensions.get('window').width),
     color: 'white',
     textAlign: 'center',
     marginLeft: '2%',
     marginRight: '2%',
+    marginBottom: '5%',
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   }

@@ -1,3 +1,9 @@
+/*
+ * Coded by Brad Just on 2/1/19.
+ * Purpose: Displays information
+ * Notable Features: Has a scrollview and an animated header.
+ */
+
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -7,6 +13,7 @@ import {
         ImageBackground,
         Dimensions,
         Animated,
+        Platform,
       }
 from 'react-native';
 
@@ -33,6 +40,11 @@ export default class EventRequirements extends Component {
       elevation: 0,
       backgroundColor: 'rgb(165,36,59)',
     },
+    headerRightContainerStyle: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginRight: '2%',
+    },
   };
 
   render() {
@@ -43,6 +55,26 @@ export default class EventRequirements extends Component {
       extrapolate: 'clamp'
     });
 
+    const headerTitle = this.state.scrollY.interpolate({
+    inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
+    outputRange: [1, -1],
+    extrapolate: 'clamp'
+  });
+
+    const headerTitleFastFade = this.state.scrollY.interpolate({
+    inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
+    outputRange: [1, -5],
+    extrapolate: 'clamp'
+  });
+
+    const scalingTextBoxHeight = this.state.scrollY.interpolate({
+    inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
+    outputRange: [(Dimensions.get('window').height) * .095, -(Dimensions.get('window').height) * .095],
+    extrapolate: 'clamp'
+  });
+
+
+
 
       return (
         <View style={styles.container}>
@@ -50,11 +82,13 @@ export default class EventRequirements extends Component {
           <ImageBackground source={require("../../../assets/Images/event_reqs.png")} style={styles.backgroundImage}>
 
             <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
-              <Text style={styles.headerTitleText}>Event Requirements</Text>
-              <Text style={styles.headerText}>To fulfill your event requirements,
-                    you must complete 1 UHP Academic Event
-                    and 1 Social Justice Event.
-              </Text>
+              <Animated.Text style={[styles.headerTitleText, {opacity: headerTitle}]}>Event Requirements</Animated.Text>
+              <Animated.View style={{height: scalingTextBoxHeight, flexWrap: "wrap"}}>
+                <Animated.Text style={[styles.headerText, {opacity: headerTitleFastFade}]}>To fulfill your event requirements,
+                      you must complete 1 UHP Event
+                      and 1 SJ Event.
+                </Animated.Text>
+              </Animated.View>
             </Animated.View>
 
             <View style={styles.opacity}>
@@ -70,7 +104,7 @@ export default class EventRequirements extends Component {
                 <View style={styles.postItContainer}>
 
                   <View style={styles.postItHeader}>
-                    <Text style={styles.postItHeaderText}>UHP Academic Event</Text>
+                    <Text style={styles.postItHeaderText}>UHP Event</Text>
                   </View>
 
                   <Text style={styles.postItBodyText}>Fulfilled by:</Text>
@@ -126,16 +160,17 @@ const styles = StyleSheet.create({
     flex: 1,
     color: 'white',
     textAlign: 'center',
-    fontSize: (.05 * Dimensions.get('window').height),
+    fontSize: (.08 * Dimensions.get('window').width),
     marginBottom: '2%',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   headerText: {
-    fontSize: (.025 * Dimensions.get('window').height),
+    fontSize: (.05 * Dimensions.get('window').width),
     textAlign: 'center',
     color: 'white',
     marginRight: '2%',
     marginLeft: '2%',
-    marginBottom: '2%'
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   backgroundImage: {
     flex: 4,
@@ -170,15 +205,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   postItHeaderText: {
-    fontSize: (.04 * Dimensions.get('window').height),
+    fontSize: (.07 * Dimensions.get('window').width),
     textAlign: 'center',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   postItBody: {
     alignItems: 'flex-start',
   },
   postItBodyText: {
-    fontSize: (.025 * Dimensions.get('window').height),
+    fontSize: (.05 * Dimensions.get('window').width),
     marginLeft: (.02 * Dimensions.get('window').width),
-    marginRight: (.02 * Dimensions.get('window').width)
+    marginRight: (.02 * Dimensions.get('window').width),
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
 });
