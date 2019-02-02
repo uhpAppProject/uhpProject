@@ -89,12 +89,14 @@ export default class ForgotPassword extends Component {
           .then((response) => response.text())
           .then((responseText) => {
             if(responseText){
-              alert(responseText);
+              if(responseText == 'Invalid Email'){
+                alert(responseText);
+              }
             }
             else{
               alert("Don't close the app! And check your email!")
+              this.setState({email_sent: true})
             }
-          this.setState({email_sent: true})
           })
         .catch((error) => {
           this.error_Nav(this.state.email, error)
