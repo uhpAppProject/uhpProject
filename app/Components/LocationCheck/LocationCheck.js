@@ -84,9 +84,7 @@ createReport = (php_url, email, title, requirement, date) => {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      if(responseJson == 'TRUE') {
-        alert("You've already signed in!")
-      }
+      if(responseJson == 'TRUE') {}
     })
     .catch((error) => {
       this._error_Nav(email, error);
@@ -125,9 +123,7 @@ createReport = (php_url, email, title, requirement, date) => {
     }
     else {
       let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true, maximumAge: 5 })
-
       this.locationCheck(location)
-
     }
   }
 

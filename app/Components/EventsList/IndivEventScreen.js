@@ -103,6 +103,7 @@ export default class IndivEvent extends Component {
      * Navigates to location check screen if the event is happening now.
      * Otherwise creates an RSVP report and navigates to the RSVP screen.
      */
+
     const{navigate} = this.props.navigation;
     if(this.state.isNow){
       navigate('LocationCheck', {
@@ -388,7 +389,7 @@ export default class IndivEvent extends Component {
 
             <AnimatedOpacity style={[styles.opacityContainer, {height: opacityHeight, width: opacityWidth, borderRadius: opacityBorder, right: opacityRight,
                                                               bottom: opacityBottom}]}
-                              onPress={() => this._onPressOpacity(email, title, requirement, date, latitude, longitude)}>
+                              onPress={() => this._onPressOpacity(email, title, requirement, date, latitude, longitude, radius)}>
 
               <Animated.Text style={[styles.opacityText, {opacity: opacityTextAnimation}]}>{this.state.opacityText}</Animated.Text>
 
