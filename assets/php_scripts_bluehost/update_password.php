@@ -16,9 +16,9 @@ require('../db_config.php');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-//currently configured for bluehost
-$sql = "UPDATE login SET password = ? WHERE email = ?";
 
+$sql = "UPDATE login SET password = ? WHERE email = ?";
+//preparing query
 if (!($stmt = $conn->prepare($sql))) {
     echo(json_encode("Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error));
 }

@@ -9,9 +9,9 @@
     "platforms": ["ios", "android"],
     "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/Images/SCU_honors_logo_red.png",
+    "icon": "./assets/Images/icon.png",
     "splash": {
-      "image": "./assets/Images/SCU_honors_logo_red.png",
+      "image": "./assets/Images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,7 +22,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.bradjust.uhpapp"
     }
   }
 }

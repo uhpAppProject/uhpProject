@@ -19,7 +19,7 @@ if ($conn->connect_error) {
 //SQL querry
 $sql = "SELECT * FROM login
         WHERE email = ?";
-
+//prepare querry
 if (!($stmt = $conn->prepare($sql))) {
     echo(json_encode("Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error));
 }
@@ -35,6 +35,7 @@ if (!$stmt->execute()) {
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
+  //check if the hashed password is correct
     $phpResult = mysqli_fetch_all($result, MYSQLI_ASSOC);
     if(password_verify($_password, $phpResult[0]['password'])){
       echo(json_encode(True));

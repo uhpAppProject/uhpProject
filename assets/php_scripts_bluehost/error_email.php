@@ -21,7 +21,7 @@ $message = "<p>Timestamp: $timestamp</p> <br>
             <p>User: $email</p> <br>
             <p>Error: $error_message</p>";
 
-
+//create email
 $mail = new PHPMailer\PHPMailer\PHPMailer(true);
    $mail->IsSMTP();
    $mail->SMTPDebug = 0;

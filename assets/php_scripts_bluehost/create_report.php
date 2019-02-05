@@ -14,7 +14,7 @@ $title = $_POST['title']; //Event1, event title
 $date = $_POST['date']; //YYYY-MM-DD, the date of the event
 $latitude = $_POST['latitude'];
 $longitude = $_POST['longitude'];
-$locationCheck = 'TRUE';
+$locationCheck = $_POST['locationCheck'];
 
 $my_file = "../Reports/$title-$date.txt";
 
@@ -34,7 +34,7 @@ if(boolval($report) && stristr($report, $email) == '') {
 } elseif (!boolval($report)) {
 
   $handle = fopen($my_file, 'a') or die(json_encode('Cannot open file:  '.$my_file));
-  $title_line = "User Email,Event Title,Requirement Filled,locationCheck Passed,latitude,longitude,Timestamp";
+  $title_line = "User Email,Event Title,Requirement Filled,Location Check Passed,latitude,longitude,Timestamp";
   fwrite($handle, $title_line);
   $data = "\n".$entry;
   fwrite($handle, $data);

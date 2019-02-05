@@ -61,7 +61,7 @@ _error_Nav(email, error){
     });
 }
 
-createReport = (php_url, email, title, requirement, date) => {
+createReport = (php_url, email, title, requirement, date, locationCheckPassed) => {
   /*
    * Writes a report of users who signed into the event
    */
@@ -73,6 +73,7 @@ createReport = (php_url, email, title, requirement, date) => {
     formData.append('title', title);
     formData.append('latitude', this.state.latitude);
     formData.append('longitude', this.state.longitude);
+    formData.append('locationCheck', locationCheckPassed);
 
     fetch( php_url , {
       method: 'POST',
@@ -108,7 +109,10 @@ createReport = (php_url, email, title, requirement, date) => {
                       });
       }
     else {
-      this.setState({ isLoading: false })
+      this.setState({ isLoading: false,
+                      latitude: location.coords.latitude,
+                      longitude: location.coords.longitude,
+                    })
       }
     }
 
@@ -148,7 +152,7 @@ componentWillMount(){
     }
     else if (this.state.checkedIn) {
 
-        this.createReport(IP + '/create_report.php', email, title, requirement, date)
+        this.createReport(IP + '/create_report.php', email, title, requirement, date, true);
 
       return (
           <View style={styles.container}>
@@ -166,6 +170,7 @@ componentWillMount(){
         )
     }
     else {
+      this.createReport(IP + '/create_report.php', email, title, requirement, date, false);
       return (
         <View style={styles.container}>
           <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>

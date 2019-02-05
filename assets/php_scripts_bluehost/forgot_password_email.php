@@ -18,9 +18,9 @@ $code = $_POST['code'];
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-//currently configured for bluehost
-$sql = "SELECT * FROM login WHERE email = ?";
 
+$sql = "SELECT * FROM login WHERE email = ?";
+//preparing the sql query
 if (!($stmt = $conn->prepare($sql))) {
     echo(json_encode("Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error));
 }
@@ -32,7 +32,7 @@ if (!$stmt->bind_param("s", $email)) {
 if (!$stmt->execute()) {
     echo(json_encode("Execute failed: (" . $stmt->errno . ") " . $stmt->error));
 }
-
+//send the query
 $result = $stmt->get_result();
 
 $message = "<p>Disreguard this email if you didn't complete the change password form.</p>
@@ -41,7 +41,7 @@ $message = "<p>Disreguard this email if you didn't complete the change password 
 
 if ($result->num_rows > 0)
   {
-
+//create email
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
        $mail->IsSMTP();
        $mail->SMTPDebug = 0;

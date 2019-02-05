@@ -14,9 +14,9 @@ require('../db_config.php');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-//currently configured for bluehost
-$sql = "SELECT * FROM users WHERE user_email = ?";
 
+$sql = "SELECT * FROM users WHERE user_email = ?";
+//preparing query
 if (!($stmt = $conn->prepare($sql))) {
     echo(json_encode("Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error));
 }
@@ -30,7 +30,7 @@ if (!$stmt->execute()) {
 }
 
 $result = $stmt->get_result();
-
+//reformatting date
 if ($result->num_rows > 0) {
     $phpResult = mysqli_fetch_all($result, MYSQLI_ASSOC);
     if($phpResult[0]['social_justice_date'] != '0000-00-00'){

@@ -14,6 +14,7 @@ if ($conn->connect_error) {
 }
 
 $sql = "SELECT * FROM events ORDER BY date, time;";
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
