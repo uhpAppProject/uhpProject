@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Reusable page with an image background.
- * Notable Features: Has props: title, text
+ * Notable Features: Has props: title, text, contains creative commons information and links
  */
 
 import React, { Component } from 'react';
@@ -13,6 +13,7 @@ import {
         Dimensions,
         ActivityIndicator,
         Platform,
+        Linking,
       }
 from 'react-native';
 
@@ -60,6 +61,11 @@ static navigationOptions = {
                   <Text style={styles.text}>{this.props.text}</Text>
                 </View>
 
+                <Text style={styles.creativeCommons}>
+                  "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://commons.wikimedia.org/wiki/File:SCU_Mission_and_Palm_Trees.jpg')}>SCU Mission and Palm Trees</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/User:SCUMATT')}>SCUMATT</Text> is licensed under <Text style={{textDecorationLine: 'underline'}}
+                  onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-sa/3.0/deed.en')}>Attribution-ShareAlike 3.0 Unported</Text>
+                </Text>
+
               </View>
             </ImageBackground>
           </View>
@@ -74,6 +80,11 @@ static navigationOptions = {
               <View style={styles.infoBannerContainer}>
                 <Text style={styles.textTitle}>{this.props.title}</Text>
               </View>
+
+              <Text style={styles.creativeCommons}>
+                "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://commons.wikimedia.org/wiki/File:SCU_Mission_and_Palm_Trees.jpg')}>SCU Mission and Palm Trees</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/User:SCUMATT')}>SCUMATT</Text> is licensed under <Text style={{textDecorationLine: 'underline'}}
+                onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-sa/3.0/deed.en')}>Attribution-ShareAlike 3.0 Unported</Text>
+              </Text>
 
             </View>
           </ImageBackground>
@@ -125,6 +136,14 @@ const styles = StyleSheet.create({
     marginLeft: '2%',
     marginRight: '2%',
     marginBottom: '5%',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+  },
+  creativeCommons: {
+    position: 'absolute',
+    bottom: 1,
+    fontSize: 7,
+    alignSelf: 'center',
+    textAlign: 'center',
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   }

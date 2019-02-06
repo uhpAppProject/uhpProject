@@ -2,7 +2,8 @@
  * Coded by Brad Just on 2/1/19.
  * Purpose: Checks user's location to determine if they are in the correct location for the event.
  * Notable Features: Function for checking location. Function for calling a script to write a report
- *                   of users that attended the event.
+ *                   of users that attended the event. Creative commons information and links at the
+                     bottom of the page.
  */
 
 import React, { Component } from 'react';
@@ -14,6 +15,7 @@ import {
         Dimensions,
         ActivityIndicator,
         Platform,
+        Linking,
       }
 from 'react-native';
 
@@ -164,6 +166,11 @@ componentWillMount(){
                   <Text style={styles.text}>Your participation status will be updated shortly</Text>
                 </View>
 
+                <Text style={styles.creativeCommons}>
+                  "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://commons.wikimedia.org/wiki/File:SCU_Mission_and_Palm_Trees.jpg')}>SCU Mission and Palm Trees</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/User:SCUMATT')}>SCUMATT</Text> is licensed under <Text style={{textDecorationLine: 'underline'}}
+                  onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-sa/3.0/deed.en')}>Attribution-ShareAlike 3.0 Unported</Text>
+                </Text>
+
               </View>
             </ImageBackground>
           </View>
@@ -180,6 +187,11 @@ componentWillMount(){
                 <Text style={styles.textTitle}>We could not sign you into this event.</Text>
                 <Text style={styles.text}>Please proceed to the event location or turn on location services</Text>
               </View>
+
+              <Text style={styles.creativeCommons}>
+                "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://commons.wikimedia.org/wiki/File:SCU_Mission_and_Palm_Trees.jpg')}>SCU Mission and Palm Trees</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/User:SCUMATT')}>SCUMATT</Text> is licensed under <Text style={{textDecorationLine: 'underline'}}
+                onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-sa/3.0/deed.en')}>Attribution-ShareAlike 3.0 Unported</Text>
+              </Text>
 
             </View>
           </ImageBackground>
@@ -229,6 +241,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: '2%',
     marginRight: '2%',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+  },
+  creativeCommons: {
+    position: 'absolute',
+    bottom: 1,
+    fontSize: 7,
+    alignSelf: 'center',
+    textAlign: 'center',
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   }

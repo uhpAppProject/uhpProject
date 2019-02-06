@@ -17,6 +17,7 @@ import {
         Dimensions,
         ActivityIndicator,
         Platform,
+        Linking,
       }
 from 'react-native';
 
@@ -184,6 +185,11 @@ _handleFinishLoading = () => {
                   </View>
                 </View>
 
+                <Text style={styles.creativeCommons}>
+                  "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://commons.wikimedia.org/wiki/File:SCU_Mission_and_Palm_Trees.jpg')}>SCU Mission and Palm Trees</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/User:SCUMATT')}>SCUMATT</Text> is licensed under <Text style={{textDecorationLine: 'underline'}}
+                  onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-sa/3.0/deed.en')}>Attribution-ShareAlike 3.0 Unported</Text>
+                </Text>
+
             </View>
 
           </ImageBackground>
@@ -247,6 +253,14 @@ const styles = StyleSheet.create({
     fontSize: (.07 * Dimensions.get('window').width),
     margin: (.01 * Dimensions.get('window').width),
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
+    },
+    creativeCommons: {
+      position: 'absolute',
+      bottom: 1,
+      fontSize: 7,
+      alignSelf: 'center',
+      textAlign: 'center',
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
   }
 );

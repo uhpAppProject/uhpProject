@@ -3,7 +3,7 @@
  * Purpose: Presents information about the user's participation status.
  * Notable Features: A function to call the user's data from storage.
  *                   A function to determine if the user has completed all
- *                   requirements.
+ *                   requirements. Contains creative commons info and links
  */
 
 import React, { Component } from 'react';
@@ -18,6 +18,7 @@ import {
         Dimensions,
         Animated,
         Platform,
+        Linking,
       }
 from 'react-native';
 
@@ -177,9 +178,13 @@ static navigationOptions = {
                           email={this.state.user_info[0].email}
                           />
 
-                      <View style={styles.placeholder}>What the fuck</View>
+                      <View style={styles.placeholder}></View>
 
                     </ScrollView>
+
+                    <Text style={styles.creativeCommons}>
+                      "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://www.flickr.com/photos/146791570@N05/32354342833')}>Writing in notebook</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://informedmag.com/')}>informedmag</Text> is licensed under <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://creativecommons.org/licenses/by/2.0/')}>CC 2.0</Text>
+                    </Text>
 
                   </View>
                 </ImageBackground>
@@ -220,7 +225,12 @@ static navigationOptions = {
 
                   </ScrollView>
 
+                  <Text style={styles.creativeCommons}>
+                    "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://www.flickr.com/photos/146791570@N05/32354342833')}>Writing in notebook</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://informedmag.com/')}>informedmag</Text> is licensed under <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://creativecommons.org/licenses/by/2.0/')}>CC 2.0</Text>
+                  </Text>
+
                 </View>
+
               </ImageBackground>
           </View>
         )
@@ -274,5 +284,11 @@ const styles = StyleSheet.create({
     height: 80
   },
   stickyContainer: {
+  },
+  creativeCommons: {
+    fontSize: 7,
+    alignSelf: 'center',
+    marginBottom: 1,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
 })
