@@ -2,8 +2,7 @@
  * Coded by Brad Just on 2/1/19.
  * Purpose: Checks user's location to determine if they are in the correct location for the event.
  * Notable Features: Function for checking location. Function for calling a script to write a report
- *                   of users that attended the event. Creative commons information and links at the
-                     bottom of the page.
+ *                   of users that attended the event. Then returns the Generic Screen.
  */
 
 import React, { Component } from 'react';
@@ -20,6 +19,8 @@ import {
 from 'react-native';
 
 import { Constants, Location, Permissions } from 'expo';
+
+import GenericBanner from '../General/genericBannerScreen.js'
 
 import IP from '../../../assets/ip.js';
 
@@ -148,55 +149,22 @@ componentWillMount(){
     if(this.state.isLoading){
       return(
         <View style={styles.activityIndicatorContainer}>
+          <Text style={styles.loadingText}>Checking your location, please wait.</Text>
           <ActivityIndicator size="large" color='#B30738' />
         </View>
         )
     }
     else if (this.state.checkedIn) {
 
-        this.createReport(IP + '/create_report.php', email, title, requirement, date, true);
+      this.createReport(IP + '/create_report.php', email, title, requirement, date, true);
 
-      return (
-          <View style={styles.container}>
-            <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
-              <View style={styles.opacity}>
-
-                <View style={styles.infoBannerContainer}>
-                  <Text style={styles.textTitle}>You are signed into the event!</Text>
-                  <Text style={styles.text}>Your participation status will be updated shortly</Text>
-                </View>
-
-                <Text style={styles.creativeCommons}>
-                  "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://commons.wikimedia.org/wiki/File:SCU_Mission_and_Palm_Trees.jpg')}>SCU Mission and Palm Trees</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/User:SCUMATT')}>SCUMATT</Text> is licensed under <Text style={{textDecorationLine: 'underline'}}
-                  onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-sa/3.0/deed.en')}>Attribution-ShareAlike 3.0 Unported</Text>
-                </Text>
-
-              </View>
-            </ImageBackground>
-          </View>
-        )
+      return ( <GenericBanner title={'You are signed into the event!'} text={'Your participation status will be updated shortly'} /> );
     }
     else {
+
       this.createReport(IP + '/create_report.php', email, title, requirement, date, false);
-      return (
-        <View style={styles.container}>
-          <ImageBackground source={require("../../../assets/Images/MissionChurch2.jpg")} style={styles.backgroundImage}>
-            <View style={styles.opacity}>
 
-              <View style={styles.infoBannerContainer}>
-                <Text style={styles.textTitle}>We could not sign you into this event.</Text>
-                <Text style={styles.text}>Please proceed to the event location or turn on location services</Text>
-              </View>
-
-              <Text style={styles.creativeCommons}>
-                "<Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://commons.wikimedia.org/wiki/File:SCU_Mission_and_Palm_Trees.jpg')}>SCU Mission and Palm Trees</Text>" by <Text style={{textDecorationLine: 'underline'}} onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/User:SCUMATT')}>SCUMATT</Text> is licensed under <Text style={{textDecorationLine: 'underline'}}
-                onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-sa/3.0/deed.en')}>Attribution-ShareAlike 3.0 Unported</Text>
-              </Text>
-
-            </View>
-          </ImageBackground>
-        </View>
-      )
+      return ( <GenericBanner title={'We could not sign you into this event.'} text={"Please proceed to the event location or turn on location services. Also note that your location has been recorded. Try signing in a few more times but if the app continues on not working you will still receive credit for the event."} /> );
     }
   }
 }
@@ -208,47 +176,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  backgroundImage: {
-    width: '100%',
-    height: '100%',
-  },
-  opacity: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.8)',
-    justifyContent: 'center'
-  },
-  infoBannerContainer: {
-    height: '35%',
-    backgroundColor: 'rgb(165,36,59)',
-    justifyContent: 'space-evenly'
-  },
-  textTitle: {
-    fontSize: (.045 * Dimensions.get('window').height),
-    fontWeight: 'bold',
-    color: 'white',
-    textAlign: 'center',
-    marginLeft: '2%',
-    marginRight: '2%',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
-  },
-  text: {
-    fontSize: (.04 * Dimensions.get('window').height),
-    color: 'white',
-    textAlign: 'center',
-    marginLeft: '2%',
-    marginRight: '2%',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
-  },
-  creativeCommons: {
-    position: 'absolute',
-    bottom: 1,
-    fontSize: 7,
-    alignSelf: 'center',
-    textAlign: 'center',
+  loadingText: {
+    color: 'black',
+    marginBottom: '5%',
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   }
