@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Settings Cog icon to be displayed
- * Notable Features: Navigates to another screen on press.
+ * Notes: Navigates to another screen on press.
  */
 
 import React, { Component } from 'react';

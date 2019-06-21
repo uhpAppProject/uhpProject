@@ -1,10 +1,9 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Displays information about individual events from EventsShow.
- * Notable Features: Contains functions to determine whether the time of an event
- *                   has passed yet. Also has a funtion that calls a script to write
- *                   RSVP and Sign In reports. Has a conditional animated header and
- *                   a button that conditionally links to other pages.
+ * Notes: Contains functions to determine whether the time of an event
+ *                   has passed yet. Has a conditional animated header and
+ *                   a button that links to other pages.
  */
 
 import React, { Component } from 'react';
@@ -21,8 +20,6 @@ import {
 from 'react-native';
 
 import Plus from "../Icons/plus.js";
-
-import IP from '../../../assets/ip.js';
 
 const AnimatedOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -78,31 +75,11 @@ export default class IndivEvent extends Component {
       });
   }
 
-  createReport(php_url, email, title, date) {
-
-      var formData = new FormData();
-      formData.append('email', email);
-      formData.append('date', date);
-      formData.append('title', title);
-
-      fetch( php_url , {
-        method: 'POST',
-        body: formData,
-        headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'multipart/form-data',
-        }
-      })
-      .catch((error) => {
-        this._error_Nav(email, error);
-      });
-    }
-
   _onPressOpacity = (email, title, requirement, date, latitude, longitude, radius) => {
-    /*
-     * Navigates to location check screen if the event is happening now.
-     * Otherwise creates an RSVP report and navigates to the RSVP screen.
-     */
+
+     // Navigates to location check screen if the event is happening now.
+     // Otherwise creates an RSVP report and navigates to the RSVP screen.
+
 
     const{navigate} = this.props.navigation;
     if(this.state.isNow){
@@ -117,101 +94,31 @@ export default class IndivEvent extends Component {
       })
     }
     else{
-
-      this.createReport(IP + '/create_report_RSVP.php', email, title, date);
       navigate('Rsvp', {
         email: email,
         title: title,
-        requirement: requirement,
-        date: date,
       })
     }
   }
 
-  _hourCheck(hourNow, minNow){
-
-    var timeNow = hourNow + minNow/60.0
-
-    //inputting the hour how
-    if((this.props.navigation.getParam('time', 'No Time').indexOf('pm') != -1) && (this.props.navigation.getParam('time', 'No Time').slice(0,2) != '12')) //if the hour is pm and not equal to 12, add 12
-    {
-      var hour = Number(this.props.navigation.getParam('time', 'No Time').slice(0,-6)) + 12;
-    }
-    //converting to a 24 hour system
-    else if((this.props.navigation.getParam('time', 'No Time').indexOf('am') != -1) && (this.props.navigation.getParam('time', 'No Time').slice(0,2) != '12'))
-    {
-      var hour = Number(this.props.navigation.getParam('time', 'No Time').slice(0,-6));
-    }
-    else if(this.props.navigation.getParam('time', 'No Time').indexOf('pm') != -1) //it must be 12:00 either am or pm
-    {
-      var hour = Number(this.props.navigation.getParam('time', 'No Time').slice(0,-6));
-    }
-    else {
-      var hour = 0;
-    }
-
-    var min = Number(this.props.navigation.getParam('time', 'No Time').slice(-5,-3))/60.0;
-
-    var eventTime = hour + min
-
-    if(Math.abs(timeNow - eventTime) <= .5) {
-      //can sign in up to 30 min before and after the start of the event
-      this.setState({ isNow: true,
-                      opacityText: "SIGN IN" });
-    }
-    else if(timeNow - eventTime > 0){
-        this.setState({ isPast: true });
-      }
-    }
-
-  _signInCheck(today){
-    var eventDate = this.props.navigation.getParam('date', 'No Date');
+  _signInCheck(eventDate){
+    var ms_ed = eventDate.getTime();
     //date of the event as listed in the database
     var today = new Date();
-    var min = today.getMinutes();
-    var hh = today.getHours();
-    var dd = today.getDate();
-    var mm = today.getMonth(); //January is 0
-    var yyyy = today.getFullYear();
-    var months = ["January", "February", "March", "April", "May", "June",
-                  "July", "August", "September", "October", "November",
-                  "December"];
-    if(months[mm] + " " + dd + ", " + yyyy == eventDate){
-        this._hourCheck(hh, min)
-    }
-    else {
-      this._isPast(today)
-      }
-    }
+    var ms_now = today.getTime();
 
-
-  _isPast(date_today){
-    eventDate = this.props.navigation.getParam('date', 'No Date');
-    eventTime = this.props.navigation.getParam('time', 'No Tate');
-
-    var months = ["January", "February", "March", "April", "May", "June",
-                  "July", "August", "September", "October", "November",
-                  "December"];
-
-    if(date_today.getFullYear() > Number(eventDate.slice(-4))) {
-      //check if year is past
-      this.setState({ isPast: true });
-    }
-    else if((date_today.getFullYear() == Number(eventDate.slice(-4))) && (date_today.getMonth() > months.indexOf(eventDate.slice(0, eventDate.indexOf(' '))))){
-        //check is month is past
-      this.setState({ isPast: true });
-    }
-    else if((date_today.getFullYear() == Number(eventDate.slice(-4))) && (date_today.getMonth() == months.indexOf(eventDate.slice(0, eventDate.indexOf(' ')))) && (date_today.getDate() > Number(eventDate.slice(eventDate.indexOf(' '), eventDate.indexOf(','))))){
-          //check is day is past
-      this.setState({ isPast: true });
-    }
+    if(Math.abs(ms_ed - ms_now) < 1800000) this.setState({
+                                                    isNow: true,
+                                                    opacityText: "SIGN IN"
+                                                    })
+    else if((ms_ed - 1800000) < ms_now) this.setState({ isPast: true }) //1800000 ms in 30 min
   }
 
   componentWillMount(){
 
-    var today = new Date();
+    var datetime = new Date(this.props.navigation.getParam('datetime', 'No DateTime'));
+    this._signInCheck(datetime);
 
-    this._signInCheck(today)
   }
 
   render(){
@@ -223,8 +130,8 @@ export default class IndivEvent extends Component {
     const title = navigation.getParam('title', 'No Title');
     const requirement = navigation.getParam('requirement', 'No Req');
     const location = navigation.getParam('location', 'No Location');
-    const date = navigation.getParam('date', 'No Date');
-    const time = navigation.getParam('time', 'No Time');
+    const date = navigation.getParam('date', 'No Date')
+    const time = navigation.getParam('time', 'No Time')
     const description = navigation.getParam('description', 'No Description');
     const email = navigation.getParam('email', 'No Email');
     const latitude = navigation.getParam('latitude', 'No Latitude');
@@ -448,8 +355,10 @@ const styles = StyleSheet.create({
     headerContainer:{
       justifyContent: 'center',
       alignItems: 'center',
-      height: '25%',
       marginTop: '2%',
+      marginLeft: '2%',
+      marginRight: '2%',
+      paddingVertical: '2%',
       marginLeft: '2%',
       marginRight: '2%',
       backgroundColor: 'rgb(245,192,69)',

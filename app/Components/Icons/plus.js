@@ -1,7 +1,7 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 3/25/19.
  * Purpose: Loads a plus icon to be displayed.
- * Notable Features: Animation
+ * Notes: Animation
  */
 
 import React, { Component } from 'react';
@@ -59,9 +59,9 @@ export default class Plus extends Component {
         return(
           <View style={styles.container}>
             <Ionicons
-              color={'rgba(255, 255, 255,' + String(this.props.opacity) + ')'}
+              color={'rgba(255, 255, 255,' + String(this.props.opacity) + ')'} //allows the opacity to be animated
               name={'ios-add'}
-              size={(.1 * Dimensions.get('window').width)}
+              size={(.1 * Dimensions.get('window').width)} //allows size to be animated
               />
           </View>
         )

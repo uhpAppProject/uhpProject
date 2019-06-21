@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Displays information
- * Notable Features: Has a scrollview and an animated header.
+ * Notes: Has a scrollview and an animated header.
  */
 
 import React, { Component } from 'react';
@@ -24,7 +24,7 @@ export default class EventRequirements extends Component {
   constructor(props) {
   super(props);
   this.state = {
-    scrollY: new Animated.Value(0)
+    scrollY: new Animated.Value(0) //animated event
   }
 };
   static navigationOptions = {
@@ -49,6 +49,7 @@ export default class EventRequirements extends Component {
 
   render() {
 
+    //Dynamic variables are declared here
     const headerHeight = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_EXPANDED_HEIGHT-HEADER_COLLAPSED_HEIGHT],
       outputRange: [HEADER_EXPANDED_HEIGHT, HEADER_COLLAPSED_HEIGHT],
@@ -92,7 +93,7 @@ export default class EventRequirements extends Component {
             </Animated.View>
 
             <View style={styles.opacity}>
-              <ScrollView style={styles.bodyContainer}
+              <ScrollView style={styles.bodyContainer} //All dynamic variables move in sync with the movement of this scrollview
                           onScroll={Animated.event(
                             [{ nativeEvent: {
                                 contentOffset: {

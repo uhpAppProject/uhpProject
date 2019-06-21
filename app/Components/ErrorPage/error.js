@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
- * Purpose: Displays any errors to users in an elegant while alerting admin.
- * Notable Features: Contains a function that calls a script to email the admin
+ * Purpose: Displays any errors to users in an elegant way while alerting admin.
+ * Notes: Contains a function that calls a script to email the admin
  *                   with information about why the app crashed.
  */
 
@@ -17,7 +17,7 @@ import {
       }
 from 'react-native';
 
-import IP from '../../../assets/ip.js';
+import { Urls } from '../../../urls.js';
 
 export default class Error extends Component {
   constructor(props) {
@@ -63,7 +63,7 @@ componentDidMount(){
   formData.append('user', email);
   formData.append('error', JSON.stringify(error));
 
-  fetch( IP + "/error_email.php" , {
+  fetch( Urls.ErrorEmail, {
     method: 'POST',
     body: formData,
     headers: {

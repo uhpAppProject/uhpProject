@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Presents information
- * Notable Features: Works with "PostIt" to present information. Has a scrollview and an animated header.
+ * Notes: Works with "PostIt" to present information. Has a scrollview and an animated header.
  */
 
 import React, { Component } from 'react';
@@ -96,6 +96,7 @@ export default class ParticipationFAQ extends Component {
                         contents={'The Participation Tracker will give you a detailed record of your participation status with regard to these event requirements. On the “Participation Status” page, you will see the events you attended and whether they counted for a UHP Event or Social Justice Event. If your status is incomplete for either one of these events, you may be prompted to return to the “Upcoming Honors Events” page to find an event that you would like to attend to fulfill your requirement.'}
                         button={true}
                         buttonTitle={'View Participation Status'}
+                        email={this.props.navigation.getParam('email', 'No Email')}
                         />
 
                 <View style={styles.postItContainer}>

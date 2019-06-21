@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Reusable page with an image background.
- * Notable Features: Has props: title, text, contains creative commons information and links
+ * Notes: Has props: title, text, contains creative commons information and links
  */
 
 import React, { Component } from 'react';

@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Home page of the app. Also loads data the app will need later.
- * Notable Features: Functions to fetch data from an external database. A few
+ * Notes: Functions to fetch data from an external database. A few
  *                   buttons to navigate to other pages in the app.
  */
 
@@ -23,7 +23,7 @@ from 'react-native';
 
 import { AppLoading, Asset, Font, Icon} from 'expo';
 
-import IP from '../../../assets/ip.js';
+import { Urls } from '../../../urls.js';
 
 export default class ParticipationHome extends Component {
   constructor(props) {
@@ -69,21 +69,18 @@ _error_Nav(email, error){
 }
 
 _navigateTo = (page, navObj) => {
-  /*
-   * Function uses react navigation to move to the next page in the application.
-   * It takes in a page to navigate to and an object with parameters to be passed
-   * to the next page
-   */
+   // Function uses react navigation to move to the next page in the application.
+   // It takes in a page to navigate to and an object with parameters to be passed
+   // to the next page
+
 
   const{navigate} = this.props.navigation;
     navigate(page, navObj);
   }
 
 fetchAndStore = (url, email, asyncTitle) => {
-  /*
-   * Pulls user data stored at url using email as a key.
-   * Stores the data in async storage for later use in the app.
-   */
+   // Pulls user data stored at url using email as a key.
+   // Stores the data in async storage for later use in the app.
 
     var formData = new FormData();
     formData.append('email', email);
@@ -106,24 +103,29 @@ fetchAndStore = (url, email, asyncTitle) => {
   }
 
 fetchAndStoreEvents = (url, asyncTitle) => {
-  /*
-   * Pulls data from url and stores it with async storage for later use.
-   */
+   // Pulls data from url and stores it with async storage for later use.
 
-    fetch(url)
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
+        'Content-Type': 'application/json'
+      },
+    })
       .then((response) => response.json())
       .then((responseJson) => {
         AsyncStorage.setItem(asyncTitle, JSON.stringify(responseJson));
       })
     .catch((error) => {
+      alert(error)
       this._error_Nav(this.state.user_email, error);
     });
   }
 
 _loadResourcesAsync = async => {
-  this.fetchAndStoreEvents(IP + '/select_all_from_events.php', 'Events');
+  this.fetchAndStoreEvents(Urls.CalendarAPP, 'Events');
   if(this.state.user_email != "Non-Honors"){
-      this.fetchAndStore(IP + '/participation_status_query.php', this.state.user_email, 'userInfo');
+    this.fetchAndStore(Urls.ParticipationAPP, this.state.user_email, 'userInfo');
   }
 };
 
@@ -175,11 +177,11 @@ _handleFinishLoading = () => {
                   </View>
 
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('EventRequirements', {})}>
+                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('EventRequirements', {email: this.state.user_email})}>
                       <Text style={styles.title}>Event Requirements</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('ParticipationFAQ', {})}>
+                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('ParticipationFAQ', {email: this.state.user_email})}>
                       <Text style={styles.title}>Honors Participation FAQ</Text>
                     </TouchableOpacity>
                   </View>

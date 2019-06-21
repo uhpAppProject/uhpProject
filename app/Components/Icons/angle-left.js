@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Back icon for the upper left corner.
- * Notable Features: Displays a chevron if the user is on ios and a back arrow if the user is on android.
+ * Notes: Displays a chevron if the user is on ios and a back arrow if the user is on android.
  */
 
 import React, { Component } from 'react';
@@ -78,8 +78,9 @@ export default class BackButton extends Component {
                 color={'white'}
                 name={'arrow-back'}
                 size={(.1 * Dimensions.get('window').width)}
-                onPress={() => this.onPress()}
+                onPress={() => this.props.navigation.goBack()}
                 />
+
             </View>
           )
         }

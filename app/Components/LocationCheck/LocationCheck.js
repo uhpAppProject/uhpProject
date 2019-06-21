@@ -1,7 +1,8 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 3/25/19.
  * Purpose: Checks user's location to determine if they are in the correct location for the event.
- * Notable Features: Function for checking location. Function for calling a script to write a report
+ *          Update participation status if they are.
+ * Notes: Function for checking location. Function for calling a script to write a report
  *                   of users that attended the event. Then returns the Generic Screen.
  */
 
@@ -22,7 +23,7 @@ import { Constants, Location, Permissions } from 'expo';
 
 import GenericBanner from '../General/genericBannerScreen.js'
 
-import IP from '../../../assets/ip.js';
+import { Urls } from '../../../urls.js';
 
 export default class LocationCheck extends Component {
   constructor(props) {
@@ -64,21 +65,19 @@ _error_Nav(email, error){
     });
 }
 
-createReport = (php_url, email, title, requirement, date, locationCheckPassed) => {
-  /*
-   * Writes a report of users who signed into the event
-   */
+createReport = (url, email, title, requirement, locationCheckPassed) => {
+   // Creates a report of sign in attempts (currently a Google Form)
+
 
     var formData = new FormData();
     formData.append('email', email);
     formData.append('requirement', requirement);
-    formData.append('date', date);
     formData.append('title', title);
     formData.append('latitude', this.state.latitude);
     formData.append('longitude', this.state.longitude);
     formData.append('locationCheck', locationCheckPassed);
 
-    fetch( php_url , {
+    fetch( url , {
       method: 'POST',
       body: formData,
       headers: {
@@ -86,9 +85,27 @@ createReport = (php_url, email, title, requirement, date, locationCheckPassed) =
        'Content-Type': 'multipart/form-data',
       }
     })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if(responseJson == 'TRUE') {}
+    .catch((error) => {
+      this._error_Nav(email, error);
+    });
+  }
+
+  updateStatus(url, email, title, requirement){
+    //Precondition: Enter a valid the valid google scripts url, user email, event attended, and the event requirement.
+    //Postcondition: Attempts to update the user's participation status if the loc check was passed. Returns an error message if the attempt fails.
+
+    var formData = new FormData();
+    formData.append('email', email);
+    formData.append('requirement', requirement);
+    formData.append('title', title);
+
+    fetch( url , {
+      method: 'POST',
+      body: formData,
+      headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'multipart/form-data',
+      }
     })
     .catch((error) => {
       this._error_Nav(email, error);
@@ -96,14 +113,13 @@ createReport = (php_url, email, title, requirement, date, locationCheckPassed) =
   }
 
   locationCheck(location){
-    /*
-     * Checks a user in if they are within a certain radius of the event. Takes in a location object as an argument
-     */
+
+     // Checks a user in if they are within a certain radius of the event. Takes in a location object as an argument
 
     if(Math.sqrt(
       (location.coords.latitude - Number(this.props.navigation.getParam('latitude', 'No Latitude')))**2 +
-      (location.coords.longitude - Number(this.props.navigation.getParam('longitude', 'No Latitude')))**2) <= Number(this.props.navigation.getParam('radius', '0.0002'))
-    ) {
+      (location.coords.longitude - Number(this.props.navigation.getParam('longitude', 'No Latitude')))**2) <= Number(this.props.navigation.getParam('radius', '0.0004')))
+      {
         this.setState({
                         checkedIn: true,
                         isLoading: false,
@@ -112,7 +128,7 @@ createReport = (php_url, email, title, requirement, date, locationCheckPassed) =
                       });
       }
     else {
-      this.setState({ isLoading: false,
+        this.setState({ isLoading: false,
                       latitude: location.coords.latitude,
                       longitude: location.coords.longitude,
                     })
@@ -120,9 +136,8 @@ createReport = (php_url, email, title, requirement, date, locationCheckPassed) =
     }
 
   _getLocationAsync = async () => {
-    /*
-     * Retrieves user's location.
-     */
+     // Retrieves user's location.
+
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
         alert('Permission to access location was denied');
@@ -155,16 +170,16 @@ componentWillMount(){
         )
     }
     else if (this.state.checkedIn) {
-
-      this.createReport(IP + '/create_report.php', email, title, requirement, date, true);
+      this.createReport(Urls.SignInApp, email, title, requirement, true);
+      this.updateStatus(Urls.UpdateApp, email, title, requirement);
 
       return ( <GenericBanner title={'You are signed into the event!'} text={'Your participation status will be updated shortly'} /> );
     }
     else {
 
-      this.createReport(IP + '/create_report.php', email, title, requirement, date, false);
+      this.createReport(Urls.SignInApp, email, title, requirement, false);
 
-      return ( <GenericBanner title={'We could not sign you into this event.'} text={"Please proceed to the event location or turn on location services. Also note that your location has been recorded. Try signing in a few more times but if the app continues on not working you will still receive credit for the event."} /> );
+      return ( <GenericBanner title={'We could not sign you into this event.'} text={"Please proceed to the event location or turn on location services. Also note that your sign in attempt has been recorded. Try signing in a few more times but if it continues not working you will still receive credit for the event."} /> );
     }
   }
 }

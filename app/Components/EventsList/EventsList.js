@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Display list of events.
- * Notable Features: Contains two classes: "EventsList" which defines a flatlist with event information
+ * Notes: Contains two classes: "EventsList" which defines a flatlist with event information
  *                   and "EventsShow" which displays the flatlist. The ListItems are pressable.
  *                   EventsShow has an animated header.
  */
@@ -43,8 +43,12 @@ _error_Nav(email, error){
 }
 
 async extractAsyncData(asyncTitle) {
-  /*Function for extracting a key from async storage (input as "asyncTitle")and parsing it into
-  A JS Object, then the funtion changes the isloading value with setState*/
+  
+
+  //  Function for extracting a key from async storage (input as "asyncTitle")and parsing it into
+  //  A JS Object, then the funtion changes the isloading value with setState
+
+
   try {
     await AsyncStorage.getItem(asyncTitle)
     .then((response) => JSON.parse(response))
@@ -64,11 +68,10 @@ renderItem = ({ item }) => (
 // MyListItems contains a TouchableOpacity and a headerscreen
   <MyListItem
       id={item.event_id}
-      title={item.name}
+      title={item.title}
       requirement={item.requirement}
       location={item.location}
-      time={item.time}
-      date={item.date}
+      datetime={item.datetime}
       description={item.description}
       email={this.props.email}
       latitude={item.latitude}
@@ -97,17 +100,26 @@ componentWillMount() {
       )
     }
     else{
-    return (
-      <View style={styles.flatlistContainer}>
-        <AnimatedFlatList
-          keyExtractor={(item) => item.event_id}
-          data={this.state.events}
-          renderItem={this.renderItem}
-          scrollEventThrottle={16}
-          onScroll={this.props.onScroll}
-        />
-      </View>
-    )
+      if(this.state.events[0] != undefined){
+        return (
+          <View style={styles.flatlistContainer}>
+            <AnimatedFlatList
+              keyExtractor={(item) => item.id}
+              data={this.state.events}
+              renderItem={this.renderItem}
+              scrollEventThrottle={16}
+              onScroll={this.props.onScroll}
+            />
+          </View>
+        )
+      }
+      else{
+        return(
+          <View style={styles.noEventsContainer}>
+            <Text style={styles.noEventsText}>There Are Currently No Upcoming Events. Please Check Back Later.</Text>
+          </View>
+        )
+      }
     }
   }
 }
@@ -172,7 +184,6 @@ export default class EventsShow extends Component {
       )
     }
     else{
-
       return(
         <View style={styles.container}>
           <ImageBackground source={require("../../../assets/Images/upcoming_events_background.png")} style={styles.backgroundImage}>
@@ -219,6 +230,18 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-start',
       backgroundColor: 'rgb(165,36,59)',
       borderBottomWidth: 1
+    },
+    noEventsContainer: {
+      flex: 1,
+      justifyContent: 'flex-start',
+      alignSelf: 'center'
+    },
+    noEventsText: {
+      fontWeight: '500',
+      textAlign: 'center',
+      marginTop: (.1 * Dimensions.get('window').height),
+      fontSize: (.07 * Dimensions.get('window').width),
+      fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
     },
     backgroundImage: {
       height: '100%',

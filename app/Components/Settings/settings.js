@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Setting menu
- * Notable Features: Buttons that navigate to other screens from the settings menu
+ * Notes: Buttons that navigate to other screens from the settings menu
  */
 
 import React, { Component } from 'react';
@@ -53,17 +53,19 @@ static navigationOptions = {
 };
 
   _navigateTo = (page, navObj) => {
-    /*
-     * Function uses react navigation to move to the next page in the application.
-     * It takes in a page to navigate to and an object with parameters to be passed
-     * to the next page
-     */
+     // Function uses react navigation to move to the next page in the application.
+     // It takes in a page to navigate to and an object with parameters to be passed
+     // to the next page
 
     const{navigate} = this.props.navigation;
       navigate(page, navObj);
     }
 
   _navigateToAndReset (page, navObj) {
+    // Function uses react navigation to move to the next page in the application while
+    // clearing the current navigation stack. It takes in a page to navigate to and an
+    // object with parameters to be passed to the next page
+
       const resetAction = StackActions.reset({
       index: 0, // <-- currect active route from actions array
       actions: [
@@ -77,13 +79,6 @@ static navigationOptions = {
   render() {
       return (
         <View style={styles.container}>
-          <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={() => this._navigateTo('PasswordReset', {})}>
-
-            <Text>Password Reset</Text>
-
-          </TouchableOpacity>
 
           <TouchableOpacity
               style={styles.buttonContainer}

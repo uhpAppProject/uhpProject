@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Defines the list items from the flatlist in EventsList
- * Notable Features: Some logic to format data. Listitems are formatted as touchable opacities.
+ * Notes: Some logic to format data. Listitems are formatted as touchable opacities.
  */
 
 import React, { Component } from 'react';
@@ -23,11 +23,12 @@ class MyListItem extends Component {
     const{navigate} = this.props.navigation;
       navigate('IndividualEvent', {
             event_id: this.props.id,
-            title: this.props.title,
+            title: this.formatTitle(this.props.title, this.props.requirement),
             requirement: this.props.requirement,
             location: this.props.location,
-            date: this.props.date,
-            time: this.props.time,
+            datetime: this.props.datetime,
+            date: this.formatDate(this.props.datetime),
+            time: this.formatTime(this.props.datetime),
             description: this.props.description,
             email: this.props.email,
             latitude: this.props.latitude,
@@ -35,28 +36,70 @@ class MyListItem extends Component {
             radius: this.props.radius,
     });
   }
+    formatTitle(title, req){
+
+      // Formats the title without the "(Social Justice Event)"
+
+      title = title.slice(0, title.search(req) - 1)
+
+      if(title.length > 25) {
+        // Adds "..." to the title if it's too long
+
+        return(title.slice(0, 25) + "...");
+      }
+      else {
+        return(title);
+      }
+    }
+
+    formatLocation(location){
+      // Adds "..." to the location if it's too long
+
+      if(location.length > 20){
+        return(location.slice(0,20) + "...");
+      }
+      else {
+        return(location);
+      }
+    }
+
+    formatDate(date){
+      //formats the date in month/day/year format
+
+      var output = new Date(date);
+      return output.getMonth() + 1 + '/' + output.getDate() + '/' + output.getFullYear();
+    }
+
+    formatTime(date){
+      //formats the time in hour:minute AM/PM format
+
+      var output = new Date(date);
+      var hour = output.getHours();
+      var minutes = output.getMinutes();
+      var am_pm;
+      if(hour < 12) am_pm = "AM";
+      else am_pm = "PM";
+      if(hour == 0 || hour == 12) hour = 12;
+      else hour %= 12
+      if(minutes < 10) return hour + ':' + '0' + output.getMinutes() + ' ' + am_pm;
+      else return hour + ':' + output.getMinutes() + ' ' + am_pm;
+    }
 
   render() {
 
-    if(this.props.requirement == 'Social Justice Event'){
+    if(this.props.requirement == 'Social Justice Event'){ // Shorten the requirement name
       var requirement = 'SJ Event'
     }
     else{
       var requirement = 'UHP Event'
     }
 
-    if(this.props.location == 'California Mission Room'){
-      var location = 'CMR'
-    }
-    else{
-      var location = this.props.location
-    }
 
     return (
       <TouchableOpacity style={styles.buttonContainer} onPress={() => this._onPress()}>
         <View style={styles.topContainer}>
           <Text style={[styles.leftText, styles.titleText]}>
-            {this.props.title}
+            {this.formatTitle(this.props.title, this.props.requirement)}
           </Text>
         </View>
 
@@ -65,16 +108,16 @@ class MyListItem extends Component {
             {requirement}
           </Text>
           <Text style={styles.rightText}>
-            {location}
+            {this.formatLocation(this.props.location)}
           </Text>
         </View>
 
         <View style={styles.bottomContainer}>
           <Text style={styles.rightText}>
-            {this.props.date}
+            {this.formatDate(this.props.datetime)}
           </Text>
           <Text style={styles.rightText}>
-            {this.props.time}
+            {this.formatTime(this.props.datetime)}
           </Text>
         </View>
 

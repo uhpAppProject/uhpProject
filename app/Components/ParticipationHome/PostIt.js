@@ -1,7 +1,7 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 3/25/19.
  * Purpose: Provides assistance to "ParticipationFAQ" screen in presenting data.
- * Notable Features: receives props: title, content, button (true or false)
+ * Notes: receives props: title, content, button (true or false)
  */
 
 import React, { Component } from 'react';
@@ -24,11 +24,9 @@ class PostIt extends Component {
 };
 
 _navigateTo = (page, navObj) => {
-  /*
-   * Function uses react navigation to move to the next page in the application.
-   * It takes in a page to navigate to and an object with parameters to be passed
-   * to the next page
-   */
+   // Function uses react navigation to move to the next page in the application.
+   // It takes in a page to navigate to and an object with parameters to be passed
+   // to the next page
 
   const{navigate} = this.props.navigation;
     navigate(page, navObj);
@@ -47,7 +45,7 @@ _navigateTo = (page, navObj) => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.buttonContainer} onPress={ () => this._navigateTo('ParticipationStatus', { title: 'FAQ' })}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={ () => this._navigateTo('ParticipationStatus', {email: this.props.email})}>
             <Text style={styles.buttonText}>{this.props.buttonTitle}</Text>
           </TouchableOpacity>
         </View>

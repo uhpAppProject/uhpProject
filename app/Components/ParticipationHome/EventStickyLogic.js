@@ -1,7 +1,7 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 3/25/19.
  * Purpose: Provides assistance to the "ParticipationStatus" screen in processing and presenting user data.
- * Notable Features: None
+ * Notes: None
  */
 
 import React, { Component } from 'react';
@@ -20,11 +20,9 @@ import { withNavigation } from 'react-navigation';
 class StickyLogic extends Component {
 
   _navigateTo = (page, navObj) => {
-    /*
-     * Function uses react navigation to move to the next page in the application.
-     * It takes in a page to navigate to and an object with parameters to be passed
-     * to the next page
-     */
+     // Function uses react navigation to move to the next page in the application.
+     // It takes in a page to navigate to and an object with parameters to be passed
+     // to the next page
 
     const{navigate} = this.props.navigation;
       navigate(page, navObj);

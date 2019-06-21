@@ -1,7 +1,7 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 3/25/19.
  * Purpose: Presents information about the user's participation status.
- * Notable Features: A function to call the user's data from storage.
+ * Notes: A function to call the user's data from storage.
  *                   A function to determine if the user has completed all
  *                   requirements. Contains creative commons info and links
  */
@@ -32,6 +32,9 @@ export default class ParticiptionStatus extends Component {
   constructor(props) {
   super(props);
   this.state = {
+    socialJustice: '',
+    uhp: '',
+    email: '',
     isMember: true,
     user_info: new Object(),
     isLoading: true,
@@ -74,10 +77,8 @@ static navigationOptions = {
   }
 
   async extractUserInfo(asyncTitle) {
-    /*
-     * Function for extracting data from async storage and parsing it into
-     * A JS Object. Then the funtion changes the isloading value with setState.
-     */
+     // Function for extracting data from async storage and parsing it into
+     // A JS Object. Then the funtion changes the isloading value with setState.
 
     try {
       await AsyncStorage.getItem(asyncTitle)
@@ -85,8 +86,11 @@ static navigationOptions = {
       .then((parsed) => {
           this.state.user_info = parsed
         })
-      if(this.state.user_info[0] != undefined){
-        this.setState({isLoading: false});
+      if(this.state.user_info != undefined){
+        this.setState({
+                        isLoading: false,
+                        isMember: this.state.user_info.uhp == 'Non Member' ? false : true
+                      });
         }
       }
     catch(error) {
@@ -95,24 +99,40 @@ static navigationOptions = {
       }
 
   checkStatus = () => {
-    if(this.state.user_info[0].academic_status == 'COMPLETE' && this.state.user_info[0].social_justice_status == 'COMPLETE'){
+    if(this.state.user_info.uhp > 0 && this.state.user_info.sj > 0){
       this.state.status = 'COMPLETE';
+      this.state.uhp = 'COMPLETE';
+      this.state.socialJustice = 'COMPLETE';
     }
     else{
+      if(this.state.user_info.uhp > 0) this.state.uhp = "COMPLETE";
+      else this.state.uhp = "INCOMPLETE";
+
+      if(this.state.user_info.sj > 0) this.state.socialJustice = "COMPLETE";
+      else this.state.socialJustice = "INCOMPLETE";
+
       this.state.status = 'INCOMPLETE';
     }
   }
 
+  formatDate(date){
+    //Formats date in month/day/year format
+
+    var output = new Date(date);
+    return output.getMonth() + 1 + '/' + output.getDate() + '/' + output.getFullYear();
+  }
+
   componentWillMount() {
-    if(this.props.navigation.getParam('email', 'No Email') == "Non-Honors"){
-      this.setState({
-                      isMember: false,
-                      isLoading: false,
-                    });
-    }
-    else {
-      this.extractUserInfo('userInfo');
-    }
+      this.state.email = this.props.navigation.getParam('email', 'No Email');
+      if(this.state.email=='Non-Honors'){
+        this.setState({
+          isMember: false,
+          isLoading: false
+        });
+      }
+      else{
+        this.extractUserInfo('userInfo');
+      }
   }
 
   render() {
@@ -140,7 +160,7 @@ static navigationOptions = {
 
     this.checkStatus()
 
-      if (this.state.user_info[0].academic_status == "INCOMPLETE" && this.state.user_info[0].social_justice_status == "INCOMPLETE") {
+      if (this.state.user_info.uhp > 0 || this.state.user_info.sj > 0) { // At least one requirement is complete
           return(
             <View style={styles.container}>
                 <ImageBackground source={require("../../../assets/Images/paticipation_status_background.png")}
@@ -165,17 +185,17 @@ static navigationOptions = {
                               scrollEventThrottle={16}>
                       <StickyLogic
                           type={'UHP Event'}
-                          status={this.state.user_info[0].academic_status}
-                          date={this.state.user_info[0].academic_date}
-                          event={this.state.user_info[0].academic_event_attended}
-                          email={this.state.user_info[0].email}
+                          status={this.state.uhp}
+                          date={this.formatDate(Number(this.state.user_info.uhpDate))}
+                          event={this.state.user_info.uhpAttended}
+                          email={this.state.email}
                           />
                       <StickyLogic
                           type={'Social Justice Event'}
-                          status={this.state.user_info[0].social_justice_status}
-                          date={this.state.user_info[0].social_justice_date}
-                          event={this.state.user_info[0].social_justice_event_attended}
-                          email={this.state.user_info[0].email}
+                          status={this.state.socialJustice}
+                          date={this.formatDate(Number(this.state.user_info.sjDate))}
+                          event={this.state.user_info.sjAttended}
+                          email={this.state.email}
                           />
 
                       <View style={styles.placeholder}></View>
@@ -191,7 +211,7 @@ static navigationOptions = {
             </View>
           )
         }
-      else {
+      else { // Neither requirement is complete
         return(
           <View style={styles.container}>
               <ImageBackground source={require("../../../assets/Images/paticipation_status_background.png")}
@@ -208,17 +228,17 @@ static navigationOptions = {
                   <ScrollView style={styles.stickyContainer}>
                     <StickyLogic
                         type={'UHP Event'}
-                        status={this.state.user_info[0].academic_status}
-                        date={this.state.user_info[0].academic_date}
-                        event={this.state.user_info[0].academic_event_attended}
-                        email={this.state.user_info[0].email}
+                        status={this.state.uhp}
+                        date={this.formatDate(Number(this.state.user_info.uhpDate))}
+                        event={this.state.user_info.uhpAttended}
+                        email={this.state.email}
                         />
                     <StickyLogic
                         type={'Social Justice Event'}
-                        status={this.state.user_info[0].social_justice_status}
-                        date={this.state.user_info[0].social_justice_date}
-                        event={this.state.user_info[0].social_justice_event_attended}
-                        email={this.state.user_info[0].email}
+                        status={this.state.socialJustice}
+                        date={this.formatDate(Number(this.state.user_info.sjDate))}
+                        event={this.state.user_info.sjAttended}
+                        email={this.state.email}
                         />
 
                     <View style={styles.placeholder}></View>
@@ -236,10 +256,9 @@ static navigationOptions = {
         )
       }
     }
-  else {
+  else { // Person did't use Google to sign in
     return(
-      <GenericBanner title={"Honors students are required to attend 1 Social Justice Event\
-                            and 1 UHP Event a year to maintain their honors status."}
+      <GenericBanner title={"Honors students are required to attend 1 Social Justice Event and 1 UHP Event a year to maintain their honors status."}
                      text={''}/>
     );
   }

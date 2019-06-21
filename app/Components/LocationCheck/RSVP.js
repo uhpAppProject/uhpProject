@@ -1,7 +1,7 @@
 /*
  * Coded by Brad Just on 2/1/19.
  * Purpose: Displays information to the user thanking them for RSVPing for an event.
- * Notable Features: None
+ * Notes: Function that creates a report of rsvps
  */
 
 import React, { Component } from 'react';
@@ -17,6 +17,8 @@ import {
 from 'react-native';
 
 import GenericBanner from '../General/genericBannerScreen.js'
+
+import { Urls } from '../../../urls.js';
 
 export default class Rsvp extends Component {
   constructor(props) {
@@ -45,15 +47,38 @@ static navigationOptions = {
   },
 };
 
+  createReport(url, email, title) {
+    //fills out a Google Form with the email of the user and the event they are
+    //rsvping to
 
-  render() {
+      var formData = new FormData();
+      formData.append('email', email);
+      formData.append('title', title);
+
+      fetch( url , {
+        method: 'POST',
+        body: formData,
+        headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'multipart/form-data',
+        }
+      })
+      .catch((error) => {
+        this._error_Nav(email, error);
+      });
+    }
+
+  componentWillMount(){
 
     const { navigation } = this.props;
     const title = navigation.getParam('title', 'No Title');
-    const requirement = navigation.getParam('requirement', 'No Req');
-    const date = navigation.getParam('date', 'No Date');
     const email = navigation.getParam('email', 'No Email');
-    const geolocation = navigation.getParam('geolocation', 'No Geolocation');
+
+    this.createReport(Urls.RsvpApp, email, title);
+  }
+
+
+  render() {
 
     return ( <GenericBanner title={'See you at the event!'} text={'Thank you for letting us know you are coming'} /> );
 
