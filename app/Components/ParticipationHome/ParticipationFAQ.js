@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Presents information
  * Notes: Works with "PostIt" to present information. Has a scrollview and an animated header.
  */
@@ -33,8 +33,7 @@ export default class ParticipationFAQ extends Component {
     headerLeftContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%',
-      marginLeft: '.05%',
+      paddingLeft: (.01 * Dimensions.get('window').width)
     },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
@@ -45,7 +44,7 @@ export default class ParticipationFAQ extends Component {
     headerRightContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%',
+      paddingRight: (.01 * Dimensions.get('window').width),
     },
   };
 

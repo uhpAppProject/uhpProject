@@ -34,8 +34,7 @@ static navigationOptions = {
   headerLeftContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
-    marginLeft: '.05%'
+    paddingLeft: (.01 * Dimensions.get('window').width)
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
@@ -46,14 +45,12 @@ static navigationOptions = {
   headerRightContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
+    paddingRight: (.01 * Dimensions.get('window').width),
   },
 };
 
 componentDidMount(){
-  /*
-   * Admin is emailed before the screen mounts
-   */
+   // Admin is emailed before the screen mounts
 
   const { navigation } = this.props;
   const email = navigation.getParam('email', 'No Email');
@@ -71,8 +68,7 @@ componentDidMount(){
      'Content-Type': 'multipart/form-data',
     }
   })
-  .catch((error) => {
-  });
+  .catch((error) => {});
   }
 
 

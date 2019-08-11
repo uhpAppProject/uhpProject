@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 3/25/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Loads a plus icon to be displayed.
  * Notes: Animation
  */
@@ -27,14 +27,6 @@ export default class Plus extends Component {
   };
 }
 
-  _error_Nav(email, error){
-    const{navigate} = this.props.navigation;
-      navigate('Error', {
-        email: email,
-        error: error
-      });
-  }
-
   async componentWillMount() {
     try {
       await Font.loadAsync({
@@ -42,7 +34,7 @@ export default class Plus extends Component {
       });
       this.setState({ fontLoaded: true });
     } catch (error) {
-      _this._error_Nav("Plus", error);
+      this.props.navigation.navigate('Error', { email: 'Plus', error: error });
     }
   }
 

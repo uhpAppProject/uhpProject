@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Displays information
  * Notes: Has a scrollview and an animated header.
  */
@@ -31,8 +31,7 @@ export default class EventRequirements extends Component {
     headerLeftContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%',
-      marginLeft: '.05%',
+      paddingLeft: (.01 * Dimensions.get('window').width)
     },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
@@ -43,7 +42,7 @@ export default class EventRequirements extends Component {
     headerRightContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%',
+      paddingRight: (.01 * Dimensions.get('window').width),
     },
   };
 
@@ -74,79 +73,76 @@ export default class EventRequirements extends Component {
     extrapolate: 'clamp'
   });
 
+  return (
+    <View style={styles.container}>
 
+      <ImageBackground source={require("../../../assets/Images/event_reqs.png")} style={styles.backgroundImage}>
 
+        <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
+          <Animated.Text style={[styles.headerTitleText, {opacity: headerTitle}]}>Event Requirements</Animated.Text>
+          <Animated.View style={{height: scalingTextBoxHeight, flexWrap: "wrap"}}>
+            <Animated.Text style={[styles.headerText, {opacity: headerTitleFastFade}]}>To fulfill your event requirements,
+                  you must complete 1 UHP Event
+                  and 1 SJ Event.
+            </Animated.Text>
+          </Animated.View>
+        </Animated.View>
 
-      return (
-        <View style={styles.container}>
+        <View style={styles.opacity}>
+          <ScrollView style={styles.bodyContainer} //All dynamic variables move in sync with the movement of this scrollview
+                      onScroll={Animated.event(
+                        [{ nativeEvent: {
+                            contentOffset: {
+                               y: this.state.scrollY
+                             }
+                           }
+                        }])}
+                    scrollEventThrottle={16}>
+            <View style={styles.postItContainer}>
 
-          <ImageBackground source={require("../../../assets/Images/event_reqs.png")} style={styles.backgroundImage}>
+              <View style={styles.postItHeader}>
+                <Text style={styles.postItHeaderText}>UHP Event</Text>
+              </View>
 
-            <Animated.View style={[styles.headerContainer, {height: headerHeight}]}>
-              <Animated.Text style={[styles.headerTitleText, {opacity: headerTitle}]}>Event Requirements</Animated.Text>
-              <Animated.View style={{height: scalingTextBoxHeight, flexWrap: "wrap"}}>
-                <Animated.Text style={[styles.headerText, {opacity: headerTitleFastFade}]}>To fulfill your event requirements,
-                      you must complete 1 UHP Event
-                      and 1 SJ Event.
-                </Animated.Text>
-              </Animated.View>
-            </Animated.View>
+              <Text style={styles.postItBodyText}>Fulfilled by:</Text>
 
-            <View style={styles.opacity}>
-              <ScrollView style={styles.bodyContainer} //All dynamic variables move in sync with the movement of this scrollview
-                          onScroll={Animated.event(
-                            [{ nativeEvent: {
-                                contentOffset: {
-                                   y: this.state.scrollY
-                                 }
-                               }
-                            }])}
-                        scrollEventThrottle={16}>
-                <View style={styles.postItContainer}>
+              <View style={styles.postItBody}>
+                <Text style={styles.postItBodyText}>• Events sponsored by UHP</Text>
+                <Text style={styles.postItBodyText}>• Becoming a UHP mentor</Text>
+                <Text style={styles.postItBodyText}>• Fall Fellowship Workshop</Text>
+                <Text style={styles.postItBodyText}>• Honors peer advising workshops</Text>
+                <Text style={styles.postItBodyText}>• Senior Thesis Poster Session</Text>
+                <Text style={styles.postItBodyText}>• Any event advertised as a UHP Event in the weekly Honors Program newsletter</Text>
+              </View>
 
-                  <View style={styles.postItHeader}>
-                    <Text style={styles.postItHeaderText}>UHP Event</Text>
-                  </View>
-
-                  <Text style={styles.postItBodyText}>Fulfilled by:</Text>
-
-                  <View style={styles.postItBody}>
-                    <Text style={styles.postItBodyText}>- Events sponsored by UHP</Text>
-                    <Text style={styles.postItBodyText}>- Becoming a UHP mentor</Text>
-                    <Text style={styles.postItBodyText}>- Fall Fellowship Workshop</Text>
-                    <Text style={styles.postItBodyText}>- Honors peer advising workshops</Text>
-                    <Text style={styles.postItBodyText}>- Senior Thesis Poster Session</Text>
-                    <Text style={styles.postItBodyText}>- Any event advertised as a UHP Event in the weekly Honors Program newsletter</Text>
-                  </View>
-
-                </View>
-
-                <View style={styles.postItContainer}>
-
-                  <View style={styles.postItHeader}>
-                    <Text style={styles.postItHeaderText}>Social Justice Event</Text>
-                  </View>
-
-                  <Text style={styles.postItBodyText}>Designed to encourage Honors students to expand their
-                        perspectives beyond the classroom by participating in
-                        an on-campus event focused on a social justice issue.</Text>
-
-                  <View style={styles.postItBody}>
-                    <Text style={styles.postItBodyText}>Fulfilled by attending programming by:</Text>
-                    <Text style={styles.postItBodyText}>- SCCAP</Text>
-                    <Text style={styles.postItBodyText}>- The MCC</Text>
-                    <Text style={styles.postItBodyText}>- Markkula Center for Applied Ethics</Text>
-                    <Text style={styles.postItBodyText}>- Other organizations or academic departments on campus</Text>
-                  </View>
-
-                </View>
-              </ScrollView>
             </View>
-          </ImageBackground>
+
+            <View style={styles.postItContainer}>
+
+              <View style={styles.postItHeader}>
+                <Text style={styles.postItHeaderText}>Social Justice Event</Text>
+              </View>
+
+              <Text style={styles.postItBodyText}>Designed to encourage Honors students to expand their
+                    perspectives beyond the classroom by participating in
+                    an on-campus event focused on a social justice issue.</Text>
+
+              <View style={styles.postItBody}>
+                <Text style={styles.postItBodyText}>Fulfilled by attending programming by:</Text>
+                <Text style={styles.postItBodyText}>• SCCAP</Text>
+                <Text style={styles.postItBodyText}>• The MCC</Text>
+                <Text style={styles.postItBodyText}>• Markkula Center for Applied Ethics</Text>
+                <Text style={styles.postItBodyText}>• Other organizations or academic departments on campus</Text>
+              </View>
+
+            </View>
+          </ScrollView>
         </View>
-      );
-    };
+      </ImageBackground>
+    </View>
+    );
   };
+};
 
 
 const styles = StyleSheet.create({
@@ -161,12 +157,12 @@ const styles = StyleSheet.create({
     flex: 1,
     color: 'white',
     textAlign: 'center',
-    fontSize: (.08 * Dimensions.get('window').width),
+    fontSize: .08 * Dimensions.get('window').width,
     marginBottom: '2%',
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
   headerText: {
-    fontSize: (.05 * Dimensions.get('window').width),
+    fontSize: .05 * Dimensions.get('window').width,
     textAlign: 'center',
     color: 'white',
     marginRight: '2%',
@@ -188,8 +184,9 @@ const styles = StyleSheet.create({
   postItContainer: {
     justifyContent: 'space-evenly',
     alignSelf: 'center',
-    height: (.5 * Dimensions.get('window').height),
-    width: (.90 * Dimensions.get('window').width),
+    width: (.9 * Dimensions.get('window').width),
+    paddingTop: (.04 * Dimensions.get('window').height),
+    paddingBottom: (.04 * Dimensions.get('window').height),
     marginTop: (.05 * Dimensions.get('window').height),
     marginBottom: (.05 * Dimensions.get('window').height),
     backgroundColor: 'white',
@@ -204,6 +201,7 @@ const styles = StyleSheet.create({
   },
   postItHeader: {
     alignItems: 'center',
+    paddingBottom: (.02 * Dimensions.get('window').height)
   },
   postItHeaderText: {
     fontSize: (.07 * Dimensions.get('window').width),

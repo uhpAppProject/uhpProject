@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Displays information about individual events from EventsShow.
  * Notes: Contains functions to determine whether the time of an event
  *                   has passed yet. Has a conditional animated header and
@@ -42,8 +42,7 @@ export default class IndivEvent extends Component {
     headerLeftContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%',
-      marginLeft: '.05%',
+      paddingLeft: (.01 * Dimensions.get('window').width)
     },
     headerTitleContainerStyle: {
       alignItems: 'center',
@@ -63,23 +62,13 @@ export default class IndivEvent extends Component {
     headerRightContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%',
+      paddingRight: (.01 * Dimensions.get('window').width),
     },
   };
 
-  _error_Nav(email, error){
-    const{navigate} = this.props.navigation;
-      navigate('Error', {
-        email: email,
-        error: error
-      });
-  }
-
   _onPressOpacity = (email, title, requirement, date, latitude, longitude, radius) => {
-
      // Navigates to location check screen if the event is happening now.
      // Otherwise creates an RSVP report and navigates to the RSVP screen.
-
 
     const{navigate} = this.props.navigation;
     if(this.state.isNow){

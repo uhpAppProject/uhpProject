@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 3/25/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Presents information about the user's participation status.
  * Notes: A function to call the user's data from storage.
  *                   A function to determine if the user has completed all
@@ -48,8 +48,7 @@ static navigationOptions = {
   headerLeftContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
-    marginLeft: '.05%',
+    paddingLeft: (.01 * Dimensions.get('window').width)
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
@@ -64,17 +63,9 @@ static navigationOptions = {
   headerRightContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
+    paddingRight: (.01 * Dimensions.get('window').width),
   },
 };
-
-  _error_Nav(email, error){
-    const{navigate} = this.props.navigation;
-      navigate('Error', {
-        email: email,
-        error: error
-      });
-  }
 
   async extractUserInfo(asyncTitle) {
      // Function for extracting data from async storage and parsing it into
@@ -94,7 +85,7 @@ static navigationOptions = {
         }
       }
     catch(error) {
-        this._error_Nav("Participation Parsing", error)
+        this.props.navigation.navigate('Error', { email: 'Participation Parsing', error: error });
         }
       }
 

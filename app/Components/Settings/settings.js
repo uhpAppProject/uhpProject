@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Setting menu
  * Notes: Buttons that navigate to other screens from the settings menu
  */
@@ -41,8 +41,7 @@ static navigationOptions = {
   headerLeftContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
-    marginLeft: '.05%',
+    paddingLeft: (.01 * Dimensions.get('window').width)
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
@@ -51,15 +50,6 @@ static navigationOptions = {
     elevation: 0,
   },
 };
-
-  _navigateTo = (page, navObj) => {
-     // Function uses react navigation to move to the next page in the application.
-     // It takes in a page to navigate to and an object with parameters to be passed
-     // to the next page
-
-    const{navigate} = this.props.navigation;
-      navigate(page, navObj);
-    }
 
   _navigateToAndReset (page, navObj) {
     // Function uses react navigation to move to the next page in the application while

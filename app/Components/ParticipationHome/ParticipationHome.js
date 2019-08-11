@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Home page of the app. Also loads data the app will need later.
  * Notes: Functions to fetch data from an external database. A few
  *                   buttons to navigate to other pages in the app.
@@ -45,7 +45,7 @@ static navigationOptions = {
   headerRightContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
+    paddingRight: (.01 * Dimensions.get('window').width),
   },
   headerLeft: <View style={{padding: .08 * Dimensions.get('window').width}}></View>,
   headerLeftContainerStyle: {
@@ -59,24 +59,6 @@ static navigationOptions = {
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif',
   },
 };
-
-_error_Nav(email, error){
-  const{navigate} = this.props.navigation;
-    navigate('Error', {
-      email: email,
-      error: error
-    });
-}
-
-_navigateTo = (page, navObj) => {
-   // Function uses react navigation to move to the next page in the application.
-   // It takes in a page to navigate to and an object with parameters to be passed
-   // to the next page
-
-
-  const{navigate} = this.props.navigation;
-    navigate(page, navObj);
-  }
 
 fetchAndStore = (url, email, asyncTitle) => {
    // Pulls user data stored at url using email as a key.
@@ -98,7 +80,7 @@ fetchAndStore = (url, email, asyncTitle) => {
         AsyncStorage.setItem(asyncTitle, JSON.stringify(responseJson));
       })
     .catch((error) => {
-      this._error_Nav(email, error);
+      this.props.navigation.navigate('Error', { email: email, error: error });
     });
   }
 
@@ -117,8 +99,7 @@ fetchAndStoreEvents = (url, asyncTitle) => {
         AsyncStorage.setItem(asyncTitle, JSON.stringify(responseJson));
       })
     .catch((error) => {
-      alert(error)
-      this._error_Nav(this.state.user_email, error);
+      this.props.navigation.navigate('Error', { email: this.state.user_email, error: error });
     });
   }
 
@@ -130,7 +111,7 @@ _loadResourcesAsync = async => {
 };
 
 _handleLoadingError = error => {
-  this._error_Nav(this.state.user_email, error);
+  this.props.navigation.navigate('Error', { email: this.state.user_email, error: error });
 };
 
 _handleFinishLoading = () => {
@@ -167,21 +148,21 @@ _handleFinishLoading = () => {
 
               <View style={styles.buttons}>
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('EventsHome', { email: this.state.user_email, title: 'Home' })}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('EventsHome', { email: this.state.user_email, title: 'Home' })}>
                       <Text style={styles.title}>Upcoming Honors Events</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('ParticipationStatus', { email: this.state.user_email, title: 'Home' })}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ParticipationStatus', { email: this.state.user_email, title: 'Home' })}>
                       <Text style={styles.title}>Participation Status</Text>
                     </TouchableOpacity>
                   </View>
 
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('EventRequirements', {email: this.state.user_email})}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('EventRequirements', {email: this.state.user_email})}>
                       <Text style={styles.title}>Event Requirements</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this._navigateTo('ParticipationFAQ', {email: this.state.user_email})}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ParticipationFAQ', {email: this.state.user_email})}>
                       <Text style={styles.title}>Honors Participation FAQ</Text>
                     </TouchableOpacity>
                   </View>

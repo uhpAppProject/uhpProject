@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Settings Cog icon to be displayed
  * Notes: Navigates to another screen on press.
  */
@@ -30,14 +30,6 @@ export default class SettingsCog extends Component {
   };
 }
 
-  _error_Nav(email, error){
-    const{navigate} = this.props.navigation;
-      navigate('Error', {
-        email: email,
-        error: error
-    });
-  }
-
     async componentWillMount() {
       try {
         await Font.loadAsync({
@@ -46,7 +38,7 @@ export default class SettingsCog extends Component {
         });
         this.setState({ fontLoaded: true });
       } catch (error) {
-        this._error_Nav("Settings Cog", error);
+        this.props.navigation.navigate('Error', { email: 'Settings Cog', error: error });
       }
     }
 

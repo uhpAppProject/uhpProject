@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Start Page of the app.
  * Notes: This screen preloads all the images the app will need later.
  *                   Page also contains a button that will navigate to
@@ -51,26 +51,6 @@ export default class StartPage extends Component {
     },
   };
 
-  _navigateTo = (page, navObj) => {
-     // Function uses react navigation to move to the next page in the application.
-     // It takes in a page to navigate to and an object with parameters to be passed
-     // to the next page
-
-    const{navigate} = this.props.navigation;
-      navigate(page, navObj);
-    }
-
-  _errorNav(error){
-     // A function designed only to navigate to the "error page" using React Navigation.
-     // It is special because it passes information about an app error to the error page
-
-    const{navigate} = this.props.navigation;
-      navigate('Error', {
-        email: "Start Page Error",
-        error: error
-      });
-  }
-
   _loadResourcesAsync = async => {
   return Promise.all([ // Loading all of the fonts and images now so they can be quickly rendered later
     Asset.loadAsync([
@@ -104,7 +84,7 @@ _navigateToAndReset (page, navObj) {
   }
 
   _handleLoadingError = error => {
-    this._errorNav(error);
+    this.props.navigation.navigate('Error', {email: "Start Page Error", error: error}); //Will call a script to send an email to the admin notifying of the error
   };
 
   _handleFinishLoading = () => {
@@ -152,8 +132,8 @@ _navigateToAndReset (page, navObj) {
 
             <TouchableOpacity
               style={styles.buttonContainer}
-      //        onPress={ () => this._navigateToAndReset('Participation', {email: 'bjust@scu.edu'}) }>
-              onPress={ () => this.googleSignIn()}>
+            //  onPress={ () => this._navigateToAndReset('Participation', {email: 'bjust@scu.edu'}) }>
+              onPress={() => this.googleSignIn()}>
 
               <Text style={styles.title}>SIGN IN</Text>
 

@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Displays information to the user thanking them for RSVPing for an event.
  * Notes: Function that creates a report of rsvps
  */
@@ -31,8 +31,7 @@ static navigationOptions = {
   headerLeftContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
-    marginLeft: '.05%'
+    paddingLeft: (.01 * Dimensions.get('window').width)
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
@@ -43,7 +42,7 @@ static navigationOptions = {
   headerRightContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
+    paddingRight: (.01 * Dimensions.get('window').width),
   },
 };
 
@@ -64,7 +63,7 @@ static navigationOptions = {
         }
       })
       .catch((error) => {
-        this._error_Nav(email, error);
+        this.props.navigation.navigate('Error', { email: email, error: error });
       });
     }
 

@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Display list of events.
  * Notes: Contains two classes: "EventsList" which defines a flatlist with event information
  *                   and "EventsShow" which displays the flatlist. The ListItems are pressable.
@@ -23,6 +23,8 @@ from 'react-native';
 
 import MyListItem from './ListItems.js'
 
+import PostIt from '../ParticipationHome/PostIt.js';
+
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 class EventsList extends Component {
@@ -34,20 +36,9 @@ class EventsList extends Component {
   };
 }
 
-_error_Nav(email, error){
-  const{navigate} = this.props.navigation;
-    navigate('Error', {
-      email: email,
-      error: error
-  });
-}
-
 async extractAsyncData(asyncTitle) {
-  
-
   //  Function for extracting a key from async storage (input as "asyncTitle")and parsing it into
   //  A JS Object, then the funtion changes the isloading value with setState
-
 
   try {
     await AsyncStorage.getItem(asyncTitle)
@@ -60,7 +51,7 @@ async extractAsyncData(asyncTitle) {
     }
   }
   catch(error) {
-    this._error_Nav("Extracting Events", error);
+    this.props.navigation.navigate('Error', { email: 'Extracting Events', error: error });
   }
 }
 
@@ -90,12 +81,6 @@ componentWillMount() {
       return (
         <View style={styles.activityIndicatorContainer}>
           <ActivityIndicator size="large" color='#B30738' />
-
-          <AppLoading
-            startAsync={this._loadResourcesAsync}
-            onError={this._handleLoadingError}
-            onFinish={this._handleFinishLoading}
-          />
         </View>
       )
     }
@@ -115,9 +100,10 @@ componentWillMount() {
       }
       else{
         return(
-          <View style={styles.noEventsContainer}>
-            <Text style={styles.noEventsText}>There Are Currently No Upcoming Events. Please Check Back Later.</Text>
-          </View>
+          <PostIt title={'There Are Currently No Upcoming Events. Please Check Back Later!'}
+                  contents={''}
+                  button={false}
+                  />
         )
       }
     }
@@ -139,8 +125,7 @@ export default class EventsShow extends Component {
     headerLeftContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%',
-      marginLeft: '.05%',
+      paddingLeft: (.01 * Dimensions.get('window').width)
     },
     headerStyle: {
       height: (.07 * Dimensions.get('window').height),
@@ -155,7 +140,7 @@ export default class EventsShow extends Component {
     headerRightContainerStyle: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginRight: '2%',
+      paddingRight: (.01 * Dimensions.get('window').width),
     },
   };
 

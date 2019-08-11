@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 3/25/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Provides assistance to "ParticipationFAQ" screen in presenting data.
  * Notes: receives props: title, content, button (true or false)
  */
@@ -23,15 +23,6 @@ class PostIt extends Component {
   this.state = {}
 };
 
-_navigateTo = (page, navObj) => {
-   // Function uses react navigation to move to the next page in the application.
-   // It takes in a page to navigate to and an object with parameters to be passed
-   // to the next page
-
-  const{navigate} = this.props.navigation;
-    navigate(page, navObj);
-  }
-
   render() {
     if(this.props.button){
       return(
@@ -45,26 +36,50 @@ _navigateTo = (page, navObj) => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.buttonContainer} onPress={ () => this._navigateTo('ParticipationStatus', {email: this.props.email})}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={ () => this.props.navigation.navigate('ParticipationStatus', {email: this.props.email})}>
             <Text style={styles.buttonText}>{this.props.buttonTitle}</Text>
           </TouchableOpacity>
         </View>
         )
     }
     else{
-      return (
-        <View style={[styles.postItContainer, {marginBottom:(.05 * Dimensions.get('window').height)}]}>
+      if(this.props.contents != '' && this.props.title != '' && this.props.contents != undefined && this.props.title != undefined){
+        return (
+          <View style={[styles.postItContainer, {marginBottom:(.05 * Dimensions.get('window').height)}]}>
 
-          <View style={styles.postItHeader}>
-            <Text style={styles.postItHeaderText}>{this.props.title}</Text>
+            <View style={styles.postItHeader}>
+              <Text style={styles.postItHeaderText}>{this.props.title}</Text>
+            </View>
+
+            <View style={styles.postItBody}>
+              <Text style={styles.postItBodyText}>{this.props.contents}</Text>
+            </View>
+
           </View>
+        );
+      }
+      else if(this.props.contents == '' || this.props.content == undefined){
+        return (
+          <View style={[styles.postItContainer, {marginBottom:(.05 * Dimensions.get('window').height)}]}>
 
-          <View style={styles.postItBody}>
-            <Text style={styles.postItBodyText}>{this.props.contents}</Text>
+            <View style={styles.postItHeader}>
+              <Text style={styles.postItHeaderText}>{this.props.title}</Text>
+            </View>
+
           </View>
+        );
+      }
+      else{
+        return (
+          <View style={[styles.postItContainer, {marginBottom:(.05 * Dimensions.get('window').height)}]}>
 
-        </View>
-      );
+            <View style={styles.postItBody}>
+              <Text style={styles.postItBodyText}>{this.props.contents}</Text>
+            </View>
+
+          </View>
+        );
+      }
     }
     };
   };

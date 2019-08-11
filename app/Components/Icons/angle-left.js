@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Back icon for the upper left corner.
  * Notes: Displays a chevron if the user is on ios and a back arrow if the user is on android.
  */
@@ -28,15 +28,6 @@ export default class BackButton extends Component {
   };
 }
 
-  _error_Nav(email, error){
-    const{navigate} = this.props.navigation;
-      navigate('Error', {
-        email: email,
-        error: error
-      });
-  }
-
-
   async componentWillMount() {
     try {
       await Font.loadAsync({
@@ -45,7 +36,7 @@ export default class BackButton extends Component {
       });
       this.setState({ fontLoaded: true });
     } catch (error) {
-      _this._error_Nav("angle_left", error);
+      this.props.navigation.navigate('Error', { email: 'angle_left', error: error });
     }
   }
 

@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 3/25/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Checks user's location to determine if they are in the correct location for the event.
  *          Update participation status if they are.
  * Notes: Function for checking location. Function for calling a script to write a report
@@ -41,8 +41,7 @@ static navigationOptions = {
   headerLeftContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
-    marginLeft: '.05%',
+    paddingLeft: (.01 * Dimensions.get('window').width)
   },
   headerStyle: {
     height: (.07 * Dimensions.get('window').height),
@@ -53,21 +52,12 @@ static navigationOptions = {
   headerRightContainerStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: '2%',
+    paddingRight: (.01 * Dimensions.get('window').width),
   },
 };
 
-_error_Nav(email, error){
-  const{navigate} = this.props.navigation;
-    navigate('Error', {
-      email: email,
-      error: error
-    });
-}
-
 createReport = (url, email, title, requirement, locationCheckPassed) => {
    // Creates a report of sign in attempts (currently a Google Form)
-
 
     var formData = new FormData();
     formData.append('email', email);
@@ -86,7 +76,7 @@ createReport = (url, email, title, requirement, locationCheckPassed) => {
       }
     })
     .catch((error) => {
-      this._error_Nav(email, error);
+      this.props.navigation.navigate('Error', { email: email, error: error });
     });
   }
 
@@ -108,7 +98,7 @@ createReport = (url, email, title, requirement, locationCheckPassed) => {
       }
     })
     .catch((error) => {
-      this._error_Nav(email, error);
+      this.props.navigation.navigate('Error', { email: email, error: error });
     });
   }
 

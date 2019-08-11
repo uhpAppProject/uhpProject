@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 2/1/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Defines the list items from the flatlist in EventsList
  * Notes: Some logic to format data. Listitems are formatted as touchable opacities.
  */
@@ -37,7 +37,6 @@ class MyListItem extends Component {
     });
   }
     formatTitle(title, req){
-
       // Formats the title without the "(Social Justice Event)"
 
       title = title.slice(0, title.search(req) - 1)

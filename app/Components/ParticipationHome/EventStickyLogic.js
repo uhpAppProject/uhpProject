@@ -1,5 +1,5 @@
 /*
- * Coded by Brad Just on 3/25/19.
+ * Coded by Brad Just on 7/22/19.
  * Purpose: Provides assistance to the "ParticipationStatus" screen in processing and presenting user data.
  * Notes: None
  */
@@ -18,15 +18,6 @@ from 'react-native';
 import { withNavigation } from 'react-navigation';
 
 class StickyLogic extends Component {
-
-  _navigateTo = (page, navObj) => {
-     // Function uses react navigation to move to the next page in the application.
-     // It takes in a page to navigate to and an object with parameters to be passed
-     // to the next page
-
-    const{navigate} = this.props.navigation;
-      navigate(page, navObj);
-    }
 
   render(){
     if(this.props.status == "COMPLETE") {
@@ -49,7 +40,7 @@ class StickyLogic extends Component {
           <TouchableOpacity
               elevation={5}
               style={styles.buttonContainer}
-              onPress={ () => this._navigateTo('EventsHome', { email: this.props.email, title: 'Participation' }) }>
+              onPress={ () => this.props.navigation.navigate('EventsHome', { email: this.props.email, title: 'Participation' }) }>
             <Text style={styles.buttonText}>View Upcoming Events</Text>
           </TouchableOpacity>
         </View>
