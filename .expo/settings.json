@@ -1,0 +1,7 @@
+{
+  "hostType": "lan",
+  "lanType": "ip",
+  "dev": false,
+  "minify": true,
+  "urlRandomness": "r4-p2d"
+}

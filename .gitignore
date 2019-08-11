@@ -1,4 +1,5 @@
-.expo
-.git
-node_modules
-package-lock.json
+urls.js
+credentials.json
+token.json
+uhpapp_upload_cert.pem
+uhpapp.jks.bak
