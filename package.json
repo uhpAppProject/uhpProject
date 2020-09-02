@@ -13,7 +13,7 @@
     "expo": "^32.0.0",
     "expo-cli": "^2.21.1",
     "global": "^4.3.2",
-    "googleapis": "27",
+    "googleapis": "39",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^0.19.1",
